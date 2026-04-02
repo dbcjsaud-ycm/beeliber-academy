@@ -30,8 +30,26 @@ const NAV_ITEMS = [
 
 const dueAssignments = ASSIGNMENTS.slice(0, 3);
 
+// 섹션별 트랙 매핑
+type Section = "all" | "marketing" | "dev" | "automation";
+
+const SECTION_TRACKS: Record<Section, string[]> = {
+  all: ["common", "tools", "supergems", "multimodal", "video-lab", "use-cases", "optimization"],
+  marketing: ["common", "multimodal", "video-lab", "use-cases"],
+  dev: ["common", "tools", "supergems", "optimization"],
+  automation: ["common", "tools", "supergems", "optimization", "use-cases"],
+};
+
+const SECTION_INFO: Record<Section, { icon: string; label: string; desc: string; color: string }> = {
+  all: { icon: "📚", label: "전체", desc: "모든 학습 트랙", color: "bg-white/10 text-white" },
+  marketing: { icon: "📣", label: "마케팅", desc: "SNS 콘텐츠 · 영상 제작 · 브랜드 관리", color: "bg-green-500/20 text-green-400 border-green-500/30" },
+  dev: { icon: "💻", label: "웹/앱 개발", desc: "기술 도구 · 프롬프트 구조 · 하네스 엔지니어링", color: "bg-blue-500/20 text-blue-400 border-blue-500/30" },
+  automation: { icon: "🤖", label: "자동화", desc: "워크플로우 설계 · IGO 구조 · 검수 파이프라인", color: "bg-purple-500/20 text-purple-400 border-purple-500/30" },
+};
+
 export default function AcademyDashboard() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [section, setSection] = useState<Section>("all");
 
   return (
     <div className="min-h-screen academy-bg text-white">
@@ -125,6 +143,30 @@ export default function AcademyDashboard() {
           </div>
         </motion.section>
 
+        {/* 직군별 섹션 선택 */}
+        <motion.section initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.08 }} className="mb-8">
+          <h3 className="font-bold mb-3 text-sm">내 직군 선택</h3>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+            {(["all", "marketing", "dev", "automation"] as Section[]).map((s) => {
+              const info = SECTION_INFO[s];
+              const isActive = section === s;
+              return (
+                <button key={s} onClick={() => setSection(s)}
+                  className={`p-4 rounded-xl border text-left transition-all ${
+                    isActive
+                      ? `${info.color} border-current shadow-lg`
+                      : "bg-white/[0.02] border-white/5 text-white/40 hover:bg-white/5"
+                  }`}
+                >
+                  <span className="text-2xl block mb-2">{info.icon}</span>
+                  <p className="font-bold text-sm">{info.label}</p>
+                  <p className="text-[10px] mt-0.5 opacity-70">{info.desc}</p>
+                </button>
+              );
+            })}
+          </div>
+        </motion.section>
+
         {/* 내 진행률 */}
         <motion.section initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="mb-8">
           <div className="glass-panel p-6">
@@ -167,7 +209,7 @@ export default function AcademyDashboard() {
         <motion.section initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="mb-8">
           <h3 className="font-bold mb-4 text-sm">학습 트랙</h3>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {TRACKS.map((track) => {
+            {TRACKS.filter((t) => SECTION_TRACKS[section].includes(t.slug)).map((track) => {
               const modules = getModulesByTrack(track.id);
               return (
                 <Link key={track.id} href={`/academy/${track.slug}`}>

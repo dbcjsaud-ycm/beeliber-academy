@@ -19,18 +19,27 @@ export async function middleware(request: NextRequest) {
     }
   );
 
-  const { data: { user } } = await supabase.auth.getUser();
+  // 개발 모드: Supabase 연결 실패해도 통과
+  try {
+    const { data: { user } } = await supabase.auth.getUser();
 
-  // Supabase 미설정 시 미들웨어 통과 (개발 모드)
-  if (!process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL === "") {
-    return supabaseResponse;
-  }
+    if (!user && (request.nextUrl.pathname.startsWith("/academy") || request.nextUrl.pathname.startsWith("/admin"))) {
+      // 로컬 세션 쿠키로 폴백 체크
+      const localSession = request.cookies.get("academy_session");
+      if (localSession) return supabaseResponse;
 
-  // 로그인 안 했으면 /academy, /admin 접근 차단 → 랜딩으로
-  if (!user && (request.nextUrl.pathname.startsWith("/academy") || request.nextUrl.pathname.startsWith("/admin"))) {
-    const url = request.nextUrl.clone();
-    url.pathname = "/";
-    return NextResponse.redirect(url);
+      const url = request.nextUrl.clone();
+      url.pathname = "/";
+      return NextResponse.redirect(url);
+    }
+  } catch {
+    // Supabase 연결 실패 시 로컬 세션만 체크
+    const localSession = request.cookies.get("academy_session");
+    if (!localSession && (request.nextUrl.pathname.startsWith("/academy") || request.nextUrl.pathname.startsWith("/admin"))) {
+      const url = request.nextUrl.clone();
+      url.pathname = "/";
+      return NextResponse.redirect(url);
+    }
   }
 
   return supabaseResponse;

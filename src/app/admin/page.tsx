@@ -23,12 +23,12 @@ interface Employee {
 
 // ─── Initial Data (빌리버 직원) ──────────────────────
 const INITIAL_EMPLOYEES: Employee[] = [
-  { id: "u1", name: "오현정", email: "oh@beeliber.com", password: "", role: "marketer", team: "SNS·브랜드·전략", status: "active", progress: 0, passRate: 0, submissions: 0 },
-  { id: "u2", name: "박진호", email: "park@beeliber.com", password: "", role: "marketer", team: "Hub Ops / 지점 관리", status: "active", progress: 0, passRate: 0, submissions: 0 },
-  { id: "u3", name: "진영주", email: "jin@beeliber.com", password: "", role: "marketer", team: "파트너 지점 활성화", status: "active", progress: 0, passRate: 0, submissions: 0 },
-  { id: "u4", name: "류천명", email: "ryu@beeliber.com", password: "", role: "developer", team: "앱 제작 / Google Ads", status: "active", progress: 0, passRate: 0, submissions: 0 },
-  { id: "u5", name: "임재원", email: "lim@beeliber.com", password: "", role: "developer", team: "인천공항 데이터", status: "active", progress: 0, passRate: 0, submissions: 0 },
-  { id: "u6", name: "김동교", email: "kim@beeliber.com", password: "", role: "automation", team: "자동화 / 요금 체계", status: "active", progress: 0, passRate: 0, submissions: 0 },
+  { id: "u1", name: "오현정", email: "oh", password: "", role: "marketer", team: "SNS·브랜드·전략", status: "active", progress: 0, passRate: 0, submissions: 0 },
+  { id: "u2", name: "박진호", email: "park", password: "", role: "marketer", team: "Hub Ops / 지점 관리", status: "active", progress: 0, passRate: 0, submissions: 0 },
+  { id: "u3", name: "진영주", email: "jin", password: "", role: "marketer", team: "파트너 지점 활성화", status: "active", progress: 0, passRate: 0, submissions: 0 },
+  { id: "u4", name: "류천명", email: "ryu", password: "", role: "developer", team: "앱 제작 / Google Ads", status: "active", progress: 0, passRate: 0, submissions: 0 },
+  { id: "u5", name: "임재원", email: "lim", password: "", role: "developer", team: "인천공항 데이터", status: "active", progress: 0, passRate: 0, submissions: 0 },
+  { id: "u6", name: "김동교", email: "kim", password: "", role: "automation", team: "자동화 / 요금 체계", status: "active", progress: 0, passRate: 0, submissions: 0 },
 ];
 
 const ROLE_OPTIONS = ["student", "marketer", "developer", "automation", "reviewer", "admin"];
@@ -96,9 +96,9 @@ function EmployeeModal({ employee, onSave, onClose }: {
           {/* 이메일 + 비밀번호 */}
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="text-xs text-white/50 block mb-1">이메일 (로그인 ID)</label>
+              <label className="text-xs text-white/50 block mb-1">아이디 (로그인 ID)</label>
               <input className="w-full rounded-lg border border-white/10 bg-white/[0.03] px-4 py-2.5 text-sm text-white outline-none focus:border-amber-400/50"
-                value={form.email} onChange={(e) => update("email", e.target.value)} placeholder="name@beeliber.com" />
+                value={form.email} onChange={(e) => update("email", e.target.value)} placeholder="hong" />
             </div>
             <div>
               <label className="text-xs text-white/50 block mb-1">비밀번호</label>
@@ -340,7 +340,7 @@ export default function AdminPage() {
                     <thead>
                       <tr className="border-b border-white/5 text-left text-white/30">
                         <th className="px-5 py-3.5 font-medium">이름</th>
-                        <th className="px-5 py-3.5 font-medium">이메일 (로그인)</th>
+                        <th className="px-5 py-3.5 font-medium">아이디 (로그인)</th>
                         <th className="px-5 py-3.5 font-medium">비밀번호</th>
                         <th className="px-5 py-3.5 font-medium">역할</th>
                         <th className="px-5 py-3.5 font-medium">담당</th>
@@ -407,7 +407,7 @@ function EmployeeRow({ employee, onEdit, onDelete }: { employee: Employee; onEdi
           <span className="font-medium">{employee.name}</span>
         </div>
       </td>
-      <td className="px-5 py-3.5 text-white/60 font-mono text-xs">{employee.email}</td>
+      <td className="px-5 py-3.5 text-amber-400/80 font-mono text-xs font-semibold">{employee.email}</td>
       <td className="px-5 py-3.5">
         {employee.password ? (
           <span className="text-xs text-green-400/60">설정됨</span>
