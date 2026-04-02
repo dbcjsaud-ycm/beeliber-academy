@@ -188,18 +188,18 @@ export default function LevelCheckPage() {
   });
 
   return (
-    <div className="min-h-screen bg-neutral-50">
-      <header className="bg-white border-b">
-        <div className="max-w-4xl mx-auto px-4 py-3 flex items-center gap-2 text-sm">
-          <Link href="/" className="text-neutral-400 hover:text-black">홈</Link>
-          <span className="text-neutral-300">/</span>
+    <div className="min-h-screen academy-bg text-white">
+      <header className="glass-panel-light sticky top-0 z-50 mx-4 mt-3 rounded-xl">
+        <div className="max-w-4xl mx-auto px-6 py-3 flex items-center gap-2 text-sm">
+          <Link href="/academy" className="text-secondary-dark hover:text-white">대시보드</Link>
+          <span className="text-white/20">/</span>
           <span className="font-semibold">AI 레벨 체크</span>
         </div>
       </header>
 
       <main className="max-w-4xl mx-auto px-4 py-8">
         {/* 히어로 */}
-        <div className="bg-gradient-to-r from-violet-600 to-indigo-600 rounded-2xl p-8 text-white mb-8">
+        <div className="glass-panel rounded-2xl p-8 mb-8 border border-violet-500/20">
           <h1 className="text-3xl font-bold mb-2">나의 AI 레벨은?</h1>
           <p className="text-violet-200 mb-4">
             30개 항목을 체크하고 나의 AI 활용 수준을 확인하세요.

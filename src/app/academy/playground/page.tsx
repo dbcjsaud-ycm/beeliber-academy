@@ -74,7 +74,7 @@ export default function PlaygroundPage() {
       <header className="glass-panel-light sticky top-0 z-50 mx-4 mt-3 rounded-xl">
         <div className="max-w-7xl mx-auto px-6 py-3 flex items-center justify-between">
           <div className="flex items-center gap-2 text-sm">
-            <Link href="/" className="text-secondary-dark hover:text-white">홈</Link>
+            <Link href="/academy" className="text-secondary-dark hover:text-white">대시보드</Link>
             <span className="text-white/20">/</span>
             <span className="font-semibold">AI 플레이그라운드</span>
           </div>

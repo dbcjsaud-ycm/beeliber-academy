@@ -209,7 +209,7 @@ export default function WorkflowCanvasPage() {
       {/* 헤더 */}
       <header className="glass-panel-light mx-3 mt-3 rounded-xl px-5 py-2.5 flex items-center justify-between shrink-0 z-20">
         <div className="flex items-center gap-3 text-sm">
-          <Link href="/" className="text-secondary-dark hover:text-white">홈</Link>
+          <Link href="/academy" className="text-secondary-dark hover:text-white">대시보드</Link>
           <span className="text-white/20">/</span>
           <span className="font-semibold">워크플로우 캔버스</span>
         </div>

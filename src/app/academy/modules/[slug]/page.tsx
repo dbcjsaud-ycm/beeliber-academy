@@ -53,7 +53,7 @@ export default function ModuleDetailPage({ params }: { params: Promise<{ slug: s
     <div className="min-h-screen academy-bg text-white">
       <header className="glass-panel-light sticky top-0 z-50 mx-4 mt-3 rounded-xl">
         <div className="max-w-5xl mx-auto px-6 py-3 flex items-center gap-2 text-sm">
-          <Link href="/" className="text-secondary-dark hover:text-white">홈</Link>
+          <Link href="/academy" className="text-secondary-dark hover:text-white">대시보드</Link>
           <span className="text-white/20">/</span>
           {track && (<><Link href={`/academy/${track.slug}`} className="text-secondary-dark hover:text-white">{track.title}</Link><span className="text-white/20">/</span></>)}
           <span className="font-semibold truncate">{module.title}</span>
