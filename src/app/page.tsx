@@ -104,13 +104,16 @@ function LoginForm() {
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <label className="text-xs text-white/50 block mb-1.5">아이디</label>
-            <input
-              type="text"
-              value={userId}
-              onChange={(e) => setUserId(e.target.value)}
-              placeholder="아이디를 입력하세요"
-              className="w-full rounded-lg border border-white/10 bg-white/[0.03] px-4 py-3 text-sm text-white placeholder-white/30 outline-none transition-all focus:border-amber-400/50 focus:bg-white/[0.05]"
-            />
+            <div className="relative">
+              <input
+                type="text"
+                value={userId}
+                onChange={(e) => setUserId(e.target.value)}
+                placeholder="admin"
+                className="w-full rounded-lg border border-white/10 bg-white/[0.03] px-4 py-3 text-sm text-white placeholder-white/30 outline-none transition-all focus:border-amber-400/50 focus:bg-white/[0.05] pr-28"
+              />
+              <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-white/20">@beeliber.com</span>
+            </div>
           </div>
 
           <div>
