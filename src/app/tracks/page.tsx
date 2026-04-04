@@ -8,12 +8,12 @@ const TRACKS = [
     tagline: 'SNS · SEO · GEO 전략',
     desc: 'Super Gems 활용, GEO 전략, SNS-SEO 연결 워크플로우를 AI로 완성하세요.',
     color: 'from-emerald-900/20',
-    border: 'border-emerald-500/15 hover:border-emerald-400/40',
+    border: 'border-white/[0.08] hover:border-amber-500/30',
     accent: 'text-emerald-400',
-    glow: 'rgba(16,185,129,0.12)',
+    glow: 'rgba(245,158,11,0.12)',
     Icon: Zap,
     iconBg: 'bg-emerald-500/15',
-    btn: 'bg-emerald-600 hover:bg-emerald-500',
+    btn: 'bg-amber-500 hover:bg-amber-400',
     outputs: [
       { emoji: '📋', text: '광고 제목 10개 + 설명 3개' },
       { emoji: '🔗', text: 'CTA 5개 + 해시태그 15개' },
@@ -29,12 +29,12 @@ const TRACKS = [
     tagline: '기준이미지 → 첫프레임 → 영상',
     desc: '기준 이미지를 먼저 생성하고 첫 프레임으로 고정해 영상으로 만드는 파이프라인.',
     color: 'from-amber-900/20',
-    border: 'border-amber-500/15 hover:border-amber-400/40',
+    border: 'border-white/[0.08] hover:border-amber-500/30',
     accent: 'text-amber-400',
     glow: 'rgba(245,158,11,0.12)',
     Icon: Video,
     iconBg: 'bg-amber-500/15',
-    btn: 'bg-amber-600 hover:bg-amber-500',
+    btn: 'bg-amber-500 hover:bg-amber-400',
     outputs: [
       { emoji: '🎨', text: '기준 이미지 프롬프트' },
       { emoji: '🎥', text: '장면별 영상 프롬프트' },
@@ -50,12 +50,12 @@ const TRACKS = [
     tagline: '기획 → 구조 → 작업지시서',
     desc: '서비스 소개부터 화면 구조, 기능 목록, 개발 작업지시서까지 AI로 완성.',
     color: 'from-blue-900/20',
-    border: 'border-blue-500/15 hover:border-blue-400/40',
+    border: 'border-white/[0.08] hover:border-amber-500/30',
     accent: 'text-blue-400',
-    glow: 'rgba(59,130,246,0.12)',
+    glow: 'rgba(245,158,11,0.12)',
     Icon: Code2,
     iconBg: 'bg-blue-500/15',
-    btn: 'bg-blue-600 hover:bg-blue-500',
+    btn: 'bg-amber-500 hover:bg-amber-400',
     outputs: [
       { emoji: '📄', text: '서비스 소개 + 화면 구조' },
       { emoji: '⚙️', text: '핵심 기능 목록' },
@@ -70,13 +70,13 @@ const TRACKS = [
     label: '자동화',
     tagline: 'Tree of Thoughts · RAG · Self-Reflection',
     desc: '반복 업무를 AI 파이프라인으로 자동화하는 고급 프롬프팅 기법을 실습.',
-    color: 'from-violet-900/20',
-    border: 'border-violet-500/15 hover:border-violet-400/40',
-    accent: 'text-violet-400',
-    glow: 'rgba(139,92,246,0.12)',
+    color: 'from-amber-900/20',
+    border: 'border-white/[0.08] hover:border-amber-500/30',
+    accent: 'text-amber-400',
+    glow: 'rgba(245,158,11,0.12)',
     Icon: Bot,
-    iconBg: 'bg-violet-500/15',
-    btn: 'bg-violet-600 hover:bg-violet-500',
+    iconBg: 'bg-amber-500/15',
+    btn: 'bg-amber-500 hover:bg-amber-400',
     outputs: [
       { emoji: '🔄', text: '반복업무 정의 + 입출력 구조' },
       { emoji: '📝', text: '단계별 요청문' },
@@ -105,7 +105,7 @@ export default function TracksPage() {
 
         {/* Header */}
         <div className="mb-12 text-center">
-          <p className="mb-2 text-xs font-medium uppercase tracking-[0.15em] text-violet-400">실전 세션</p>
+          <p className="mb-2 text-xs font-medium uppercase tracking-[0.15em] text-amber-400">실전 세션</p>
           <h1 className="text-4xl font-black text-white lg:text-5xl">
             어떤 결과물을 만들 건가요?
           </h1>
@@ -161,7 +161,7 @@ export default function TracksPage() {
                 {/* CTA */}
                 <Link
                   href={track.href}
-                  className={`flex items-center justify-center gap-2 rounded-xl py-2.5 text-sm font-semibold text-white transition-all ${track.btn}`}
+                  className={`flex items-center justify-center gap-2 rounded-xl py-2.5 text-sm font-semibold text-black transition-all ${track.btn}`}
                 >
                   {track.label} 트랙 시작
                   <ArrowRight size={15} />
@@ -175,7 +175,7 @@ export default function TracksPage() {
         <div className="mt-10 text-center">
           <p className="text-sm text-white/30">
             아직 방향을 모르겠다면?{' '}
-            <Link href="/academy/level-check" className="text-violet-400 hover:text-violet-300 transition-colors">
+            <Link href="/academy/level-check" className="text-amber-400 hover:text-amber-300 transition-colors">
               AI 레벨 체크 →
             </Link>
           </p>

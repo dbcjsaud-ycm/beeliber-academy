@@ -15,7 +15,15 @@
 body {
   color: #fff;
   background: var(--bg-base);
-  font-family: 'Pretendard', 'Inter', system-ui, -apple-system, sans-serif;
+  font-family: var(--font-geist-sans), 'Pretendard', system-ui, -apple-system, sans-serif;
+}
+
+.font-fraunces {
+  font-family: var(--font-fraunces), Georgia, serif;
+}
+
+code, pre, .font-mono {
+  font-family: var(--font-geist-mono), 'Fira Code', monospace;
 }
 
 /* ── Academy Background ─────────────────────────────────────────── */
@@ -59,8 +67,8 @@ body {
   }
 
   .node-card:hover {
-    border-color: rgba(139,92,246,0.35);
-    background: rgba(139,92,246,0.06);
+    border-color: rgba(245,158,11,0.30);
+    background: rgba(245,158,11,0.04);
     transform: translateY(-1px);
   }
 
@@ -130,6 +138,14 @@ body {
 
   .glow-violet-sm {
     box-shadow: 0 0 12px rgba(139,92,246,0.4);
+  }
+
+  .glow-amber {
+    box-shadow: 0 0 30px rgba(245,158,11,0.35), 0 0 60px rgba(245,158,11,0.12);
+  }
+
+  .glow-amber-sm {
+    box-shadow: 0 0 12px rgba(245,158,11,0.4);
   }
 
   .glow-cyan {

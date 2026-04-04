@@ -2,7 +2,7 @@
 
 import { useRef, useMemo, useEffect } from 'react';
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
-import { Float, MeshDistortMaterial, Torus, Sphere, Icosahedron } from '@react-three/drei';
+import { Float, MeshDistortMaterial } from '@react-three/drei';
 import * as THREE from 'three';
 
 /* ── Neural Network Lines ──────────────────────────────────── */
@@ -58,25 +58,21 @@ function DataNode({ radius, speed, offset, color, size }: {
 function HexRing({ rotation, speed, color, opacity }: {
   rotation: [number, number, number]; speed: number; color: string; opacity: number;
 }) {
-  const torusRef = useRef<THREE.Mesh>(null);
+  const groupRef = useRef<THREE.Group>(null);
 
   useFrame(({ clock }) => {
-    if (!torusRef.current) return;
-    torusRef.current.rotation.z = clock.elapsedTime * speed;
-    torusRef.current.rotation.x = rotation[0] + clock.elapsedTime * speed * 0.3;
+    if (!groupRef.current) return;
+    groupRef.current.rotation.z = clock.elapsedTime * speed;
+    groupRef.current.rotation.x = rotation[0] + clock.elapsedTime * speed * 0.3;
   });
 
   return (
-    <mesh ref={torusRef} rotation={rotation}>
-      <torusGeometry args={[2.4, 0.012, 8, 64]} />
-      <meshStandardMaterial
-        color={color}
-        emissive={color}
-        emissiveIntensity={0.8}
-        transparent
-        opacity={opacity}
-      />
-    </mesh>
+    <group ref={groupRef} rotation={rotation}>
+      <mesh>
+        <torusGeometry args={[2.4, 0.012, 8, 64]} />
+        <meshStandardMaterial color={color} emissive={color} emissiveIntensity={0.8} transparent opacity={opacity} />
+      </mesh>
+    </group>
   );
 }
 
@@ -99,10 +95,8 @@ function MouseTracker({ children }: { children: React.ReactNode }) {
 
   useFrame(({ clock }) => {
     if (!groupRef.current) return;
-    // Slow drift + mouse tilt
     groupRef.current.rotation.y += (mouse.current.x * 0.3 - groupRef.current.rotation.y) * 0.04;
     groupRef.current.rotation.x += (mouse.current.y * 0.15 - groupRef.current.rotation.x) * 0.04;
-    // Subtle float
     groupRef.current.position.y = Math.sin(clock.elapsedTime * 0.5) * 0.15;
   });
 
@@ -122,12 +116,7 @@ function WireShell() {
   return (
     <mesh ref={meshRef}>
       <icosahedronGeometry args={[2.1, 1]} />
-      <meshBasicMaterial
-        color="#7c3aed"
-        wireframe
-        transparent
-        opacity={0.12}
-      />
+      <meshBasicMaterial color="#7c3aed" wireframe transparent opacity={0.12} />
     </mesh>
   );
 }
@@ -139,14 +128,14 @@ function BrainCore() {
   useFrame(({ clock }) => {
     if (!meshRef.current) return;
     meshRef.current.rotation.y = clock.elapsedTime * 0.15;
-    // Scale pulse
     const s = 1 + Math.sin(clock.elapsedTime * 1.5) * 0.04;
     meshRef.current.scale.setScalar(s);
   });
 
   return (
     <Float speed={1.5} rotationIntensity={0.2} floatIntensity={0.1}>
-      <Sphere ref={meshRef} args={[1.0, 64, 64]}>
+      <mesh ref={meshRef}>
+        <sphereGeometry args={[1.0, 64, 64]} />
         <MeshDistortMaterial
           color="#4c1d95"
           roughness={0.1}
@@ -156,7 +145,7 @@ function BrainCore() {
           emissive="#6d28d9"
           emissiveIntensity={0.4}
         />
-      </Sphere>
+      </mesh>
     </Float>
   );
 }
@@ -165,32 +154,37 @@ function BrainCore() {
 function ParticleCloud() {
   const pointsRef = useRef<THREE.Points>(null);
 
-  const { positions, colors } = useMemo(() => {
+  const { posArray, colArray } = useMemo(() => {
     const count = 200;
-    const pos = new Float32Array(count * 3);
-    const col = new Float32Array(count * 3);
+    const posArray = new Float32Array(count * 3);
+    const colArray = new Float32Array(count * 3);
     const palette = [
       new THREE.Color('#7c3aed'),
       new THREE.Color('#06b6d4'),
       new THREE.Color('#a78bfa'),
       new THREE.Color('#f59e0b'),
     ];
-
     for (let i = 0; i < count; i++) {
       const r = 2.5 + Math.random() * 3;
       const theta = Math.random() * Math.PI * 2;
       const phi = Math.random() * Math.PI;
-      pos[i * 3]     = r * Math.sin(phi) * Math.cos(theta);
-      pos[i * 3 + 1] = r * Math.sin(phi) * Math.sin(theta);
-      pos[i * 3 + 2] = r * Math.cos(phi);
-
+      posArray[i * 3]     = r * Math.sin(phi) * Math.cos(theta);
+      posArray[i * 3 + 1] = r * Math.sin(phi) * Math.sin(theta);
+      posArray[i * 3 + 2] = r * Math.cos(phi);
       const c = palette[Math.floor(Math.random() * palette.length)];
-      col[i * 3]     = c.r;
-      col[i * 3 + 1] = c.g;
-      col[i * 3 + 2] = c.b;
+      colArray[i * 3]     = c.r;
+      colArray[i * 3 + 1] = c.g;
+      colArray[i * 3 + 2] = c.b;
     }
-    return { positions: pos, colors: col };
+    return { posArray, colArray };
   }, []);
+
+  const geo = useMemo(() => {
+    const g = new THREE.BufferGeometry();
+    g.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+    g.setAttribute('color',    new THREE.BufferAttribute(colArray, 3));
+    return g;
+  }, [posArray, colArray]);
 
   useFrame(({ clock }) => {
     if (!pointsRef.current) return;
@@ -199,11 +193,7 @@ function ParticleCloud() {
   });
 
   return (
-    <points ref={pointsRef}>
-      <bufferGeometry>
-        <bufferAttribute attach="attributes-position" args={[positions, 3]} />
-        <bufferAttribute attach="attributes-color" args={[colors, 3]} />
-      </bufferGeometry>
+    <points ref={pointsRef} geometry={geo}>
       <pointsMaterial size={0.04} vertexColors transparent opacity={0.7} sizeAttenuation />
     </points>
   );
@@ -214,38 +204,31 @@ function RobotScene() {
   const nodePositions = useMemo(() =>
     Array.from({ length: 8 }, (_, i) => {
       const angle = (i / 8) * Math.PI * 2;
-      const r = 1.6 + Math.random() * 0.4;
+      const r = 1.6 + (i % 3) * 0.15;
       return new THREE.Vector3(
         Math.cos(angle) * r,
-        (Math.random() - 0.5) * 1.0,
+        ((i % 3) - 1) * 0.35,
         Math.sin(angle) * r
       );
     }), []);
 
   return (
     <MouseTracker>
-      {/* Lighting */}
       <ambientLight intensity={0.3} />
-      <pointLight position={[3, 3, 3]} intensity={1.2} color="#7c3aed" />
+      <pointLight position={[3, 3, 3]}   intensity={1.2} color="#7c3aed" />
       <pointLight position={[-3, -2, 2]} intensity={0.6} color="#06b6d4" />
-      <pointLight position={[0, 0, 3]} intensity={0.8} color="#a78bfa" />
+      <pointLight position={[0, 0, 3]}   intensity={0.8} color="#a78bfa" />
       <pointLight position={[0, -3, -2]} intensity={0.4} color="#f59e0b" />
 
-      {/* Outer wireframe */}
       <WireShell />
 
-      {/* Orbital rings */}
-      <HexRing rotation={[0, 0, 0]}          speed={0.25}  color="#7c3aed" opacity={0.6} />
-      <HexRing rotation={[Math.PI / 3, 0, 0]} speed={-0.18} color="#06b6d4" opacity={0.4} />
-      <HexRing rotation={[Math.PI / 2, Math.PI / 4, 0]} speed={0.12} color="#f59e0b" opacity={0.3} />
+      <HexRing rotation={[0, 0, 0]}                      speed={0.25}  color="#7c3aed" opacity={0.6} />
+      <HexRing rotation={[Math.PI / 3, 0, 0]}            speed={-0.18} color="#06b6d4" opacity={0.4} />
+      <HexRing rotation={[Math.PI / 2, Math.PI / 4, 0]} speed={0.12}  color="#f59e0b" opacity={0.3} />
 
-      {/* Core brain */}
       <BrainCore />
-
-      {/* Neural lines */}
       <NeuralLines nodePositions={nodePositions} />
 
-      {/* Orbiting data nodes */}
       {nodePositions.map((p, i) => (
         <DataNode
           key={i}
@@ -257,7 +240,6 @@ function RobotScene() {
         />
       ))}
 
-      {/* Particle cloud */}
       <ParticleCloud />
     </MouseTracker>
   );

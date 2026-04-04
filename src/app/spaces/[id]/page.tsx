@@ -174,7 +174,7 @@ export default function SpacePage({ params }: { params: { id: string } }) {
               onClick={() => setPanelTab('generate')}
               className={`flex flex-1 items-center justify-center gap-1.5 py-2.5 text-xs transition
                 ${panelTab === 'generate'
-                  ? 'border-b-2 border-violet-500 text-white'
+                  ? 'border-b-2 border-amber-500 text-white'
                   : 'text-white/30 hover:text-white/60'
                 }`}
             >
@@ -185,7 +185,7 @@ export default function SpacePage({ params }: { params: { id: string } }) {
               onClick={() => setPanelTab('layers')}
               className={`flex flex-1 items-center justify-center gap-1.5 py-2.5 text-xs transition
                 ${panelTab === 'layers'
-                  ? 'border-b-2 border-violet-500 text-white'
+                  ? 'border-b-2 border-amber-500 text-white'
                   : 'text-white/30 hover:text-white/60'
                 }`}
             >

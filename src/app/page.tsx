@@ -48,10 +48,10 @@ const TRACKS = [
   {
     icon: '🤖',
     label: '자동화',
-    color: 'from-violet-500/10 to-transparent',
-    border: 'border-violet-500/20 hover:border-violet-400/50',
-    accent: 'text-violet-400',
-    tag: 'bg-violet-500/15 text-violet-400',
+    color: 'from-amber-500/10 to-transparent',
+    border: 'border-amber-500/20 hover:border-amber-400/50',
+    accent: 'text-amber-400',
+    tag: 'bg-amber-500/15 text-amber-400',
     Icon: Bot,
     desc: 'Tree of Thoughts, Self-Reflection, Meta-Prompting 실전 기법',
     outputs: ['반복업무 정의 + 입출력 구조', '단계별 요청문', '최종 출력 형식'],
@@ -103,7 +103,7 @@ export default function HomePage() {
 
           <Link
             href="/academy"
-            className="flex items-center gap-1.5 rounded-xl bg-violet-600 px-4 py-2 text-sm font-semibold text-white hover:bg-violet-500 transition-colors glow-violet-sm"
+            className="flex items-center gap-1.5 rounded-xl bg-amber-500 px-4 py-2 text-sm font-semibold text-black hover:bg-amber-400 transition-colors glow-amber-sm"
           >
             <Sparkles size={13} />
             시작하기
@@ -126,15 +126,15 @@ export default function HomePage() {
           {/* Left: Copy */}
           <div className="flex-1 space-y-8">
             {/* Eyebrow */}
-            <div className="inline-flex items-center gap-2 rounded-full border border-violet-500/30 bg-violet-500/10 px-4 py-1.5 text-sm text-violet-300">
-              <span className="h-1.5 w-1.5 rounded-full bg-violet-400 animate-pulse" />
+            <div className="inline-flex items-center gap-2 rounded-full border border-amber-500/30 bg-amber-500/10 px-4 py-1.5 text-sm text-amber-300">
+              <span className="h-1.5 w-1.5 rounded-full bg-amber-400 animate-pulse" />
               AI 실습 교육 플랫폼
             </div>
 
             {/* Headline */}
-            <h1 className="text-5xl font-black leading-[1.1] tracking-tight lg:text-6xl xl:text-7xl">
+            <h1 className="font-fraunces text-5xl font-black leading-[1.1] tracking-tight lg:text-6xl xl:text-7xl">
               <span className="block text-white">작은 질문이</span>
-              <span className="block text-gradient-violet">거대한 변화를</span>
+              <span className="block text-gradient-amber">거대한 변화를</span>
               <span className="block text-white">만듭니다</span>
             </h1>
 
@@ -148,16 +148,16 @@ export default function HomePage() {
             <div className="flex flex-wrap gap-3">
               <Link
                 href="/academy"
-                className="flex items-center gap-2 rounded-xl bg-violet-600 px-6 py-3 text-base font-semibold text-white hover:bg-violet-500 transition-all hover:scale-[1.02] glow-violet"
+                className="flex items-center gap-2 rounded-xl bg-amber-500 px-6 py-3 text-base font-semibold text-black hover:bg-amber-400 transition-all hover:scale-[1.02] glow-amber"
               >
                 <Brain size={18} />
                 무료로 시작하기
               </Link>
               <Link
                 href="/lab/marketing/campaign-copy-studio"
-                className="flex items-center gap-2 rounded-xl border border-white/15 bg-white/5 px-6 py-3 text-base font-semibold text-white/80 hover:bg-white/10 hover:text-white transition-all"
+                className="flex items-center gap-2 rounded-xl border border-white/10 bg-white/5 px-6 py-3 text-base font-semibold text-white/80 hover:bg-white/[0.09] hover:border-amber-500/25 hover:text-white transition-all"
               >
-                <Play size={16} className="text-violet-400" />
+                <Play size={16} className="text-amber-400" />
                 샘플 수업 보기
               </Link>
             </div>
@@ -166,7 +166,7 @@ export default function HomePage() {
             <div className="flex items-center gap-6 pt-2">
               {STATS.map(({ value, label }) => (
                 <div key={label} className="text-center">
-                  <div className="text-2xl font-bold text-gradient-violet">{value}</div>
+                  <div className="text-2xl font-bold text-gradient-amber">{value}</div>
                   <div className="text-xs text-white/40">{label}</div>
                 </div>
               ))}
@@ -209,7 +209,7 @@ export default function HomePage() {
       {/* ── Tracks ─────────────────────────────────────────────── */}
       <section className="relative mx-auto max-w-7xl px-6 py-24">
         <div className="mb-12 text-center">
-          <p className="mb-3 text-sm font-medium uppercase tracking-[0.15em] text-violet-400">실전 세션</p>
+          <p className="mb-3 text-sm font-medium uppercase tracking-[0.15em] text-amber-400">실전 세션</p>
           <h2 className="text-3xl font-bold text-white lg:text-4xl">
             어떤 결과물을 만들 건가요?
           </h2>
@@ -281,7 +281,7 @@ export default function HomePage() {
                 )}
                 <div className="relative flex h-12 w-12 items-center justify-center rounded-xl glass-panel text-2xl">
                   {icon}
-                  <span className="absolute -top-1.5 -right-1.5 rounded-full bg-violet-600 px-1.5 py-0.5 text-[9px] font-bold text-white">
+                  <span className="absolute -top-1.5 -right-1.5 rounded-full bg-amber-500 px-1.5 py-0.5 text-[9px] font-bold text-black">
                     {step}
                   </span>
                 </div>
@@ -295,12 +295,12 @@ export default function HomePage() {
 
       {/* ── CTA Banner ──────────────────────────────────────────── */}
       <section className="mx-auto max-w-7xl px-6 pb-24">
-        <div className="relative overflow-hidden rounded-3xl border border-violet-500/20 bg-gradient-to-br from-violet-900/20 via-transparent to-cyan-900/10 p-12 text-center">
+        <div className="relative overflow-hidden rounded-3xl border border-amber-500/20 bg-gradient-to-br from-amber-900/10 via-transparent to-cyan-900/10 p-12 text-center">
           <div className="pointer-events-none absolute inset-0">
-            <div className="absolute top-0 left-1/2 h-[300px] w-[400px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-violet-600/15 blur-[80px]" />
+            <div className="absolute top-0 left-1/2 h-[300px] w-[400px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-amber-500/10 blur-[80px]" />
           </div>
           <div className="relative">
-            <p className="mb-2 text-sm font-medium text-violet-400">지금 바로 시작하세요</p>
+            <p className="mb-2 text-sm font-medium text-amber-400">지금 바로 시작하세요</p>
             <h2 className="mb-4 text-3xl font-black text-white lg:text-4xl">
               첫 질문이 모든 것을 바꿉니다
             </h2>
@@ -308,7 +308,7 @@ export default function HomePage() {
             <div className="flex flex-wrap items-center justify-center gap-3">
               <Link
                 href="/academy"
-                className="flex items-center gap-2 rounded-xl bg-violet-600 px-8 py-3.5 text-base font-bold text-white hover:bg-violet-500 transition-all hover:scale-[1.02] glow-violet"
+                className="flex items-center gap-2 rounded-xl bg-amber-500 px-8 py-3.5 text-base font-bold text-black hover:bg-amber-400 transition-all hover:scale-[1.02] glow-amber"
               >
                 <Sparkles size={16} />
                 무료로 시작하기

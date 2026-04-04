@@ -1,4 +1,24 @@
 import './globals.css';
+import { Fraunces, Geist, Geist_Mono } from 'next/font/google';
+
+const fraunces = Fraunces({
+  subsets: ['latin'],
+  variable: '--font-fraunces',
+  weight: ['700', '800'],
+  display: 'swap',
+});
+
+const geist = Geist({
+  subsets: ['latin'],
+  variable: '--font-geist-sans',
+  display: 'swap',
+});
+
+const geistMono = Geist_Mono({
+  subsets: ['latin'],
+  variable: '--font-geist-mono',
+  display: 'swap',
+});
 
 export const metadata = {
   title: 'Beeliber Academy — AI 실습 교육 플랫폼',
@@ -7,7 +27,7 @@ export const metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="ko">
+    <html lang="ko" className={`${fraunces.variable} ${geist.variable} ${geistMono.variable}`}>
       <body className="min-h-screen academy-bg text-white antialiased">
         {children}
       </body>

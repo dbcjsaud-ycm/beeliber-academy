@@ -9,8 +9,12 @@
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.82.0",
+    "@react-three/drei": "^10.7.7",
+    "@react-three/fiber": "^9.5.0",
     "@supabase/ssr": "^0.6.1",
     "@supabase/supabase-js": "^2.58.0",
+    "@tailwindcss/postcss": "^4.2.2",
+    "@types/three": "^0.183.1",
     "fabric": "^6.9.1",
     "immer": "^11.1.4",
     "lucide-react": "^0.542.0",
@@ -18,7 +22,13 @@
     "openai": "^4.104.0",
     "react": "19.0.0",
     "react-dom": "19.0.0",
+    "tailwindcss": "^4.2.2",
+    "three": "^0.183.2",
     "zod": "^3.24.2",
     "zustand": "^5.0.12"
+  },
+  "devDependencies": {
+    "@types/react": "19.2.14",
+    "typescript": "6.0.2"
   }
 }
