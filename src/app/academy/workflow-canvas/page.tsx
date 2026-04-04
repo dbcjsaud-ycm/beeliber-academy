@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { Sparkles } from "lucide-react";
 import WorkflowCanvas, { type CanvasPreset } from "@/components/academy/canvas/WorkflowCanvas";
 
 // ═══════════════════════════════════════════════
@@ -793,6 +794,16 @@ export default function WorkflowCanvasPage() {
           >
             💻 구현 코드 로드맵
           </button>
+
+          <div className="w-px h-4 bg-white/10 mx-1" />
+
+          <Link
+            href="/spaces/new"
+            className="flex items-center gap-1.5 px-4 py-1.5 rounded-full text-xs font-semibold bg-violet-600 hover:bg-violet-500 text-white transition-all"
+          >
+            <Sparkles size={12} />
+            워크스페이스 열기
+          </Link>
         </div>
       </header>
 

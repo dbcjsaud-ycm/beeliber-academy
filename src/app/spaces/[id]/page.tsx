@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef, useState } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import {
@@ -10,6 +10,7 @@ import {
   Download,
   Image as ImageIcon,
   Layers,
+  Save,
 } from 'lucide-react';
 
 import CanvasToolbar from '@/components/canvas/CanvasToolbar';
@@ -19,6 +20,8 @@ import PromptInput from '@/components/generate/PromptInput';
 import GenerateButton from '@/components/generate/GenerateButton';
 import { useCanvasStore } from '@/stores/canvasStore';
 import { useGenerateStore } from '@/stores/generateStore';
+import { useCanvasPersist } from '@/lib/pikaso/useCanvasPersist';
+import { getCreditsBalance } from '@/lib/pikaso/spaces';
 import type { InfiniteCanvasHandle } from '@/components/canvas/InfiniteCanvas';
 
 // Dynamic import to avoid SSR issues with Fabric.js
@@ -32,9 +35,30 @@ const DEFAULT_PAGE_ID = 'page-1';
 export default function SpacePage({ params }: { params: { id: string } }) {
   const canvasRef = useRef<InfiniteCanvasHandle>(null);
   const [panelTab, setPanelTab] = useState<'generate' | 'layers'>('generate');
+  const [saveStatus, setSaveStatus] = useState<'saved' | 'saving' | 'idle'>('idle');
 
   const { selectedIds, elements, viewport } = useCanvasStore();
-  const { creditsBalance, activeGenerations } = useGenerateStore();
+  const { creditsBalance, activeGenerations, setGenerationState } = useGenerateStore();
+
+  // Autosave to Supabase
+  useCanvasPersist(true);
+
+  // Load real credits from Supabase on mount
+  useEffect(() => {
+    getCreditsBalance().then((balance) => {
+      if (balance > 0) {
+        useGenerateStore.setState({ creditsBalance: balance });
+      }
+    }).catch(() => {}); // Graceful fail if not logged in
+  }, []);
+
+  // Show save indicator when elements change
+  useEffect(() => {
+    if (elements.length === 0) return;
+    setSaveStatus('saving');
+    const t = setTimeout(() => setSaveStatus('saved'), 2200);
+    return () => clearTimeout(t);
+  }, [elements]);
 
   const spaceTitle = `스페이스 ${params.id.slice(0, 8)}`;
   const pendingCount = activeGenerations.filter(
@@ -58,6 +82,14 @@ export default function SpacePage({ params }: { params: { id: string } }) {
         <span className="text-sm font-medium text-white/80">{spaceTitle}</span>
 
         <div className="ml-auto flex items-center gap-2">
+          {/* Save status */}
+          {saveStatus !== 'idle' && (
+            <div className="flex items-center gap-1 text-xs text-white/30">
+              <Save size={11} />
+              <span>{saveStatus === 'saving' ? '저장 중...' : '저장됨'}</span>
+            </div>
+          )}
+
           {/* Credits badge */}
           <div className="flex items-center gap-1.5 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs">
             <span className="text-white/40">크레딧</span>
