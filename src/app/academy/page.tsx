@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { motion } from "motion/react";
+
 import { ChevronRight, Menu, X, LogOut } from "lucide-react";
 import { TRACKS, MODULES, ASSIGNMENTS, getModulesByTrack } from "@/lib/academy/data";
 import { Badge } from "@/components/ui/badge";
@@ -97,7 +97,7 @@ export default function AcademyDashboard() {
 
         {/* 모바일 메뉴 */}
         {mobileMenuOpen && (
-          <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }}
+          <div
             className="md:hidden border-t border-white/5 px-4 py-3 space-y-2">
             {NAV_ITEMS.map((item) => (
               <Link key={item.label} href={item.href} onClick={() => setMobileMenuOpen(false)}
@@ -105,13 +105,13 @@ export default function AcademyDashboard() {
                 {item.label}
               </Link>
             ))}
-          </motion.div>
+          </div>
         )}
       </header>
 
       <main className="max-w-7xl mx-auto px-4 py-8">
         {/* 환영 */}
-        <motion.section initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="mb-8">
+        <section className="mb-8">
           <div className="glass-panel p-8">
             <p className="text-blue-400 text-sm font-semibold mb-2 flex items-center gap-2">
               <span className="w-2 h-2 rounded-full bg-blue-400" />
@@ -141,10 +141,10 @@ export default function AcademyDashboard() {
               </Link>
             </div>
           </div>
-        </motion.section>
+        </section>
 
         {/* 직군별 섹션 선택 */}
-        <motion.section initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.08 }} className="mb-8">
+        <section className="mb-8">
           <h3 className="font-bold mb-3 text-sm">내 직군 선택</h3>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
             {(["all", "marketing", "dev", "automation"] as Section[]).map((s) => {
@@ -165,10 +165,10 @@ export default function AcademyDashboard() {
               );
             })}
           </div>
-        </motion.section>
+        </section>
 
         {/* 내 진행률 */}
-        <motion.section initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="mb-8">
+        <section className="mb-8">
           <div className="glass-panel p-6">
             <div className="flex items-center justify-between mb-4">
               <h3 className="font-bold text-sm">내 진행률</h3>
@@ -183,10 +183,10 @@ export default function AcademyDashboard() {
               <span>추천 역할: <strong className="text-amber-400">—</strong></span>
             </div>
           </div>
-        </motion.section>
+        </section>
 
         {/* 마감 임박 과제 */}
-        <motion.section initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15 }} className="mb-8">
+        <section className="mb-8">
           <h3 className="font-bold mb-4 text-sm">마감 임박 과제</h3>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {dueAssignments.map((a) => (
@@ -203,10 +203,10 @@ export default function AcademyDashboard() {
               </Link>
             ))}
           </div>
-        </motion.section>
+        </section>
 
         {/* 학습 트랙 */}
-        <motion.section initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="mb-8">
+        <section className="mb-8">
           <h3 className="font-bold mb-4 text-sm">학습 트랙</h3>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {TRACKS.filter((t) => SECTION_TRACKS[section].includes(t.slug)).map((track) => {
@@ -228,10 +228,10 @@ export default function AcademyDashboard() {
               );
             })}
           </div>
-        </motion.section>
+        </section>
 
         {/* 하네스 구조 */}
-        <motion.section initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.25 }} className="mb-8">
+        <section className="mb-8">
           <div className="glass-panel p-8">
             <h3 className="font-bold mb-6 text-sm text-center">하네스 엔지니어링 구조</h3>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
@@ -254,7 +254,7 @@ export default function AcademyDashboard() {
               AI는 생성보다 <strong className="text-amber-400">검수/피드백 보조</strong>에 더 많이 사용됩니다
             </p>
           </div>
-        </motion.section>
+        </section>
       </main>
 
       <footer className="border-t border-white/5 py-6 text-center text-xs text-secondary-dark">

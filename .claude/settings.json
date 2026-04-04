@@ -8,7 +8,8 @@
       "Bash(ls /Users/cm/aca/beeliber-academy/*.config.js)",
       "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:3000)",
       "Skill(design-review)",
-      "Skill(design-review:*)"
+      "Skill(design-review:*)",
+      "Bash(git commit:*)"
     ]
   }
 }

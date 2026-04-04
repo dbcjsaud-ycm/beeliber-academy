@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { motion } from "motion/react";
+
 import { ChevronRight, Plus, Pencil, Trash2, X, Eye, EyeOff, Users, BarChart3, AlertTriangle, CheckCircle } from "lucide-react";
 import { TRACKS, MODULES } from "@/lib/academy/data";
 import { Badge } from "@/components/ui/badge";
@@ -150,7 +150,7 @@ function EmployeeModal({ employee, onSave, onClose }: {
             {isNew ? "등록" : "저장"}
           </button>
         </div>
-      </motion.div>
+      </div>
     </div>
   );
 }
@@ -211,7 +211,7 @@ export default function AdminPage() {
               <div className="w-8 h-8 rounded-full bg-gradient-to-br from-red-500 to-orange-500 flex items-center justify-center text-white text-xs font-bold">A</div>
             </div>
           </div>
-        </motion.header>
+        </header>
 
         {/* Tab Navigation */}
         <div className="border-b border-white/5 px-6">
@@ -231,7 +231,7 @@ export default function AdminPage() {
         <main className="max-w-7xl mx-auto px-6 py-8">
           {/* ═══ 대시보드 탭 ═══ */}
           {tab === "dashboard" && (
-            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-6">
+            <div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-6">
               {/* KPI 카드 */}
               <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-3">
                 {[
@@ -315,12 +315,12 @@ export default function AdminPage() {
                   </div>
                 </div>
               </div>
-            </motion.div>
+            </div>
           )}
 
           {/* ═══ 직원 관리 탭 ═══ */}
           {tab === "employees" && (
-            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-6">
+            <div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-6">
               {/* 상단 액션 */}
               <div className="flex items-center justify-between">
                 <div>
@@ -376,7 +376,7 @@ export default function AdminPage() {
                   </div>
                 ))}
               </div>
-            </motion.div>
+            </div>
           )}
         </main>
       </div>
