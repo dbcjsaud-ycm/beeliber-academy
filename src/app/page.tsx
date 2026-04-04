@@ -88,24 +88,25 @@ export default function HomePage() {
       {/* ── Hero ─────────────────────────────────────────────────────── */}
       <section className="relative h-screen min-h-[700px] overflow-hidden">
 
-        {/* Spline — 뷰포트 오른쪽 풀블리드, z-0 */}
-        <div className="absolute inset-y-0 right-0 w-full lg:w-[62%]" style={{ zIndex: 0 }}>
+        {/* Spline — 풀스크린 백그라운드 */}
+        <div className="absolute inset-0" style={{ zIndex: 0 }}>
           <SplineScene />
         </div>
 
-        {/* left-side gradient veil — Spline 위에서 텍스트 가독성 확보 */}
+        {/* 오른쪽 텍스트 영역 veil */}
         <div className="pointer-events-none absolute inset-0" style={{ zIndex: 1 }}>
-          <div className="absolute inset-y-0 left-0 w-[55%] bg-gradient-to-r from-[#050508] via-[#050508]/90 to-transparent" />
-          <div className="absolute inset-y-0 left-[35%] w-[30%] bg-gradient-to-r from-[#050508]/40 to-transparent" />
-          {/* top/bottom darkening */}
-          <div className="absolute inset-x-0 top-0 h-28 bg-gradient-to-b from-[#050508] to-transparent" />
+          {/* 우측 패널 배경 */}
+          <div className="absolute inset-y-0 right-0 w-full lg:w-[48%]"
+            style={{ background: 'linear-gradient(to left, rgba(5,5,8,0.96) 40%, rgba(5,5,8,0.85) 70%, transparent 100%)' }} />
+          {/* top/bottom */}
+          <div className="absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-[#050508]/80 to-transparent" />
           <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-[#050508] to-transparent" />
         </div>
 
-        {/* Content — z-10 */}
-        <div className="relative flex h-full items-center" style={{ zIndex: 10 }}>
+        {/* Content — 우측 배치, z-10 */}
+        <div className="relative flex h-full items-center justify-end" style={{ zIndex: 10 }}>
           <div className="mx-auto w-full max-w-7xl px-6">
-            <div className="flex max-w-[540px] flex-col gap-7">
+            <div className="ml-auto flex max-w-[520px] flex-col gap-7">
 
               {/* eyebrow */}
               <div className="flex items-center gap-3">
