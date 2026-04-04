@@ -203,6 +203,29 @@ export async function POST(req: NextRequest) {
     usedModel = 'simulation';
   }
 
+  // ── Deduct credits (best-effort) ──────────────────────────────────────────
+  const generationId = crypto.randomUUID();
+  try {
+    await supabase.from('generations').insert({
+      id: generationId,
+      user_id: user.id,
+      model_id: usedModel,
+      type: 'image',
+      status: 'completed',
+      prompt: finalPrompt,
+      output_urls: [imageUrl],
+      credits_cost: creditsCost,
+    });
+
+    await supabase.rpc('deduct_credits', {
+      p_user_id: user.id,
+      p_amount: creditsCost,
+      p_generation_id: generationId,
+    });
+  } catch {
+    // Non-fatal
+  }
+
   return NextResponse.json({
     success: true,
     data: {

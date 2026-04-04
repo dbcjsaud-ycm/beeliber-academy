@@ -6,6 +6,7 @@ import { useCanvasStore } from '@/stores/canvasStore';
 import type { InfiniteCanvasHandle } from './InfiniteCanvas';
 import type { RefObject } from 'react';
 import InpaintingPanel from './InpaintingPanel';
+import OutpaintingPanel from './OutpaintingPanel';
 
 interface ContextActionBarProps {
   canvasRef: RefObject<InfiniteCanvasHandle | null>;
@@ -13,7 +14,8 @@ interface ContextActionBarProps {
 
 export default function ContextActionBar({ canvasRef }: ContextActionBarProps) {
   const { selectedIds, removeElement } = useCanvasStore();
-  const [showInpaint, setShowInpaint] = useState(false);
+  const [showInpaint, setShowInpaint]   = useState(false);
+  const [showOutpaint, setShowOutpaint] = useState(false);
 
   if (selectedIds.length === 0) return null;
 
@@ -53,10 +55,15 @@ export default function ContextActionBar({ canvasRef }: ContextActionBarProps) {
     {
       icon: Paintbrush,
       label: 'Inpaint',
-      onClick: () => setShowInpaint((v) => !v),
+      onClick: () => { setShowInpaint((v) => !v); setShowOutpaint(false); },
       active: showInpaint,
     },
-    { icon: Expand,   label: 'Outpaint',   onClick: () => {} },
+    {
+      icon: Expand,
+      label: 'Outpaint',
+      onClick: () => { setShowOutpaint((v) => !v); setShowInpaint(false); },
+      active: showOutpaint,
+    },
     { icon: Camera,   label: '시점 변경',   onClick: () => {} },
     { icon: Sun,      label: '조명 변경',   onClick: () => {} },
     { icon: Copy,     label: '복제',        onClick: handleCopy },
@@ -90,11 +97,19 @@ export default function ContextActionBar({ canvasRef }: ContextActionBarProps) {
         })}
       </div>
 
-      {/* Inpainting panel (shown inline below action bar) */}
+      {/* Inpainting panel */}
       {showInpaint && (
         <InpaintingPanel
           canvasRef={canvasRef}
           onClose={() => setShowInpaint(false)}
+        />
+      )}
+
+      {/* Outpainting panel */}
+      {showOutpaint && (
+        <OutpaintingPanel
+          canvasRef={canvasRef}
+          onClose={() => setShowOutpaint(false)}
         />
       )}
     </div>
