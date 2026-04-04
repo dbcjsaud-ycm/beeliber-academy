@@ -86,25 +86,30 @@ export default function HomePage() {
       </nav>
 
       {/* ── Hero ─────────────────────────────────────────────────────── */}
-      <section className="relative h-screen min-h-[700px] overflow-hidden">
+      <section style={{ position: 'relative', height: '100vh', minHeight: 700, overflow: 'hidden' }}>
 
         {/* Spline — 풀스크린 백그라운드 */}
-        <div className="absolute inset-0" style={{ zIndex: 0 }}>
+        <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', zIndex: 0 }}>
           <SplineScene />
         </div>
 
-        {/* 오른쪽 텍스트 영역 veil */}
-        <div className="pointer-events-none absolute inset-0" style={{ zIndex: 1 }}>
-          {/* 우측 패널 배경 */}
-          <div className="absolute inset-y-0 right-0 w-full lg:w-[48%]"
-            style={{ background: 'linear-gradient(to left, rgba(5,5,8,0.96) 40%, rgba(5,5,8,0.85) 70%, transparent 100%)' }} />
-          {/* top/bottom */}
-          <div className="absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-[#050508]/80 to-transparent" />
-          <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-[#050508] to-transparent" />
+        {/* 우측 텍스트 영역 veil */}
+        <div style={{ position: 'absolute', inset: 0, zIndex: 1, pointerEvents: 'none' }}>
+          {/* 우측 패널 어둡게 */}
+          <div style={{
+            position: 'absolute', inset: 0,
+            background: 'linear-gradient(to left, rgba(5,5,8,0.97) 30%, rgba(5,5,8,0.88) 50%, rgba(5,5,8,0.30) 72%, transparent 100%)',
+          }} />
+          {/* 상단 */}
+          <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 96,
+            background: 'linear-gradient(to bottom, rgba(5,5,8,0.70), transparent)' }} />
+          {/* 하단 */}
+          <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: 160,
+            background: 'linear-gradient(to top, rgba(5,5,8,1), transparent)' }} />
         </div>
 
-        {/* Content — 우측 배치, z-10 */}
-        <div className="relative flex h-full items-center justify-end" style={{ zIndex: 10 }}>
+        {/* Content — 우측, z-10 */}
+        <div style={{ position: 'relative', height: '100%', display: 'flex', alignItems: 'center', zIndex: 10 }}>
           <div className="mx-auto w-full max-w-7xl px-6">
             <div className="ml-auto flex max-w-[520px] flex-col gap-7">
 
