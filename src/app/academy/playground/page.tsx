@@ -9,18 +9,18 @@ type Mode = "text" | "image";
 
 const EXAMPLE_PROMPTS = {
   text: [
-    { label: "서비스 소개문", prompt: "빌리버 서비스를 외국인 여행자 대상으로 200자 이내로 소개해주세요. Active 모드(경쾌하고 친근하게) 톤으로 작성하고, 운영 시간과 예약 방법을 포함해주세요." },
-    { label: "금지표현 검수 연습", prompt: "아래 문장에서 빌리버 금지 표현을 찾고 대체해주세요:\n\n'빌리버는 저렴한 택배 서비스로 호텔에서 공항까지 무거운 짐을 쉽게 배송해드립니다. AI 기반 솔루션으로 할인된 가격에 이용하세요.'" },
-    { label: "마케팅 전략 3안", prompt: "빌리버 인스타그램 팔로워를 3개월 내 1,000명으로 성장시키는 마케팅 전략 3안을 제시해주세요. 각 안에 장단점, 예상 비용, 실현 가능성을 포함해주세요." },
-    { label: "스레드 게시물 5개", prompt: "빌리버 서비스를 소개하는 인스타그램 스레드 게시물 5개를 작성해주세요. 각 150자 이내, Active 모드, 마지막에 bee-liber.com CTA 포함." },
-    { label: "다국어 카피 (영/중/일)", prompt: "빌리버 라스트데이 배송 서비스를 영어, 繁體中文, 일본어로 각각 소개하는 짧은 카피(50자 이내)를 작성해주세요. 톤은 각 문화에 맞게 조절하되 핵심 메시지는 동일하게." },
+    { label: "서비스 소개문", prompt: "우리 서비스를 처음 접하는 고객을 대상으로 200자 이내로 소개해주세요. 경쾌하고 친근한 톤으로 작성하고, 핵심 가치와 사용 방법을 포함해주세요." },
+    { label: "금지표현 검수 연습", prompt: "아래 문장에서 부적절한 표현을 찾고 대체해주세요:\n\n'이 서비스는 저렴한 가격으로 제공됩니다. AI 기반 솔루션으로 할인된 가격에 이용하세요.'" },
+    { label: "마케팅 전략 3안", prompt: "인스타그램 팔로워를 3개월 내 1,000명으로 성장시키는 마케팅 전략 3안을 제시해주세요. 각 안에 장단점, 예상 비용, 실현 가능성을 포함해주세요." },
+    { label: "SNS 게시물 5개", prompt: "서비스를 소개하는 인스타그램 게시물 5개를 작성해주세요. 각 150자 이내, 친근한 톤으로 작성하고 행동 유도 문구를 포함해주세요." },
+    { label: "다국어 카피 (영/중/일)", prompt: "서비스를 영어, 繁體中文, 일본어로 각각 소개하는 짧은 카피(50자 이내)를 작성해주세요. 톤은 각 문화에 맞게 조절하되 핵심 메시지는 동일하게." },
   ],
   image: [
-    { label: "빈손 여행자", prompt: "A happy young Asian tourist walking through a bright Seoul street with empty hands, no luggage, warm golden hour lighting, travel lifestyle photography, candid shot, warm tones" },
-    { label: "Hub 지점 분위기", prompt: "A modern clean luggage storage counter in a bright Korean neighborhood shop, warm interior lighting, wooden shelves with colorful suitcases neatly organized, welcoming atmosphere" },
+    { label: "밝은 라이프스타일", prompt: "A happy young person walking through a bright city street, warm golden hour lighting, lifestyle photography, candid shot, warm tones" },
+    { label: "서비스 공간", prompt: "A modern clean service counter in a bright retail space, warm interior lighting, neatly organized shelves, welcoming atmosphere" },
     { label: "카드뉴스 배경", prompt: "Minimalist abstract background with soft yellow gradient, subtle geometric shapes, clean modern design, warm tones, perfect for text overlay" },
-    { label: "공항 수령 장면", prompt: "A smiling tourist receiving their luggage at Incheon airport pickup counter, bright modern airport interior, clean commercial lighting, relieved and happy expression" },
-    { label: "캐리어 POV", prompt: "First person view of a rolling suitcase wheel on a clean Seoul sidewalk, cherry blossoms visible, warm spring sunlight, cinematic travel mood, shallow depth of field" },
+    { label: "고객 만족 장면", prompt: "A smiling customer at a modern service counter, bright interior, clean commercial lighting, happy and satisfied expression" },
+    { label: "도시 배경", prompt: "First person view walking on a clean city sidewalk, cherry blossoms visible, warm spring sunlight, cinematic travel mood, shallow depth of field" },
   ],
 };
 
@@ -139,8 +139,8 @@ export default function PlaygroundPage() {
               <textarea
                 className="glass-input w-full h-32 px-4 py-3 text-sm resize-none"
                 placeholder={mode === "text"
-                  ? "빌리버 관련 프롬프트를 입력하세요...\n예: 빌리버 서비스를 소개하는 SNS 게시물을 작성해주세요."
-                  : "이미지 프롬프트를 영어로 입력하세요...\n예: A happy tourist walking through Seoul with no luggage, warm tones"
+                  ? "프롬프트를 입력하세요...\n예: 우리 서비스를 소개하는 SNS 게시물을 작성해주세요."
+                  : "이미지 프롬프트를 영어로 입력하세요...\n예: A happy person walking through a bright city street, warm tones"
                 }
                 value={prompt}
                 onChange={(e) => setPrompt(e.target.value)}
@@ -259,7 +259,7 @@ export default function PlaygroundPage() {
                       <li>• 금지 표현을 대체 표현으로 바꿔보세요 (예: &quot;저렴한&quot; → &quot;스마트한 여행 파트너&quot;)</li>
                     )}
                     {reviewResult.violations.some(v => v.rule === "required_mention") && (
-                      <li>• 예약 안내 시 bee-liber.com을 반드시 포함하세요</li>
+                      <li>• 필수 문구나 링크가 누락되지 않았는지 확인하세요</li>
                     )}
                     {reviewResult.passed && <li>• 잘하셨어요! 이 결과물을 과제에 활용해보세요</li>}
                   </ul>

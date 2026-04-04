@@ -1,4 +1,4 @@
-// Beeliber Academy 타입 정의
+// Academy 타입 정의
 
 export type UserRole = 'student' | 'marketer' | 'developer' | 'automation' | 'reviewer' | 'admin';
 export type SubmissionStatus = 'draft' | 'submitted' | 'ai_reviewed' | 'revision_requested' | 'resubmitted' | 'passed' | 'failed';

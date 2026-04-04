@@ -5,7 +5,7 @@ import { Canvas, useFrame } from "@react-three/fiber";
 import { Float, MeshDistortMaterial } from "@react-three/drei";
 import * as THREE from "three";
 
-// 작은 빌리버 테마 물방울 (페이지 배경용 — 가벼움)
+// 작은 테마 물방울 (페이지 배경용 — 가벼움)
 function MiniBubble({ position, scale, speed, color }: {
   position: [number, number, number];
   scale: number;
@@ -77,7 +77,7 @@ function Scene() {
       <directionalLight position={[4, 4, 4]} intensity={0.4} color="#ffd700" />
       <directionalLight position={[-3, -2, 3]} intensity={0.2} color="#3b82f6" />
 
-      {/* 빌리버 테마 물방울 — 작고 은은하게 */}
+      {/* 테마 물방울 — 작고 은은하게 */}
       <MiniBubble position={[-5, 2, -4]} scale={0.8} speed={0.5} color="#f59e0b" />
       <MiniBubble position={[5, -1, -5]} scale={0.6} speed={0.4} color="#3b82f6" />
       <MiniBubble position={[0, 3, -6]} scale={0.5} speed={0.6} color="#a855f7" />

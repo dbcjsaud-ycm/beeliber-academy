@@ -10,7 +10,7 @@ import WorkflowCanvas, { type CanvasPreset } from "@/components/academy/canvas/W
 
 const DEV_PRESET: CanvasPreset = {
   title: "웹/앱 개발 워크플로우",
-  subtitle: "Beeliber Academy 교육 웹의 하네스 엔지니어링 구조를 직접 설계해보세요",
+  subtitle: "Academy 교육 웹의 하네스 엔지니어링 구조를 직접 설계해보세요",
   guide: [
     "노드를 드래그하여 위치를 조정하세요",
     "출력 포트(●) 클릭 → 입력 포트(●) 클릭으로 연결",
@@ -198,8 +198,563 @@ const VIDEO_PRESET: CanvasPreset = {
 };
 
 // ═══════════════════════════════════════════════
+// 프리셋 3: 이미지/영상 생성 아키텍처 (멀티모달 크리에이티브 워크스페이스)
+// Pikaso Clone 구조 기반 — 무한 캔버스 + 생성 허브 + 이미지 편집기 + 모델 라우팅
+// ═══════════════════════════════════════════════
 
-type CanvasMode = "dev" | "video";
+const IMAGE_PRESET: CanvasPreset = {
+  title: "이미지/영상 생성 아키텍처",
+  subtitle: "무한 캔버스 + 생성 허브 + 편집기 + 모델 라우팅을 노드로 설계해보세요",
+  guide: [
+    "노드를 드래그하여 위치를 조정하세요",
+    "출력 포트(●) → 입력 포트(●) 클릭으로 연결",
+    "레퍼런스 시스템: style / character / element / color 카테고리",
+    "모델 라우터: auto 선택 시 작업 성격에 따라 최적 모델 자동 배정",
+    "기준 이미지를 먼저 생성하고 → 첫 프레임으로 고정해 영상화",
+    "Inpaint/Outpaint로 생성 후 바로 편집하는 흐름을 연결해보세요",
+  ],
+  nodes: [
+    {
+      id: "canvas-core",
+      name: "InfiniteCanvas",
+      type: "캔버스",
+      icon: "🖼️",
+      color: "#3b82f6",
+      glowColor: "rgba(59, 130, 246, 0.3)",
+      position: { x: 60, y: 200 },
+      fields: [
+        { label: "기능", value: "줌/팬/선택/이미지 배치" },
+        { label: "인터랙션", value: "휠 줌 · 드래그 팬 · Undo/Redo" },
+      ],
+      inputs: 0,
+      outputs: 1,
+      description: "무한 캔버스 — 모든 생성·편집 작업의 중심 공간. 요소를 자유롭게 배치하고 이동합니다.",
+    },
+    {
+      id: "reference-system",
+      name: "Reference System",
+      type: "조건화",
+      icon: "🎯",
+      color: "#f97316",
+      glowColor: "rgba(249, 115, 22, 0.3)",
+      position: { x: 60, y: 420 },
+      fields: [
+        { label: "카테고리", value: "style · character · element · color" },
+        { label: "최대", value: "레퍼런스 8개 동시 조합" },
+      ],
+      inputs: 1,
+      outputs: 1,
+      description: "스타일/캐릭터/요소/색감 레퍼런스 이미지를 등록해 생성 결과에 조건을 부여합니다. character는 IP-Adapter 기반, color/effect는 prompt suffix 방식.",
+    },
+    {
+      id: "model-router",
+      name: "Model Router",
+      type: "AI Core",
+      icon: "🧭",
+      color: "#8b5cf6",
+      glowColor: "rgba(139, 92, 246, 0.3)",
+      position: { x: 380, y: 300 },
+      fields: [
+        { label: "모드", value: "auto / 수동 선택" },
+        { label: "모델풀", value: "Gemini · Nanobanana · Veo · Flux · SDXL" },
+      ],
+      inputs: 2,
+      outputs: 1,
+      description: "modelId=auto 시 작업 성격·레퍼런스 유무에 따라 최적 모델 자동 선택. BullMQ 큐로 비동기 처리, 실패 시 fallback provider 재시도.",
+    },
+    {
+      id: "image-gen",
+      name: "Image Generator",
+      type: "Generator",
+      icon: "✨",
+      color: "#22c55e",
+      glowColor: "rgba(34, 197, 94, 0.3)",
+      position: { x: 700, y: 160 },
+      fields: [
+        { label: "입력", value: "프롬프트 + 레퍼런스 조건" },
+        { label: "출력", value: "생성 이미지 → 캔버스 배치" },
+      ],
+      inputs: 1,
+      outputs: 2,
+      description: "프롬프트와 레퍼런스 조건을 받아 이미지를 생성하고 캔버스에 배치합니다. 결과는 S3 저장 후 DB 기록.",
+    },
+    {
+      id: "inpaint",
+      name: "Inpainting",
+      type: "편집기",
+      icon: "🖌️",
+      color: "#ec4899",
+      glowColor: "rgba(236, 72, 153, 0.3)",
+      position: { x: 1020, y: 60 },
+      fields: [
+        { label: "방식", value: "브러시 마스크 → 바이너리 마스크 추출" },
+        { label: "활용", value: "얼굴·배경·오브젝트 부분 수정" },
+      ],
+      inputs: 1,
+      outputs: 1,
+      description: "생성된 이미지의 특정 영역을 브러시로 선택해 새로운 내용으로 교체합니다. 핵심 차별 기능.",
+    },
+    {
+      id: "outpaint",
+      name: "Outpainting",
+      type: "편집기",
+      icon: "↔️",
+      color: "#06b6d4",
+      glowColor: "rgba(6, 182, 212, 0.3)",
+      position: { x: 1020, y: 260 },
+      fields: [
+        { label: "방식", value: "상하좌우 bounds 확장" },
+        { label: "비율", value: "1:1 · 16:9 · 9:16 프리셋" },
+      ],
+      inputs: 1,
+      outputs: 1,
+      description: "이미지 경계 바깥으로 캔버스를 확장해 주변 장면을 AI로 채웁니다. 영상 첫 프레임 준비에 유용.",
+    },
+    {
+      id: "camera-change",
+      name: "Camera Change",
+      type: "편집기",
+      icon: "📷",
+      color: "#eab308",
+      glowColor: "rgba(234, 179, 8, 0.3)",
+      position: { x: 1020, y: 460 },
+      fields: [
+        { label: "제어", value: "회전 · 세로 · 줌 · 틸트" },
+        { label: "출력", value: "시점 변경 후보 이미지 다수 생성" },
+      ],
+      inputs: 1,
+      outputs: 1,
+      description: "동일 장면을 다른 카메라 앵글/줌으로 재생성합니다. 영상 시퀀스 다양화에 활용.",
+    },
+    {
+      id: "relight",
+      name: "Relight",
+      type: "편집기",
+      icon: "💡",
+      color: "#f59e0b",
+      glowColor: "rgba(245, 158, 11, 0.3)",
+      position: { x: 1020, y: 660 },
+      fields: [
+        { label: "제어", value: "라이트 포지션 드래그" },
+        { label: "프리셋", value: "자연광 · 골든아워 · 스튜디오 · 야경" },
+      ],
+      inputs: 1,
+      outputs: 1,
+      description: "이미지 내 광원 위치와 색온도를 재배치합니다. 씬 분위기를 일관되게 유지하는 데 필수.",
+    },
+    {
+      id: "i2v",
+      name: "Image-to-Video",
+      type: "Generator",
+      icon: "🎬",
+      color: "#a855f7",
+      glowColor: "rgba(168, 85, 247, 0.3)",
+      position: { x: 1360, y: 300 },
+      fields: [
+        { label: "모델", value: "Veo 3.1 / Runway / Higgsfield" },
+        { label: "카메라", value: "Zoom In · Dolly · Pan · Orbit" },
+      ],
+      inputs: 2,
+      outputs: 1,
+      description: "기준 이미지를 첫 프레임으로 고정해 영상 클립을 생성합니다. 캐릭터 일관성 유지의 핵심 단계.",
+    },
+    {
+      id: "credits",
+      name: "Credits Manager",
+      type: "Billing",
+      icon: "💳",
+      color: "#14b8a6",
+      glowColor: "rgba(20, 184, 166, 0.3)",
+      position: { x: 380, y: 560 },
+      fields: [
+        { label: "흐름", value: "estimate → balance check → deduct" },
+        { label: "이력", value: "credit_transactions 테이블 기록" },
+      ],
+      inputs: 0,
+      outputs: 1,
+      description: "모델별 과금 단가와 작업별 고정 비용을 관리합니다. BullMQ 작업 완료 후 사용량 차감.",
+    },
+    {
+      id: "s3-storage",
+      name: "S3 / CDN",
+      type: "Storage",
+      icon: "☁️",
+      color: "#64748b",
+      glowColor: "rgba(100, 116, 139, 0.3)",
+      position: { x: 1360, y: 560 },
+      fields: [
+        { label: "저장", value: "원본 · 편집본 · 썸네일" },
+        { label: "배포", value: "CloudFront CDN 가속" },
+      ],
+      inputs: 2,
+      outputs: 0,
+      description: "생성·편집된 이미지/영상을 S3에 저장하고 CloudFront로 빠르게 서빙합니다. DB 기록도 함께 갱신.",
+    },
+  ],
+  connections: [
+    { id: "i1", from: "canvas-core", to: "reference-system" },
+    { id: "i2", from: "canvas-core", to: "model-router" },
+    { id: "i3", from: "reference-system", to: "model-router" },
+    { id: "i4", from: "credits", to: "model-router" },
+    { id: "i5", from: "model-router", to: "image-gen" },
+    { id: "i6", from: "image-gen", to: "inpaint" },
+    { id: "i7", from: "image-gen", to: "outpaint" },
+    { id: "i8", from: "image-gen", to: "camera-change" },
+    { id: "i9", from: "image-gen", to: "relight" },
+    { id: "i10", from: "outpaint", to: "i2v" },
+    { id: "i11", from: "camera-change", to: "i2v" },
+    { id: "i12", from: "image-gen", to: "s3-storage" },
+    { id: "i13", from: "i2v", to: "s3-storage" },
+  ],
+  extraNodes: [
+    {
+      name: "Context Action Bar",
+      type: "UI",
+      icon: "⚡",
+      color: "#3b82f6",
+      glowColor: "rgba(59, 130, 246, 0.3)",
+      fields: [{ label: "액션", value: "AI 편집 · 리사이즈 · 복제 · 레퍼런스 등록" }],
+      inputs: 1, outputs: 1,
+      description: "캔버스에서 요소를 선택했을 때 뜨는 AI 액션 바. 인라인 편집의 진입점.",
+    },
+    {
+      name: "BullMQ Worker",
+      type: "Queue",
+      icon: "⚙️",
+      color: "#f97316",
+      glowColor: "rgba(249, 115, 22, 0.3)",
+      fields: [{ label: "처리", value: "AI 생성 비동기 큐 · 재시도 · 완료 알림" }],
+      inputs: 1, outputs: 1,
+      description: "AI 생성 요청을 큐에 쌓아 순차·비동기 처리. 실패 시 fallback provider로 자동 재시도.",
+    },
+    {
+      name: "Collaboration (Yjs)",
+      type: "Realtime",
+      icon: "👥",
+      color: "#22c55e",
+      glowColor: "rgba(34, 197, 94, 0.3)",
+      fields: [{ label: "기술", value: "Yjs CRDT + y-websocket + Awareness" }],
+      inputs: 1, outputs: 1,
+      description: "다중 사용자가 같은 캔버스를 동시 편집. 커서 위치와 선택 상태를 실시간 브로드캐스트.",
+    },
+    {
+      name: "Adjust / Filter",
+      type: "편집기",
+      icon: "🎚️",
+      color: "#a855f7",
+      glowColor: "rgba(168, 85, 247, 0.3)",
+      fields: [{ label: "조정", value: "밝기 · 대비 · 채도 · 필터 프리셋" }],
+      inputs: 1, outputs: 1,
+      description: "생성 이미지의 색감·밝기·필터를 비파괴 방식으로 조정합니다.",
+    },
+    {
+      name: "Template Preset",
+      type: "재사용",
+      icon: "📐",
+      color: "#ec4899",
+      glowColor: "rgba(236, 72, 153, 0.3)",
+      fields: [{ label: "활용", value: "레퍼런스 조합 · 프롬프트 저장 · 재실행" }],
+      inputs: 0, outputs: 1,
+      description: "자주 쓰는 레퍼런스 조합과 프롬프트를 템플릿으로 저장해 재사용합니다.",
+    },
+  ],
+};
+
+// ═══════════════════════════════════════════════
+// 프리셋 4: 구현 코드 로드맵 (개발자 작업지시서 원문 기준)
+// 1단계(타입+캔버스) → 2단계(핵심모듈) → 3단계(기술설계) → 4단계(추가UI)
+// ═══════════════════════════════════════════════
+
+const CODE_PRESET: CanvasPreset = {
+  title: "구현 코드 로드맵",
+  subtitle: "개발자 작업지시서 4단계 — 타입 정의부터 배포까지 순서대로 연결해보세요",
+  guide: [
+    "노드를 드래그하여 위치를 조정하세요",
+    "출력 포트(●) → 입력 포트(●) 클릭으로 연결",
+    "단계별 구현: 1단계(타입·캔버스) → 2단계(모듈) → 3단계(DB·API) → 4단계(배포)",
+    "각 노드의 '파일 경로' 필드가 실제 구현 파일 위치입니다",
+    "Auto 모델: 레퍼런스 있으면 seedream-5-lite, 긴 프롬프트면 gpt, 기본은 flux-2-pro",
+    "크레딧 차감은 반드시 SELECT FOR UPDATE 트랜잭션으로 처리",
+  ],
+  nodes: [
+    // ── 1단계: 타입 정의 ──
+    {
+      id: "types",
+      name: "1. 타입 정의",
+      type: "1단계",
+      icon: "📐",
+      color: "#06b6d4",
+      glowColor: "rgba(6, 182, 212, 0.3)",
+      position: { x: 60, y: 60 },
+      fields: [
+        { label: "파일", value: "types/canvas.ts · models.ts · references.ts · credits.ts" },
+        { label: "핵심", value: "CanvasElement · AIModel · ReferenceCategory · CreditAccount" },
+      ],
+      inputs: 0,
+      outputs: 1,
+      description: "CanvasElement(id/type/x/y/width/height/rotation/zIndex/pageId/data), AIModel(provider/type/credits/tags), ReferenceCategory(stock|style|character|element|color|effect|camera), ViewportState(x/y/zoom)",
+    },
+    // ── 1단계: 캔버스 코어 ──
+    {
+      id: "canvas",
+      name: "2. InfiniteCanvas",
+      type: "1단계",
+      icon: "🖼️",
+      color: "#3b82f6",
+      glowColor: "rgba(59, 130, 246, 0.3)",
+      position: { x: 60, y: 280 },
+      fields: [
+        { label: "파일", value: "components/canvas/InfiniteCanvas.tsx" },
+        { label: "핵심", value: "Ctrl+휠=줌 · 휠=팬 · Space+drag=팬 · pageElements 필터링" },
+      ],
+      inputs: 1,
+      outputs: 1,
+      description: "handleWheel(Ctrl=줌/일반=팬), 팬 시작 setPanStart, 현재 pageId 기준 elements 필터, ImageElement/TextElement/StickyNote 렌더링, ContextActionBar(selectedIds>0), CanvasToolbar, StatusBar(PageManager+MiniMap+Zoom%)",
+    },
+    // ── 1단계: CanvasToolbar ──
+    {
+      id: "toolbar",
+      name: "3. CanvasToolbar",
+      type: "1단계",
+      icon: "🔧",
+      color: "#3b82f6",
+      glowColor: "rgba(59, 130, 246, 0.3)",
+      position: { x: 60, y: 500 },
+      fields: [
+        { label: "파일", value: "components/canvas/CanvasToolbar.tsx" },
+        { label: "도구", value: "select(V) · hand(H) · crop(K) · sticky(T) · comment(C)" },
+      ],
+      inputs: 1,
+      outputs: 1,
+      description: "TOOLS 배열(id/icon/label/shortcut/subTools). 서브툴: crop→lasso, sticky→pen/sticker. 호버 시 서브툴 패널 노출. Undo/Redo 버튼. AddElementMenu: 이미지생성기/동영상생성기/어시스턴트/텍스트 + 업로드/에셋/스톡",
+    },
+    // ── 1단계: ModelSelector ──
+    {
+      id: "model-selector",
+      name: "4. ModelSelector",
+      type: "1단계",
+      icon: "🧭",
+      color: "#8b5cf6",
+      glowColor: "rgba(139, 92, 246, 0.3)",
+      position: { x: 400, y: 60 },
+      fields: [
+        { label: "파일", value: "components/generate/ModelSelector.tsx" },
+        { label: "옵션", value: "Auto · 다중(4개 병렬) · 모든 모델(40개) → ModelBrowser 모달" },
+      ],
+      inputs: 1,
+      outputs: 1,
+      description: "RECOMMENDED: image=[flux-2-pro, seedream-5-lite, google-nano-banana-2], video=[seedance-2, kling-3, kling-3-omni]. Auto 선택: 레퍼런스있음→seedream-5-lite / 프롬프트>200→gpt / 기본→flux-2-pro",
+    },
+    // ── 1단계: ReferenceSystem ──
+    {
+      id: "reference",
+      name: "5. ReferenceSystem",
+      type: "1단계",
+      icon: "🎯",
+      color: "#f97316",
+      glowColor: "rgba(249, 115, 22, 0.3)",
+      position: { x: 400, y: 280 },
+      fields: [
+        { label: "파일", value: "components/generate/ReferenceSystem.tsx" },
+        { label: "카테고리", value: "stock · style(IP-Adapter) · character(IP-Adapter) · element · color(suffix) · effect(suffix) · camera" },
+      ],
+      inputs: 1,
+      outputs: 1,
+      description: "최대 8개 레퍼런스 조합. 빠른추가버튼(스타일/캐릭터/추가). 선택된 레퍼런스 칩(thumbnail+name+x). ReferenceBrowser 모달: CategorySidebar / PresetGrid / MediaUploadZone / SearchBar. weight: 0.0~1.0",
+    },
+    // ── 2단계: Inpainting ──
+    {
+      id: "inpaint-code",
+      name: "6. InpaintingPanel",
+      type: "2단계",
+      icon: "🖌️",
+      color: "#ec4899",
+      glowColor: "rgba(236, 72, 153, 0.3)",
+      position: { x: 400, y: 500 },
+      fields: [
+        { label: "파일", value: "components/editor/InpaintingPanel.tsx" },
+        { label: "흐름", value: "마스크 Canvas → 브러시 stroke → 바이너리 추출 → POST /api/generate/inpaint" },
+      ],
+      inputs: 1,
+      outputs: 1,
+      description: "maskRef(별도 canvas) + 브러시: size/hardness/opacity. drawBrushStroke: hardness<1이면 RadialGradient 소프트브러시. extractMask: 알파채널→흑백 바이너리 PNG Blob. maskHistory로 Undo. mode: replace|erase",
+    },
+    // ── 2단계: Credits ──
+    {
+      id: "credits-code",
+      name: "7. Credits 시스템",
+      type: "2단계",
+      icon: "💳",
+      color: "#14b8a6",
+      glowColor: "rgba(20, 184, 166, 0.3)",
+      position: { x: 740, y: 60 },
+      fields: [
+        { label: "파일", value: "lib/credits/pricing.ts · manager.ts" },
+        { label: "단가", value: "flux-2-pro=50 · imagen-4=100 · gpt=150 · inpaint=40 · outpaint=60 · camera=80" },
+      ],
+      inputs: 1,
+      outputs: 1,
+      description: "IMAGE_PRICING / VIDEO_PRICING(perSecondMultiplier) / TASK_PRICING. CreditManager: getBalance / estimateCost / checkBalance / deduct(SELECT FOR UPDATE 트랜잭션) / addCredits. 영상: baseCost + durationSec * perSecond",
+    },
+    // ── 3단계: DB Schema ──
+    {
+      id: "db-schema",
+      name: "8. DB Schema",
+      type: "3단계",
+      icon: "🗄️",
+      color: "#64748b",
+      glowColor: "rgba(100, 116, 139, 0.3)",
+      position: { x: 740, y: 280 },
+      fields: [
+        { label: "파일", value: "lib/db/schema.ts (Drizzle ORM + PostgreSQL)" },
+        { label: "테이블", value: "users · credit_accounts · spaces · pages · elements · generations · ai_models · reference_presets · templates · comments" },
+      ],
+      inputs: 1,
+      outputs: 1,
+      description: "elements.data: jsonb(image|text|video|audio|sticky|sticker|list). generations: userId/modelId/type/status/prompt/outputUrls/creditsCost. spaces.settings: jsonb(snapGuides/tooltips/edgeType/mouseWheelMode). space_collaborators: spaceId+userId UNIQUE",
+    },
+    // ── 3단계: API Routes ──
+    {
+      id: "api-routes",
+      name: "9. API Routes",
+      type: "3단계",
+      icon: "🔌",
+      color: "#22c55e",
+      glowColor: "rgba(34, 197, 94, 0.3)",
+      position: { x: 740, y: 500 },
+      fields: [
+        { label: "생성", value: "POST /api/generate/image|video|audio|3d|inpaint|outpaint|relight|camera|upscale" },
+        { label: "기타", value: "GET /api/generate/:id/status · /api/models · /api/credits/estimate · WS /api/collaborate/:spaceId" },
+      ],
+      inputs: 1,
+      outputs: 1,
+      description: "ImageGenerateRequest: {modelId, prompt, references[], count(1~8), aspectRatio, enhancePrompt?, seed?}. 공통 에러코드: UNAUTHORIZED|INSUFFICIENT_CREDITS|MODEL_UNAVAILABLE|RATE_LIMITED|GENERATION_FAILED. 크레딧 견적: POST /api/credits/estimate → {estimatedCost, currentBalance, sufficient}",
+    },
+    // ── 3단계: Zustand + Collaboration ──
+    {
+      id: "state-collab",
+      name: "10. State + Collab",
+      type: "3단계",
+      icon: "👥",
+      color: "#a855f7",
+      glowColor: "rgba(168, 85, 247, 0.3)",
+      position: { x: 1080, y: 170 },
+      fields: [
+        { label: "파일", value: "stores/canvasStore.ts · generateStore.ts · creditStore.ts" },
+        { label: "협업", value: "Yjs CRDT + y-websocket + Awareness(커서/선택 브로드캐스트)" },
+      ],
+      inputs: 2,
+      outputs: 1,
+      description: "canvasStore: viewport/elements/selectedIds/activeTool/pages/history(undo·redo·canUndo·canRedo)/clipboard. generateStore: activeType/selectedModel/references/prompt/activeGenerations(Map)/results. creditStore: balance/plan/monthlyUsed/estimateCost(). Redis: Yjs 영속성+rate limiting",
+    },
+    // ── 3단계: Model Router + BullMQ ──
+    {
+      id: "model-router-code",
+      name: "11. Model Router",
+      type: "3단계",
+      icon: "⚙️",
+      color: "#f59e0b",
+      glowColor: "rgba(245, 158, 11, 0.3)",
+      position: { x: 1080, y: 390 },
+      fields: [
+        { label: "파일", value: "lib/ai/model-router.ts" },
+        { label: "흐름", value: "Credit Check → Auto 선택 → BullMQ Queue → Worker → S3 → deduct → 알림" },
+      ],
+      inputs: 1,
+      outputs: 1,
+      description: "MODEL_PROVIDER 맵: flux-2-pro→replicate(fallback:fal), flux-1-fast→fal, kling-3→fal, seedance-2→fal, wan-2.2→replicate, elevenlabs-v3→elevenlabs. 실패 시 fallback provider 재시도 최대 3회. Pro유저 큐 우선순위 높음. SSE 또는 폴링으로 진행률 전달",
+    },
+    // ── 배포 ──
+    {
+      id: "deploy",
+      name: "12. 배포 인프라",
+      type: "배포",
+      icon: "🚀",
+      color: "#ef4444",
+      glowColor: "rgba(239, 68, 68, 0.3)",
+      position: { x: 1400, y: 280 },
+      fields: [
+        { label: "스택", value: "Vercel(Next.js) · S3+CloudFront · PostgreSQL(Neon/Supabase) · Redis · BullMQ Worker" },
+        { label: "순서", value: "캔버스MVP → 이미지생성기 → Inpaint/Outpaint → DB/크레딧 → 협업 → 배포" },
+      ],
+      inputs: 1,
+      outputs: 0,
+      description: "브라우저→CloudFront→Vercel→S3 / y-websocket WS Server / PostgreSQL / Redis / BullMQ Worker→AI Providers(Replicate·Fal.ai·OpenAI·Google Vertex·ElevenLabs). 우선순위: 1.캔버스코어 2.이미지생성 3.Inpaint/Outpaint 4.DB/API/크레딧 5.협업 6.배포",
+    },
+  ],
+  connections: [
+    { id: "c1", from: "types", to: "canvas" },
+    { id: "c2", from: "types", to: "model-selector" },
+    { id: "c3", from: "canvas", to: "toolbar" },
+    { id: "c4", from: "canvas", to: "reference" },
+    { id: "c5", from: "model-selector", to: "reference" },
+    { id: "c6", from: "reference", to: "inpaint-code" },
+    { id: "c7", from: "model-selector", to: "credits-code" },
+    { id: "c8", from: "credits-code", to: "db-schema" },
+    { id: "c9", from: "credits-code", to: "api-routes" },
+    { id: "c10", from: "db-schema", to: "state-collab" },
+    { id: "c11", from: "api-routes", to: "state-collab" },
+    { id: "c12", from: "inpaint-code", to: "state-collab" },
+    { id: "c13", from: "state-collab", to: "model-router-code" },
+    { id: "c14", from: "model-router-code", to: "deploy" },
+  ],
+  extraNodes: [
+    {
+      name: "OutpaintingPanel",
+      type: "2단계",
+      icon: "↔️",
+      color: "#06b6d4",
+      glowColor: "rgba(6, 182, 212, 0.3)",
+      fields: [{ label: "파일", value: "components/editor/OutpaintingPanel.tsx" }, { label: "방식", value: "상하좌우 bounds 확장 · 1:1/16:9/9:16 프리셋" }],
+      inputs: 1, outputs: 1,
+      description: "이미지 경계 바깥을 AI로 채움. bounds(top/bottom/left/right px 입력) + aspectRatio 프리셋. POST /api/generate/outpaint. 비용: 60 크레딧",
+    },
+    {
+      name: "CameraChangePanel",
+      type: "2단계",
+      icon: "📷",
+      color: "#eab308",
+      glowColor: "rgba(234, 179, 8, 0.3)",
+      fields: [{ label: "파일", value: "components/editor/CameraChangePanel.tsx" }, { label: "제어", value: "회전·세로·줌·틸트 → 후보 이미지 다수 생성" }],
+      inputs: 1, outputs: 1,
+      description: "동일 장면을 다른 앵글/줌으로 재생성. 후보 이미지 여러 장 중 선택. POST /api/generate/camera. 비용: 80 크레딧",
+    },
+    {
+      name: "RelightPanel",
+      type: "2단계",
+      icon: "💡",
+      color: "#f59e0b",
+      glowColor: "rgba(245, 158, 11, 0.3)",
+      fields: [{ label: "파일", value: "components/editor/RelightPanel.tsx" }, { label: "제어", value: "라이트 포지션 드래그 · 자연광/골든아워/스튜디오/야경 프리셋" }],
+      inputs: 1, outputs: 1,
+      description: "광원 위치·색온도 재배치. 프리셋 또는 드래그로 광원 위치 지정. POST /api/generate/relight. 비용: 50 크레딧",
+    },
+    {
+      name: "ContextActionBar",
+      type: "1단계",
+      icon: "⚡",
+      color: "#3b82f6",
+      glowColor: "rgba(59, 130, 246, 0.3)",
+      fields: [{ label: "파일", value: "components/canvas/ContextActionBar.tsx" }, { label: "액션", value: "AIWand · Resize · UseAsReference · Duplicate · Delete · Download · Link · More" }],
+      inputs: 1, outputs: 1,
+      description: "selectedIds.length > 0 일 때 상단에 플로팅. AIWand → ImageEditorModal(Inpaint|Outpaint|Camera|Relight|Adjust). UseAsReference → ReferenceSystem에 등록",
+    },
+    {
+      name: "AdjustPanel",
+      type: "2단계",
+      icon: "🎚️",
+      color: "#8b5cf6",
+      glowColor: "rgba(139, 92, 246, 0.3)",
+      fields: [{ label: "파일", value: "components/editor/AdjustPanel.tsx" }, { label: "조정", value: "밝기·대비·채도·색온도·선명도·노이즈감소 · 필터 프리셋" }],
+      inputs: 1, outputs: 1,
+      description: "비파괴 방식으로 이미지 색감·필터 조정. CSS filter 또는 canvas API로 실시간 미리보기. 확정 시 새 이미지로 저장",
+    },
+  ],
+};
+
+// ═══════════════════════════════════════════════
+
+type CanvasMode = "dev" | "video" | "image" | "code";
 
 export default function WorkflowCanvasPage() {
   const [mode, setMode] = useState<CanvasMode>("dev");
@@ -226,15 +781,26 @@ export default function WorkflowCanvasPage() {
           >
             🎬 영상 기획
           </button>
+          <button
+            onClick={() => setMode("image")}
+            className={`px-4 py-1.5 rounded-full text-xs font-semibold transition-all ${mode === "image" ? "bg-orange-500 text-white" : "bg-white/5 text-secondary-dark hover:bg-white/10"}`}
+          >
+            🎨 이미지/영상 실습
+          </button>
+          <button
+            onClick={() => setMode("code")}
+            className={`px-4 py-1.5 rounded-full text-xs font-semibold transition-all ${mode === "code" ? "bg-green-500 text-white" : "bg-white/5 text-secondary-dark hover:bg-white/10"}`}
+          >
+            💻 구현 코드 로드맵
+          </button>
         </div>
       </header>
 
       <div className="flex-1 overflow-hidden mt-3 mx-3 mb-3">
-        {mode === "dev" ? (
-          <WorkflowCanvas key="dev" preset={DEV_PRESET} />
-        ) : (
-          <WorkflowCanvas key="video" preset={VIDEO_PRESET} />
-        )}
+        {mode === "dev" && <WorkflowCanvas key="dev" preset={DEV_PRESET} />}
+        {mode === "video" && <WorkflowCanvas key="video" preset={VIDEO_PRESET} />}
+        {mode === "image" && <WorkflowCanvas key="image" preset={IMAGE_PRESET} />}
+        {mode === "code" && <WorkflowCanvas key="code" preset={CODE_PRESET} />}
       </div>
     </div>
   );

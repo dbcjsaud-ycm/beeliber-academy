@@ -382,12 +382,15 @@ Pro 유저 큐 우선순위 높음 / Free 유저 보통
 ### 배포 아키텍처
 
 ```
-브라우저 → CloudFront CDN → Vercel(Next.js SSR/API) → S3
-                         → y-websocket WS Server
-                         → PostgreSQL (Neon/Supabase)
-                         → Redis
+브라우저 → CloudFront CDN → Vercel(Next.js SSR/API) → Supabase Storage
+                         → y-websocket WS Server (Railway / Fly.io — NOT Vercel)
+                         → PostgreSQL (Supabase)
+                         → Redis (BullMQ 큐)
                          → BullMQ Worker → AI Providers
                               (Replicate, Fal.ai, OpenAI, Google Vertex, ElevenLabs)
+
+주의: y-websocket은 지속 WebSocket 서버가 필요하므로 Vercel 서버리스에서 실행 불가.
+      S3 대신 Supabase Storage 사용 (S3 호환 API, 신규 AWS 자격증명 불필요).
 ```
 
 ### 개발 우선순위
@@ -397,7 +400,20 @@ Pro 유저 큐 우선순위 높음 / Free 유저 보통
 3. Inpaint/Outpaint — 만들고 바로 고치는 경험 완성
 4. DB/API/크레딧 — 저장·이력·과금 (실서비스 전환)
 5. 협업 — Yjs 다중 사용자 동기화
-6. 배포/모니터링 — S3/CDN/큐/로그
+6. 배포/모니터링 — Supabase Storage/CDN/큐/로그
+
+### 구현 전 확인사항 (autoplan 검수 결과)
+
+- **크레딧 차감 멱등성**: `credit_transactions` INSERT에 `ON CONFLICT (generationId) DO NOTHING` 필수
+- **Rate Limiting**: BullMQ 큐 진입 시 사용자당 동시 생성 최대 3개 제한
+- **SSE 라우트**: `export const maxDuration = 60` 설정 필수 (Vercel 기본 30s 초과)
+- **패널 상태 머신**: IDLE / IMAGE_SELECTED / GENERATING / MULTIPLE_SELECTED 명시
+- **빈 캔버스 상태**: "첫 이미지를 생성해보세요" CTA 필수 (빈 상태 처리)
+- **생성 중 플레이스홀더**: 큐에 등록되면 캔버스에 pending 타일 즉시 표시
+- **dark 테마**: InfiniteCanvas 배경 `bg-neutral-900`, 요소에 `glass-panel` 테두리
+- **기존 `/api/ai/image`**: Pikaso 생성 API와 분리 유지 (레거시 코드, 브랜드 스타일 하드코딩됨)
+- **Stripe 웹훅**: `stripe.webhooks.constructEvent()` HMAC 검증 필수
+- **테스트**: Vitest(유닛) + Playwright(E2E) 설정 필요, 현재 0% 커버리지
 
 ---
 
@@ -429,3 +445,17 @@ Key routing rules:
 - Architecture review → invoke plan-eng-review
 - Save progress, checkpoint, resume → invoke checkpoint
 - Code quality, health check → invoke health
+
+## GSTACK REVIEW REPORT
+
+| Review | Trigger | Why | Runs | Status | Findings |
+|--------|---------|-----|------|--------|----------|
+| CEO Review | `/autoplan` | Scope & strategy | 1 | DONE | 6 critical gaps (credits idempotency, rate limit, Yjs infra, Stripe webhook, test coverage, base64 API) |
+| Design Review | `/autoplan` | UI/UX gaps | 1 | DONE | 3 medium gaps (panel state machine, empty states, dark theme alignment) |
+| Eng Review | `/autoplan` | Architecture & tests | 1 | DONE | 24 test gaps (0% coverage), 3 arch concerns (S3→Supabase Storage, SSE maxDuration, Yjs on Vercel) |
+| DX Review | `/autoplan` | Developer experience | 1 | DONE | 3 gaps (error envelope standard, SSE vs WS clarification, onboarding env vars) |
+| Codex Review | `/codex review` | Independent 2nd opinion | 0 | — | — |
+
+**VERDICT:** REVIEWED — 6 critical gaps addressed in CLAUDE.md "구현 전 확인사항" section.
+CEO plan artifact: `~/.gstack/projects/dbcjsaud-ycm-beeliber-academy/ceo-plans/20260404-pikaso-clone.md`
+Test plan artifact: `~/.gstack/projects/dbcjsaud-ycm-beeliber-academy/cm-master-eng-review-test-plan-*.md`

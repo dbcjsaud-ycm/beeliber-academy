@@ -1,16 +1,38 @@
-// Beeliber 브랜드/정책 자동 검수 엔진 (Evaluator)
+// 브랜드/정책 자동 검수 엔진 (Evaluator)
 
 export const BEELIBER_POLICY_RULES = {
   forbiddenPhrases: [
-    '저렴한', '싼', '할인', '힘들다', '무겁다',
-    '택배', '물류', 'AI 기반', 'AI기반솔루션',
-    '호텔 픽업', '공항→호텔', '공항-호텔', 'airport to hotel',
-    '호텔픽업', '공항에서 호텔',
+    '저렴한',
+    '싼',
+    '할인',
+    '힘들다',
+    '무겁다',
+    '택배',
+    '물류',
+    'AI 기반 솔루션',
+    '호텔 픽업',
+    '공항→호텔 배송',
+    '공항-호텔 배송',
+    'airport to hotel',
+    'hotel pickup',
   ],
-  requiredMentions: ['bee-liber.com'],
-  forbiddenServices: ['공항→호텔 배송', '호텔 픽업'],
-  operatingHours: { open: '09:00', close: '21:00' },
-  deliveryHours: { dropoff: '09:00~13:00', pickup: '16:00~21:00' },
+  requiredMentions: [
+    'bee-liber.com',
+  ],
+  forbiddenServices: [
+    '공항→호텔 배송',
+    '공항-호텔 배송',
+    '호텔 픽업',
+    'airport to hotel',
+    'hotel pickup',
+  ],
+};
+
+// 하위 호환용 alias
+export const POLICY_RULES = {
+  forbiddenPhrases: BEELIBER_POLICY_RULES.forbiddenPhrases,
+  requiredMentions: BEELIBER_POLICY_RULES.requiredMentions,
+  forbiddenServices: BEELIBER_POLICY_RULES.forbiddenServices,
 };
 
 export interface ReviewResult {
@@ -30,21 +52,20 @@ export interface Violation {
 export function runAutoReview(text: string): ReviewResult {
   const violations: Violation[] = [];
 
-  // 금지어 검사
   for (const phrase of BEELIBER_POLICY_RULES.forbiddenPhrases) {
     if (text.includes(phrase)) {
-      const severity = BEELIBER_POLICY_RULES.forbiddenServices.some(s => phrase.includes(s) || s.includes(phrase))
-        ? 'critical' : 'error';
+      const isCritical = BEELIBER_POLICY_RULES.forbiddenServices.some(
+        s => phrase.includes(s) || s.includes(phrase)
+      );
       violations.push({
         rule: 'forbidden_phrase',
-        severity,
+        severity: isCritical ? 'critical' : 'error',
         message: `금지 표현 "${phrase}"이(가) 포함되어 있습니다.`,
         found: phrase,
       });
     }
   }
 
-  // 필수 언급 검사
   for (const required of BEELIBER_POLICY_RULES.requiredMentions) {
     if (!text.includes(required)) {
       violations.push({

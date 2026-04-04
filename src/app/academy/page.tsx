@@ -258,7 +258,7 @@ export default function AcademyDashboard() {
       </main>
 
       <footer className="border-t border-white/5 py-6 text-center text-xs text-secondary-dark">
-        Beeliber Academy v1.0 — 하네스 엔지니어링 기반 실무 훈련 시스템
+        Academy v1.0 — 하네스 엔지니어링 기반 실무 훈련 시스템
       </footer>
     </div>
   );

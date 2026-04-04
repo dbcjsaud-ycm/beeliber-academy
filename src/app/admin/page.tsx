@@ -21,14 +21,14 @@ interface Employee {
   submissions: number;
 }
 
-// ─── Initial Data (빌리버 직원) ──────────────────────
+// ─── Initial Data ────────────────────────────────────
 const INITIAL_EMPLOYEES: Employee[] = [
-  { id: "u1", name: "오현정", email: "oh", password: "", role: "marketer", team: "SNS·브랜드·전략", status: "active", progress: 0, passRate: 0, submissions: 0 },
-  { id: "u2", name: "박진호", email: "park", password: "", role: "marketer", team: "Hub Ops / 지점 관리", status: "active", progress: 0, passRate: 0, submissions: 0 },
-  { id: "u3", name: "진영주", email: "jin", password: "", role: "marketer", team: "파트너 지점 활성화", status: "active", progress: 0, passRate: 0, submissions: 0 },
-  { id: "u4", name: "류천명", email: "ryu", password: "", role: "developer", team: "앱 제작 / Google Ads", status: "active", progress: 0, passRate: 0, submissions: 0 },
-  { id: "u5", name: "임재원", email: "lim", password: "", role: "developer", team: "인천공항 데이터", status: "active", progress: 0, passRate: 0, submissions: 0 },
-  { id: "u6", name: "김동교", email: "kim", password: "", role: "automation", team: "자동화 / 요금 체계", status: "active", progress: 0, passRate: 0, submissions: 0 },
+  { id: "u1", name: "수강생 1", email: "user1", password: "", role: "marketer", team: "SNS·브랜드·전략", status: "active", progress: 0, passRate: 0, submissions: 0 },
+  { id: "u2", name: "수강생 2", email: "user2", password: "", role: "marketer", team: "콘텐츠 기획", status: "active", progress: 0, passRate: 0, submissions: 0 },
+  { id: "u3", name: "수강생 3", email: "user3", password: "", role: "marketer", team: "채널 운영", status: "active", progress: 0, passRate: 0, submissions: 0 },
+  { id: "u4", name: "수강생 4", email: "user4", password: "", role: "developer", team: "앱 제작 / 광고", status: "active", progress: 0, passRate: 0, submissions: 0 },
+  { id: "u5", name: "수강생 5", email: "user5", password: "", role: "developer", team: "데이터 분석", status: "active", progress: 0, passRate: 0, submissions: 0 },
+  { id: "u6", name: "수강생 6", email: "user6", password: "", role: "automation", team: "자동화 / 운영", status: "active", progress: 0, passRate: 0, submissions: 0 },
 ];
 
 const ROLE_OPTIONS = ["student", "marketer", "developer", "automation", "reviewer", "admin"];
@@ -42,17 +42,17 @@ const ROLE_COLORS: Record<string, string> = {
 };
 
 const MOCK_VIOLATIONS = [
-  { rule: '"저렴한" 사용', count: 12, trend: "down" },
-  { rule: '"택배" 사용', count: 8, trend: "down" },
-  { rule: 'bee-liber.com 누락', count: 7, trend: "up" },
-  { rule: '"호텔 픽업" 언급', count: 3, trend: "same" },
-  { rule: '운영 시간 오류', count: 2, trend: "down" },
+  { rule: '금지 표현 사용', count: 12, trend: "down" },
+  { rule: '톤 가이드 위반', count: 8, trend: "down" },
+  { rule: 'CTA 누락', count: 7, trend: "up" },
+  { rule: '필수 문구 미포함', count: 3, trend: "same" },
+  { rule: '출력 형식 오류', count: 2, trend: "down" },
 ];
 
 const MOCK_PENDING = [
-  { user: "오현정", assignment: "Gemini 전략 3안 생성", status: "ai_reviewed", score: 72 },
-  { user: "박진호", assignment: "금지 표현 찾기 리포트", status: "submitted", score: null },
-  { user: "류천명", assignment: "Opal IGO 설계서", status: "ai_reviewed", score: 85 },
+  { user: "수강생 1", assignment: "Gemini 전략 3안 생성", status: "ai_reviewed", score: 72 },
+  { user: "수강생 2", assignment: "금지 표현 찾기 리포트", status: "submitted", score: null },
+  { user: "수강생 4", assignment: "앱 설계서 작성", status: "ai_reviewed", score: 85 },
 ];
 
 type Tab = "dashboard" | "employees";
