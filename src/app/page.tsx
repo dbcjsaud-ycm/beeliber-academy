@@ -353,11 +353,14 @@ export default function HomePage() {
             </Link>
           </div>
 
-          <div className="grid gap-3 sm:grid-cols-2">
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
             {TRACKS.map((t) => (
               <Link key={t.no} href={t.href}
-                className="group relative flex flex-col overflow-hidden transition-all duration-200 hover:-translate-y-0.5"
+                className="group"
                 style={{
+                  display: 'flex', flexDirection: 'column', overflow: 'hidden',
+                  transition: 'transform 200ms ease, box-shadow 200ms ease',
+                  textDecoration: 'none',
                   borderRadius: 14,
                   border: '1px solid rgba(255,255,255,0.07)',
                   background: `linear-gradient(140deg, ${t.gradStart} 0%, rgba(255,255,255,0.015) 100%)`,
