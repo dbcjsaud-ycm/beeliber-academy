@@ -115,9 +115,13 @@ export default function HomePage() {
 
               {/* eyebrow */}
               <div className="flex items-center gap-3">
-                <span className="h-px w-8 bg-cyan-400/50" />
-                <span className="font-mono text-[11px] font-medium uppercase tracking-[0.2em] text-cyan-400/80">
-                  AI 실습 교육 플랫폼
+                <span className="inline-flex items-center gap-2 rounded-[4px] border border-cyan-500/20 px-3 py-1"
+                  style={{ background: 'rgba(6,182,212,0.06)' }}>
+                  <span className="h-1.5 w-1.5 rounded-full bg-cyan-400 opacity-80"
+                    style={{ boxShadow: '0 0 6px rgba(6,182,212,0.8)', animation: 'pulse-glow 2.5s ease-in-out infinite' }} />
+                  <span className="font-mono text-[10px] font-medium uppercase tracking-[0.22em] text-cyan-400/90">
+                    AI 실습 교육 플랫폼
+                  </span>
                 </span>
               </div>
 
@@ -158,14 +162,14 @@ export default function HomePage() {
               </div>
 
               {/* stats */}
-              <div className="flex items-center gap-8 border-t border-white/[0.06] pt-5">
+              <div className="flex items-center gap-6 border-t border-white/[0.06] pt-5">
                 {[
-                  { v: '4', l: '실전 트랙' },
+                  { v: '04', l: '실전 트랙' },
                   { v: '28+', l: '실습 모듈' },
                   { v: 'AI', l: '자동 검수' },
                 ].map(({ v, l }) => (
-                  <div key={l}>
-                    <div className="font-mono text-xl font-bold"
+                  <div key={l} className="flex flex-col gap-0.5">
+                    <div className="font-mono text-[1.1rem] font-bold leading-none tracking-tight"
                       style={{
                         background: 'linear-gradient(135deg, #fcd34d, #f59e0b)',
                         WebkitBackgroundClip: 'text',
@@ -174,12 +178,14 @@ export default function HomePage() {
                       }}>
                       {v}
                     </div>
-                    <div className="mt-0.5 font-sans text-[11px] text-white/30">{l}</div>
+                    <div className="font-mono text-[10px] uppercase tracking-[0.15em] text-white/25">{l}</div>
                   </div>
                 ))}
-                <span className="font-sans text-[11px] text-white/15 ml-auto">
-                  Gemini · GPT · Claude
-                </span>
+                <div className="ml-auto flex items-center gap-1.5 rounded-[4px] border border-white/[0.06] px-2.5 py-1"
+                  style={{ background: 'rgba(255,255,255,0.02)' }}>
+                  <span className="font-mono text-[10px] text-white/20 tracking-wider">PWR BY</span>
+                  <span className="font-mono text-[10px] font-semibold text-white/40 tracking-wide">GEMINI · GPT · CLAUDE</span>
+                </div>
               </div>
             </div>
           </div>
@@ -196,10 +202,12 @@ export default function HomePage() {
       <section className="relative mx-auto max-w-7xl px-6 py-24">
         <div className="mb-14 flex items-end justify-between gap-4">
           <div>
-            <p className="mb-3 flex items-center gap-2.5 font-mono text-[11px] font-medium uppercase tracking-[0.2em] text-amber-400/70">
-              <span className="h-px w-6 bg-amber-500/40" />
-              실전 세션
-            </p>
+            <div className="mb-4 inline-flex items-center gap-2 rounded-[4px] border border-amber-500/15 px-3 py-1"
+              style={{ background: 'rgba(245,158,11,0.04)' }}>
+              <span className="font-mono text-[10px] font-semibold uppercase tracking-[0.22em] text-amber-400/80">
+                실전 세션
+              </span>
+            </div>
             <h2 className="font-display text-[2rem] font-black leading-tight text-white lg:text-[2.5rem]">
               어떤 결과물을 만들 건가요?
             </h2>
@@ -234,7 +242,7 @@ export default function HomePage() {
                 <span className="font-mono text-[11px] font-semibold tracking-[0.18em]" style={{ color: t.accent }}>
                   {t.no}
                 </span>
-                <span className="rounded-full border px-2.5 py-0.5 font-mono text-[10px] font-medium tracking-wider"
+                <span className="rounded-[4px] border px-2 py-[3px] font-mono text-[10px] font-semibold uppercase tracking-[0.14em]"
                   style={{ color: t.accent, borderColor: t.border, background: t.glow }}>
                   {t.time}
                 </span>
@@ -254,10 +262,10 @@ export default function HomePage() {
                 ))}
               </div>
 
-              <div className="flex items-center gap-1.5 font-sans text-[13px] font-semibold transition-all group-hover:gap-2.5"
+              <div className="flex items-center gap-1.5 font-mono text-[11px] font-semibold uppercase tracking-[0.14em] transition-all group-hover:gap-2.5"
                 style={{ color: t.accent }}>
                 트랙 시작
-                <ArrowRight size={13} strokeWidth={2.5} />
+                <ArrowRight size={12} strokeWidth={2.5} />
               </div>
             </Link>
           ))}
@@ -267,10 +275,12 @@ export default function HomePage() {
       {/* ── How it works ─────────────────────────────────────────────── */}
       <section className="mx-auto max-w-7xl px-6 pb-24">
         <div className="mb-10">
-          <p className="mb-3 flex items-center gap-2.5 font-mono text-[11px] font-medium uppercase tracking-[0.2em] text-amber-400/70">
-            <span className="h-px w-6 bg-amber-500/40" />
-            학습 흐름
-          </p>
+          <div className="mb-4 inline-flex items-center gap-2 rounded-[4px] border border-white/[0.08] px-3 py-1"
+            style={{ background: 'rgba(255,255,255,0.03)' }}>
+            <span className="font-mono text-[10px] font-semibold uppercase tracking-[0.22em] text-white/40">
+              학습 흐름
+            </span>
+          </div>
           <h2 className="font-display text-[2rem] font-black text-white">한 번 해보면 바로 보입니다</h2>
         </div>
 
@@ -280,15 +290,15 @@ export default function HomePage() {
 
           {STEPS.map((s, i) => (
             <div key={s.n} className="relative flex flex-col gap-2.5 p-4">
-              <div className="relative flex h-9 w-9 items-center justify-center rounded-full border border-amber-500/25 font-mono text-[11px] font-semibold text-amber-400"
-                style={{ background: 'rgba(245,158,11,0.08)' }}>
+              <div className="relative flex h-8 w-8 items-center justify-center rounded-[6px] border border-amber-500/20 font-mono text-[10px] font-bold text-amber-400"
+                style={{ background: 'rgba(245,158,11,0.06)' }}>
                 {s.n}
               </div>
               <div className="font-sans text-[13px] font-semibold text-white">{s.label}</div>
-              <div className="font-sans text-[12px] leading-relaxed text-white/35">{s.desc}</div>
+              <div className="font-mono text-[11px] uppercase tracking-[0.12em] text-white/30">{s.desc}</div>
               {i < 4 && (
                 <div className="absolute top-4 -right-1.5 hidden text-white/15 md:block">
-                  <ChevronRight size={12} />
+                  <ChevronRight size={11} />
                 </div>
               )}
             </div>
@@ -304,10 +314,14 @@ export default function HomePage() {
             style={{ background: 'rgba(245,158,11,0.08)' }} />
 
           <div className="relative max-w-lg">
-            <p className="mb-3 flex items-center gap-2.5 font-mono text-[11px] font-medium uppercase tracking-[0.2em] text-amber-400/70">
-              <span className="h-px w-6 bg-amber-500/40" />
-              지금 바로 시작하세요
-            </p>
+            <div className="mb-4 inline-flex items-center gap-2 rounded-[4px] border border-amber-500/20 px-3 py-1"
+              style={{ background: 'rgba(245,158,11,0.05)' }}>
+              <span className="h-1.5 w-1.5 rounded-full bg-amber-400"
+                style={{ boxShadow: '0 0 6px rgba(245,158,11,0.7)', animation: 'pulse-glow 2.5s ease-in-out infinite' }} />
+              <span className="font-mono text-[10px] font-semibold uppercase tracking-[0.22em] text-amber-400/90">
+                지금 바로 시작하세요
+              </span>
+            </div>
             <h2 className="mb-4 font-display text-[2.25rem] font-black leading-tight text-white lg:text-[2.75rem]">
               첫 질문이<br />모든 것을 바꿉니다
             </h2>

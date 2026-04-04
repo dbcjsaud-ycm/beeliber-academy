@@ -2,7 +2,14 @@
 
 export default function SplineScene() {
   return (
-    <div style={{ position: 'absolute', inset: 0, width: '100%', height: '100%' }}>
+    /* 로봇을 좌측으로 당기기 — iframe을 6% 왼쪽으로 밀고 폭 보상 */
+    <div style={{
+      position: 'absolute',
+      top: 0,
+      left: '-6%',
+      width: '106%',
+      height: '100%',
+    }}>
       <iframe
         src="https://my.spline.design/nexbotrobotcharacterconcept-bFzyvi7hkuFvNt3Iel8ZqT72/"
         frameBorder="0"
@@ -12,7 +19,6 @@ export default function SplineScene() {
           width: '100%',
           height: '100%',
           border: 'none',
-          pointerEvents: 'auto',
         }}
       />
     </div>
