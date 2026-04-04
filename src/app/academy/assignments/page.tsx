@@ -21,7 +21,7 @@ export default function AssignmentsPage() {
       </header>
 
       <main className="max-w-5xl mx-auto px-4 py-8">
-        <div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
+        <div>
           <h2 className="text-2xl font-bold mb-2">과제 센터</h2>
           <p className="text-secondary-dark mb-8 text-sm">모든 실습 과제를 한눈에 확인하고 제출하세요. AI가 자동 검수합니다.</p>
         </div>
@@ -32,7 +32,7 @@ export default function AssignmentsPage() {
             const track = module ? TRACKS.find((t) => t.id === module.track_id) : null;
 
             return (
-              <div key={a.id} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.05 }}>
+              <div key={a.id}>
                 <Link href={`/academy/assignments/${a.id}`}>
                   <div className="node-card p-5 cursor-pointer">
                     <div className="flex items-center justify-between">

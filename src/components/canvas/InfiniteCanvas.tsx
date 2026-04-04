@@ -57,7 +57,7 @@ const InfiniteCanvas = forwardRef<InfiniteCanvasHandle, InfiniteCanvasProps>(
           zoom *= 0.999 ** delta;
           zoom = Math.min(Math.max(zoom, ZOOM_MIN), ZOOM_MAX);
           canvas!.zoomToPoint(
-            new fabric.Point(opt.e.offsetX, opt.e.offsetY),
+            new fabric!.Point(opt.e.offsetX, opt.e.offsetY),
             zoom
           );
           setZoom(zoom);
@@ -191,7 +191,6 @@ const InfiniteCanvas = forwardRef<InfiniteCanvasHandle, InfiniteCanvasProps>(
         img.set({
           left: centerX,
           top: centerY,
-          // @ts-expect-error -- custom property
           id,
         });
 

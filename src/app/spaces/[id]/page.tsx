@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef, useState, useEffect } from 'react';
+import { use, useRef, useState, useEffect } from 'react';
 import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import {
@@ -32,7 +32,8 @@ const InfiniteCanvas = dynamic(
 
 const DEFAULT_PAGE_ID = 'page-1';
 
-export default function SpacePage({ params }: { params: { id: string } }) {
+export default function SpacePage({ params }: { params: Promise<{ id: string }> }) {
+  const resolvedParams = use(params);
   const canvasRef = useRef<InfiniteCanvasHandle>(null);
   const [panelTab, setPanelTab] = useState<'generate' | 'layers'>('generate');
   const [saveStatus, setSaveStatus] = useState<'saved' | 'saving' | 'idle'>('idle');
@@ -60,7 +61,7 @@ export default function SpacePage({ params }: { params: { id: string } }) {
     return () => clearTimeout(t);
   }, [elements]);
 
-  const spaceTitle = `스페이스 ${params.id.slice(0, 8)}`;
+  const spaceTitle = `스페이스 ${resolvedParams.id.slice(0, 8)}`;
   const pendingCount = activeGenerations.filter(
     (g) => g.status === 'queued' || g.status === 'processing'
   ).length;

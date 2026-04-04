@@ -14,7 +14,7 @@ const TRACKS = [
     no: '01', icon: '📣', label: '마케팅', sub: 'SNS · SEO · GEO 전략',
     desc: 'Super Gems 활용, GEO 전략, SNS-SEO 연결 워크플로우를 AI로 완성합니다.',
     outputs: ['광고 제목 10개 + 설명 3개', 'CTA 5개 + 해시태그 15개', '썸네일 문구 세트'],
-    href: '/lab/marketing/campaign-copy-studio', time: '2–3h', level: '초급',
+    href: '/tracks/marketing', time: '2–3h', level: '초급',
     accent: '#f59e0b', glow: 'rgba(245,158,11,0.10)', border: 'rgba(245,158,11,0.20)',
     gradStart: 'rgba(245,158,11,0.04)',
   },

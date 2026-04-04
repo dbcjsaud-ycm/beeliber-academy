@@ -74,11 +74,9 @@ function EmployeeModal({ employee, onSave, onClose }: {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm" onClick={onClose}>
-      <motion.div
-        initial={{ opacity: 0, scale: 0.95 }}
-        animate={{ opacity: 1, scale: 1 }}
+      <div
         className="w-full max-w-lg rounded-2xl border border-white/10 bg-[#12121a]/95 p-6 shadow-2xl backdrop-blur-xl"
-        onClick={(e) => e.stopPropagation()}
+        onClick={(e: React.MouseEvent) => e.stopPropagation()}
       >
         <div className="flex items-center justify-between mb-6">
           <h3 className="text-lg font-bold text-white">{isNew ? "직원 등록" : "직원 정보 수정"}</h3>
@@ -196,8 +194,7 @@ export default function AdminPage() {
 
       <div className="relative z-10">
         {/* Header */}
-        <motion.header initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }}
-          className="border-b border-white/5 px-6 py-4">
+        <header className="border-b border-white/5 px-6 py-4">
           <div className="max-w-7xl mx-auto flex items-center justify-between">
             <div className="flex items-center gap-3">
               <Link href="/" className="text-lg font-semibold">
@@ -231,7 +228,7 @@ export default function AdminPage() {
         <main className="max-w-7xl mx-auto px-6 py-8">
           {/* ═══ 대시보드 탭 ═══ */}
           {tab === "dashboard" && (
-            <div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-6">
+            <div className="space-y-6">
               {/* KPI 카드 */}
               <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-3">
                 {[
@@ -320,7 +317,7 @@ export default function AdminPage() {
 
           {/* ═══ 직원 관리 탭 ═══ */}
           {tab === "employees" && (
-            <div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-6">
+            <div className="space-y-6">
               {/* 상단 액션 */}
               <div className="flex items-center justify-between">
                 <div>
