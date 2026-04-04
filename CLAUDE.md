@@ -459,3 +459,16 @@ Key routing rules:
 **VERDICT:** REVIEWED — 6 critical gaps addressed in CLAUDE.md "구현 전 확인사항" section.
 CEO plan artifact: `~/.gstack/projects/dbcjsaud-ycm-beeliber-academy/ceo-plans/20260404-pikaso-clone.md`
 Test plan artifact: `~/.gstack/projects/dbcjsaud-ycm-beeliber-academy/cm-master-eng-review-test-plan-*.md`
+
+## Design System
+Always read DESIGN.md before making any visual or UI decisions.
+All font choices, colors, spacing, and aesthetic direction are defined there.
+Do not deviate without explicit user approval.
+
+Key rules from DESIGN.md:
+- Primary accent: #f59e0b (amber-500) — NOT violet for CTA buttons
+- Primary button text: #000000 (black on amber background)
+- Display font: Fraunces (hero headlines only) — body is Geist Sans
+- Card hover: border transitions to rgba(245,158,11,0.30)
+- Violet (#7c3aed) is secondary only — AI/tech indicators, 3D robot, inpainting
+- In QA mode, flag any code that uses violet as a primary action color
