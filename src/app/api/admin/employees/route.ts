@@ -51,10 +51,10 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ success: false, error: authError.message }, { status: 400 });
   }
 
-  // Insert profile
+  // Upsert profile (trigger may have already inserted a row)
   const { data: profile, error: profileError } = await admin
     .from("profiles")
-    .insert({
+    .upsert({
       id: authData.user.id,
       email,
       display_name: name,

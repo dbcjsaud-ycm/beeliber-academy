@@ -202,7 +202,7 @@ OUTPUT (결과물 기준)
       prompt: `beeliber AI 아카데미 브랜드 카드뉴스 이미지 3종을 위한 AI 이미지 생성 프롬프트를 작성해주세요.
 
 브랜드 가이드:
-- 주색: 황금색 (#f59e0b), 어두운 배경 (#050508)
+- 주색: 황금색 (#f59e0b), 어두운 배경 (#1a1825)
 - 톤: 따뜻하고 기술적, 벌 테마
 - 폰트 느낌: 세리프 헤드라인 + 모던 산세리프 본문
 
@@ -469,7 +469,7 @@ export default function AssignmentDetailPage({ params }: { params: Promise<{ id:
 
   const assignment = ASSIGNMENTS.find((a) => a.id === id);
   if (!assignment) return (
-    <div style={{ minHeight: "100vh", background: "#050508", color: "#fff", display: "flex", alignItems: "center", justifyContent: "center" }}>
+    <div style={{ minHeight: "100vh", background: "#1a1825", color: "#fff", display: "flex", alignItems: "center", justifyContent: "center" }}>
       <p style={{ color: "rgba(255,255,255,0.40)" }}>과제를 찾을 수 없습니다.</p>
     </div>
   );
@@ -511,7 +511,7 @@ export default function AssignmentDetailPage({ params }: { params: Promise<{ id:
   };
 
   return (
-    <div style={{ minHeight: "100vh", background: "#050508", color: "#fff" }}>
+    <div style={{ minHeight: "100vh", background: "#1a1825", color: "#fff" }}>
 
       {/* ── Header ── */}
       <header style={{
@@ -552,7 +552,7 @@ export default function AssignmentDetailPage({ params }: { params: Promise<{ id:
         <div style={{
           borderRadius: 16,
           border: "1px solid rgba(245,158,11,0.15)",
-          background: "linear-gradient(135deg, rgba(245,158,11,0.06) 0%, rgba(5,5,8,0.60) 60%)",
+          background: "linear-gradient(135deg, rgba(245,158,11,0.06) 0%, rgba(26,24,37,0.60) 60%)",
           backdropFilter: "blur(16px)",
           WebkitBackdropFilter: "blur(16px)",
           padding: "28px 32px",

@@ -248,19 +248,6 @@ function CreditModal({
   );
 }
 
-const MOCK_VIOLATIONS = [
-  { rule: '금지 표현 사용', count: 12, trend: 'down' },
-  { rule: '톤 가이드 위반', count: 8, trend: 'down' },
-  { rule: 'CTA 누락', count: 7, trend: 'up' },
-  { rule: '필수 문구 미포함', count: 3, trend: 'same' },
-  { rule: '출력 형식 오류', count: 2, trend: 'down' },
-];
-
-const MOCK_PENDING = [
-  { user: '수강생 1', assignment: 'Gemini 전략 3안 생성', status: 'ai_reviewed', score: 72 },
-  { user: '수강생 2', assignment: '금지 표현 찾기 리포트', status: 'submitted', score: null },
-  { user: '수강생 4', assignment: '앱 설계서 작성', status: 'ai_reviewed', score: 85 },
-];
 
 // ─── Employee Modal ──────────────────────────────────
 function EmployeeModal({
@@ -585,13 +572,27 @@ function EmployeeRow({
   );
 }
 
+interface DashboardData {
+  stats: {
+    totalUsers: number;
+    submissionRate: number;
+    firstPassRate: number;
+    revisionRate: number;
+  };
+  pending: { id: string; status: string; score: number | null; userName: string; assignmentTitle: string }[];
+  violations: { rule: string; count: number }[];
+  completedByTrack: Record<string, number>;
+}
+
 // ─── Main Client Component ───────────────────────────
 export function AdminClient({
   initialProfiles,
   initialCreditMap,
+  dashboardData,
 }: {
   initialProfiles: ProfileRow[];
   initialCreditMap: Record<string, number>;
+  dashboardData: DashboardData;
 }) {
   const [tab, setTab] = useState<'dashboard' | 'employees'>('dashboard');
   const [employees, setEmployees] = useState<Employee[]>(initialProfiles.map(profileToEmployee));
@@ -618,11 +619,11 @@ export function AdminClient({
   const stats = {
     totalUsers: employees.length,
     activeThisWeek: employees.filter((e) => e.status === 'active').length,
-    submissionRate: 67,
-    firstPassRate: 45,
-    revisionRate: 38,
-    completionRate: 25,
-    placementRate: 17,
+    submissionRate: dashboardData.stats.submissionRate,
+    firstPassRate: dashboardData.stats.firstPassRate,
+    revisionRate: dashboardData.stats.revisionRate,
+    completionRate: 0,
+    placementRate: 0,
   };
 
   async function handleSave(emp: Employee) {
@@ -778,47 +779,52 @@ export function AdminClient({
                 <div className="rounded-2xl p-5" style={cardStyle}>
                   <div className="flex items-center justify-between mb-4">
                     <h3 className="font-bold text-sm">검토 대기 과제</h3>
-                    <Badge className="bg-red-500/20 text-red-400 text-xs">{MOCK_PENDING.length}건</Badge>
+                    <Badge className="bg-red-500/20 text-red-400 text-xs">{dashboardData.pending.length}건</Badge>
                   </div>
                   <div className="space-y-3">
-                    {MOCK_PENDING.map((p, i) => (
-                      <div key={i} className="flex items-center justify-between p-3 rounded-lg" style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.05)' }}>
-                        <div>
-                          <p className="text-sm font-medium">{p.assignment}</p>
-                          <p className="text-xs" style={{ color: 'rgba(255,255,255,0.3)' }}>{p.user}</p>
+                    {dashboardData.pending.length === 0 ? (
+                      <p className="text-sm text-center py-6" style={{ color: 'rgba(255,255,255,0.2)' }}>검토 대기 과제 없음</p>
+                    ) : (
+                      dashboardData.pending.map((p) => (
+                        <div key={p.id} className="flex items-center justify-between p-3 rounded-lg" style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.05)' }}>
+                          <div>
+                            <p className="text-sm font-medium">{p.assignmentTitle}</p>
+                            <p className="text-xs" style={{ color: 'rgba(255,255,255,0.3)' }}>{p.userName}</p>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            {p.score !== null && (
+                              <span className="text-sm font-bold" style={{ color: p.score >= 80 ? 'rgb(74,222,128)' : p.score >= 50 ? 'rgb(251,191,36)' : 'rgb(248,113,113)' }}>
+                                {p.score}점
+                              </span>
+                            )}
+                            <Badge className="bg-white/5 text-white/40 text-xs">
+                              {p.status === 'submitted' ? '대기' : 'AI 완료'}
+                            </Badge>
+                          </div>
                         </div>
-                        <div className="flex items-center gap-2">
-                          {p.score !== null && (
-                            <span className="text-sm font-bold" style={{ color: p.score >= 80 ? 'rgb(74,222,128)' : p.score >= 50 ? 'rgb(251,191,36)' : 'rgb(248,113,113)' }}>
-                              {p.score}점
-                            </span>
-                          )}
-                          <Badge className="bg-white/5 text-white/40 text-xs">
-                            {p.status === 'submitted' ? '대기' : 'AI 완료'}
-                          </Badge>
-                        </div>
-                      </div>
-                    ))}
+                      ))
+                    )}
                   </div>
                 </div>
 
                 <div className="rounded-2xl p-5" style={cardStyle}>
                   <h3 className="font-bold text-sm mb-4">가장 많이 틀리는 규칙 TOP 5</h3>
                   <div className="space-y-3">
-                    {MOCK_VIOLATIONS.map((v, i) => (
-                      <div key={i} className="flex items-center justify-between">
-                        <div className="flex items-center gap-3">
-                          <span className="w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold" style={{ background: 'rgba(239,68,68,0.1)', color: 'rgb(248,113,113)' }}>
-                            {i + 1}
-                          </span>
-                          <span className="text-sm">{v.rule}</span>
-                        </div>
-                        <div className="flex items-center gap-2">
+                    {dashboardData.violations.length === 0 ? (
+                      <p className="text-sm text-center py-6" style={{ color: 'rgba(255,255,255,0.2)' }}>아직 위반 데이터 없음</p>
+                    ) : (
+                      dashboardData.violations.map((v, i) => (
+                        <div key={i} className="flex items-center justify-between">
+                          <div className="flex items-center gap-3">
+                            <span className="w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold" style={{ background: 'rgba(239,68,68,0.1)', color: 'rgb(248,113,113)' }}>
+                              {i + 1}
+                            </span>
+                            <span className="text-sm">{v.rule}</span>
+                          </div>
                           <span className="text-sm font-bold">{v.count}회</span>
-                          <span className="text-xs">{v.trend === 'down' ? '📉' : v.trend === 'up' ? '📈' : '➡️'}</span>
                         </div>
-                      </div>
-                    ))}
+                      ))
+                    )}
                   </div>
                 </div>
 
@@ -827,14 +833,16 @@ export function AdminClient({
                   <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
                     {TRACKS.map((t) => {
                       const mods = MODULES.filter((m) => m.track_id === t.id);
+                      const completed = dashboardData.completedByTrack[t.id] ?? 0;
+                      const pct = stats.totalUsers > 0 ? Math.min(100, Math.round((completed / stats.totalUsers) * 100)) : 0;
                       return (
                         <div key={t.id} className="p-3 rounded-lg" style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.05)' }}>
                           <p className="text-xs font-semibold mb-2">{t.title}</p>
                           <div className="flex items-center gap-2 mb-1">
                             <div className="flex-1 rounded-full h-1.5" style={{ background: 'rgba(255,255,255,0.05)' }}>
-                              <div className="h-1.5 rounded-full" style={{ width: '0%', background: 'linear-gradient(90deg, #3b82f6, #60a5fa)' }} />
+                              <div className="h-1.5 rounded-full" style={{ width: `${pct}%`, background: 'linear-gradient(90deg, #3b82f6, #60a5fa)' }} />
                             </div>
-                            <span className="text-xs font-bold" style={{ color: 'rgb(96,165,250)' }}>0%</span>
+                            <span className="text-xs font-bold" style={{ color: 'rgb(96,165,250)' }}>{pct}%</span>
                           </div>
                           <p className="text-[10px]" style={{ color: 'rgba(255,255,255,0.3)' }}>{mods.length}개 모듈</p>
                         </div>

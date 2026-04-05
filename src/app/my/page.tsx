@@ -106,7 +106,7 @@ export default function MyPage() {
 
   if (loading) {
     return (
-      <div style={{ minHeight: '100vh', background: '#0b0a0f', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+      <div style={{ minHeight: '100vh', background: '#1a1825', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 12 }}>
           <div style={{ width: 32, height: 32, borderRadius: '50%', border: '2px solid rgba(245,158,11,0.3)', borderTopColor: '#f59e0b', animation: 'spin 0.8s linear infinite' }} />
           <span className="font-mono" style={{ fontSize: 11, color: 'rgba(255,255,255,0.50)', letterSpacing: '0.14em', textTransform: 'uppercase' }}>Loading</span>
@@ -122,7 +122,7 @@ export default function MyPage() {
     <div className="landing-bg" style={{ minHeight: '100vh', color: '#fff' }}>
 
       {/* Nav */}
-      <nav style={{ position: 'sticky', top: 0, zIndex: 50, borderBottom: '1px solid rgba(255,255,255,0.05)', background: 'rgba(11,10,15,0.85)', backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)' }}>
+      <nav style={{ position: 'sticky', top: 0, zIndex: 50, borderBottom: '1px solid rgba(255,255,255,0.10)', background: 'rgba(26,24,37,0.85)', backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)' }}>
         <div className="mx-auto flex h-14 max-w-5xl items-center justify-between px-6">
           <Link href="/" className="flex items-center gap-2.5">
             <span style={{ fontSize: 18 }}>🐝</span>
@@ -171,7 +171,7 @@ export default function MyPage() {
         </div>
 
         {/* 크레딧 카드 */}
-        <div style={{ borderRadius: 16, border: '1px solid rgba(245,158,11,0.15)', background: 'linear-gradient(135deg, rgba(245,158,11,0.06) 0%, rgba(11,10,15,0) 60%)', padding: '24px 28px', marginBottom: 24 }}>
+        <div style={{ borderRadius: 16, border: '1px solid rgba(245,158,11,0.15)', background: 'linear-gradient(135deg, rgba(245,158,11,0.06) 0%, rgba(26,24,37,0) 60%)', padding: '24px 28px', marginBottom: 24 }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16 }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
               <Zap size={15} style={{ color: '#f59e0b' }} />
@@ -191,7 +191,7 @@ export default function MyPage() {
           </div>
 
           {/* 프로그레스 바 */}
-          <div style={{ height: 4, borderRadius: 2, background: 'rgba(255,255,255,0.06)', overflow: 'hidden' }}>
+          <div style={{ height: 4, borderRadius: 2, background: 'rgba(255,255,255,0.11)', overflow: 'hidden' }}>
             <div style={{ height: '100%', width: `${creditPct}%`, borderRadius: 2, background: 'linear-gradient(90deg, #f59e0b, #fcd34d)', transition: 'width 0.6s ease' }} />
           </div>
 
@@ -217,9 +217,9 @@ export default function MyPage() {
             { icon: '🏛️', label: '워크스페이스', href: '/spaces/new', accent: '#7c3aed' },
           ].map(({ icon, label, href, accent }) => (
             <Link key={href} href={href} className="group flex items-center justify-between"
-              style={{ padding: '14px 16px', borderRadius: 12, border: '1px solid rgba(255,255,255,0.07)', background: 'rgba(255,255,255,0.02)', textDecoration: 'none', transition: 'border-color 180ms' }}
+              style={{ padding: '14px 16px', borderRadius: 12, border: '1px solid rgba(255,255,255,0.12)', background: 'rgba(255,255,255,0.02)', textDecoration: 'none', transition: 'border-color 180ms' }}
               onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.borderColor = `${accent}44`; }}
-              onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.borderColor = 'rgba(255,255,255,0.07)'; }}>
+              onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.borderColor = 'rgba(255,255,255,0.12)'; }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
                 <span style={{ fontSize: 18 }}>{icon}</span>
                 <span className="font-sans" style={{ fontSize: 13, fontWeight: 500, color: 'rgba(255,255,255,0.75)' }}>{label}</span>
@@ -244,7 +244,7 @@ export default function MyPage() {
           </div>
 
           {generations.length === 0 ? (
-            <div style={{ textAlign: 'center', padding: '48px 24px', borderRadius: 16, border: '1px solid rgba(255,255,255,0.05)', background: 'rgba(255,255,255,0.01)' }}>
+            <div style={{ textAlign: 'center', padding: '48px 24px', borderRadius: 16, border: '1px solid rgba(255,255,255,0.10)', background: 'rgba(255,255,255,0.01)' }}>
               <span style={{ fontSize: 32, display: 'block', marginBottom: 12 }}>✨</span>
               <p className="font-sans" style={{ fontSize: 14, color: 'rgba(255,255,255,0.55)', margin: 0 }}>아직 생성한 콘텐츠가 없습니다</p>
               <Link href="/academy" className="inline-flex items-center gap-2 font-sans text-[13px] font-semibold text-black mt-4 transition-all hover:bg-amber-400"
@@ -255,7 +255,7 @@ export default function MyPage() {
           ) : (
             <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
               {generations.map((g) => (
-                <div key={g.id} style={{ display: 'flex', alignItems: 'center', gap: 14, padding: '12px 16px', borderRadius: 12, border: '1px solid rgba(255,255,255,0.05)', background: 'rgba(255,255,255,0.02)' }}>
+                <div key={g.id} style={{ display: 'flex', alignItems: 'center', gap: 14, padding: '12px 16px', borderRadius: 12, border: '1px solid rgba(255,255,255,0.10)', background: 'rgba(255,255,255,0.02)' }}>
                   {/* 타입 아이콘 */}
                   <div style={{ width: 32, height: 32, borderRadius: 8, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, background: `${typeColor(g.type)}15`, border: `1px solid ${typeColor(g.type)}30`, color: typeColor(g.type) }}>
                     {typeIcon(g.type)}
@@ -263,7 +263,7 @@ export default function MyPage() {
 
                   {/* 썸네일 (이미지인 경우) */}
                   {g.type === 'image' && g.output_urls?.[0] && (
-                    <div style={{ width: 40, height: 40, borderRadius: 8, overflow: 'hidden', flexShrink: 0, border: '1px solid rgba(255,255,255,0.07)' }}>
+                    <div style={{ width: 40, height: 40, borderRadius: 8, overflow: 'hidden', flexShrink: 0, border: '1px solid rgba(255,255,255,0.12)' }}>
                       <img src={g.output_urls[0]} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                     </div>
                   )}

@@ -152,13 +152,13 @@ export default function CoursesPage() {
   }, []);
 
   return (
-    <div style={{ minHeight: '100vh', background: '#050508', color: '#fff', overflowX: 'hidden' }}>
+    <div style={{ minHeight: '100vh', background: '#1a1825', color: '#fff', overflowX: 'hidden' }}>
 
       {/* ── Nav ── */}
       <nav style={{
         position: 'fixed', top: 0, left: 0, right: 0, zIndex: 50,
-        borderBottom: '1px solid rgba(255,255,255,0.05)',
-        background: 'rgba(5,5,8,0.85)',
+        borderBottom: '1px solid rgba(255,255,255,0.10)',
+        background: 'rgba(26,24,37,0.85)',
         backdropFilter: 'blur(24px)',
         WebkitBackdropFilter: 'blur(24px)',
       }}>
@@ -166,7 +166,7 @@ export default function CoursesPage() {
           <Link href="/" className="flex items-center gap-2.5">
             <span style={{ fontSize: 20, lineHeight: 1 }}>🐝</span>
             <span className="font-sans text-sm font-semibold tracking-tight text-white">beeliber</span>
-            <span className="font-sans text-sm font-normal" style={{ color: 'rgba(255,255,255,0.22)' }}>academy</span>
+            <span className="font-sans text-sm font-normal" style={{ color: 'rgba(255,255,255,0.50)' }}>academy</span>
           </Link>
           {!loading && (
             user ? (
@@ -254,12 +254,12 @@ export default function CoursesPage() {
             <div key={label} style={{
               display: 'flex', alignItems: 'center', gap: 7,
               padding: '5px 12px', borderRadius: 6,
-              border: '1px solid rgba(255,255,255,0.06)',
+              border: '1px solid rgba(255,255,255,0.11)',
               background: 'rgba(255,255,255,0.02)',
             }}>
               <span style={{ width: 7, height: 7, borderRadius: '50%', background: color, flexShrink: 0 }} />
               <span className="font-mono" style={{ fontSize: 10, fontWeight: 700, color, letterSpacing: '0.1em' }}>{label}</span>
-              <span className="font-sans" style={{ fontSize: 11, color: 'rgba(255,255,255,0.25)' }}>{desc}</span>
+              <span className="font-sans" style={{ fontSize: 11, color: 'rgba(255,255,255,0.52)' }}>{desc}</span>
             </div>
           ))}
         </div>
@@ -273,7 +273,7 @@ export default function CoursesPage() {
               style={{
                 display: 'flex', alignItems: 'stretch',
                 borderRadius: 14,
-                border: '1px solid rgba(255,255,255,0.07)',
+                border: '1px solid rgba(255,255,255,0.12)',
                 background: `linear-gradient(120deg, ${c.gradStart} 0%, rgba(255,255,255,0.012) 100%)`,
                 textDecoration: 'none',
                 overflow: 'hidden',
@@ -286,7 +286,7 @@ export default function CoursesPage() {
               }}
               onMouseLeave={(e) => {
                 const el = e.currentTarget as HTMLElement;
-                el.style.borderColor = 'rgba(255,255,255,0.07)';
+                el.style.borderColor = 'rgba(255,255,255,0.12)';
                 el.style.boxShadow = '';
               }}
             >
@@ -294,7 +294,7 @@ export default function CoursesPage() {
               <div style={{
                 width: 64, flexShrink: 0, display: 'flex', flexDirection: 'column',
                 alignItems: 'center', justifyContent: 'center', gap: 6,
-                borderRight: '1px solid rgba(255,255,255,0.05)',
+                borderRight: '1px solid rgba(255,255,255,0.10)',
                 padding: '20px 0',
                 background: `linear-gradient(180deg, ${c.gradStart} 0%, transparent 100%)`,
               }}>
@@ -320,11 +320,11 @@ export default function CoursesPage() {
                   </span>
                   <span style={{
                     padding: '2px 9px', borderRadius: 4,
-                    border: '1px solid rgba(255,255,255,0.06)',
+                    border: '1px solid rgba(255,255,255,0.11)',
                     background: 'rgba(255,255,255,0.02)',
                   }}>
                     <span className="font-mono" style={{
-                      fontSize: 9, color: 'rgba(255,255,255,0.28)', letterSpacing: '0.10em',
+                      fontSize: 9, color: 'rgba(255,255,255,0.52)', letterSpacing: '0.10em',
                     }}>{c.duration}</span>
                   </span>
                   {idx === 0 && (
@@ -356,7 +356,7 @@ export default function CoursesPage() {
                     <span key={o} style={{
                       display: 'flex', alignItems: 'center', gap: 5,
                       padding: '3px 9px', borderRadius: 5,
-                      border: '1px solid rgba(255,255,255,0.06)',
+                      border: '1px solid rgba(255,255,255,0.11)',
                       background: 'rgba(255,255,255,0.025)',
                     }}>
                       <CheckCircle2 size={9} style={{ color: c.accent, opacity: 0.7, flexShrink: 0 }} />
@@ -369,7 +369,7 @@ export default function CoursesPage() {
               {/* 오른쪽 — CTA 화살표 */}
               <div style={{
                 width: 52, flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center',
-                borderLeft: '1px solid rgba(255,255,255,0.05)',
+                borderLeft: '1px solid rgba(255,255,255,0.10)',
               }}>
                 <ArrowRight size={15} style={{ color: c.accent, opacity: 0.6 }} />
               </div>
@@ -380,7 +380,7 @@ export default function CoursesPage() {
         {/* 하단 안내 */}
         <div style={{
           marginTop: 40, padding: '20px 24px', borderRadius: 12,
-          border: '1px solid rgba(255,255,255,0.05)',
+          border: '1px solid rgba(255,255,255,0.10)',
           background: 'rgba(255,255,255,0.015)',
           display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-between', gap: 16,
         }}>
@@ -388,7 +388,7 @@ export default function CoursesPage() {
             <p className="font-sans" style={{ fontSize: 14, color: 'rgba(255,255,255,0.55)', margin: 0 }}>
               어떤 수업부터 시작해야 할지 모르겠다면
             </p>
-            <p className="font-sans" style={{ fontSize: 12, color: 'rgba(255,255,255,0.25)', marginTop: 4 }}>
+            <p className="font-sans" style={{ fontSize: 12, color: 'rgba(255,255,255,0.52)', marginTop: 4 }}>
               레벨 테스트 5문항으로 맞춤 수업을 추천해 드립니다
             </p>
           </div>

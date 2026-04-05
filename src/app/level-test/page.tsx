@@ -142,25 +142,25 @@ export default function LevelTestPage() {
 
   if (authLoading) {
     return (
-      <div style={{ minHeight: '100vh', background: '#050508', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+      <div style={{ minHeight: '100vh', background: '#1a1825', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
         <div style={{ width: 24, height: 24, border: '2px solid rgba(245,158,11,0.3)', borderTopColor: '#f59e0b', borderRadius: '50%', animation: 'spin 0.8s linear infinite' }} />
       </div>
     );
   }
 
   return (
-    <div style={{ minHeight: '100vh', background: '#050508', color: '#fff' }}>
+    <div style={{ minHeight: '100vh', background: '#1a1825', color: '#fff' }}>
 
       {/* Nav */}
       <nav style={{
         position: 'fixed', top: 0, left: 0, right: 0, zIndex: 50,
-        borderBottom: '1px solid rgba(255,255,255,0.05)',
-        background: 'rgba(5,5,8,0.85)',
+        borderBottom: '1px solid rgba(255,255,255,0.10)',
+        background: 'rgba(26,24,37,0.85)',
         backdropFilter: 'blur(24px)',
         WebkitBackdropFilter: 'blur(24px)',
       }}>
         <div className="mx-auto flex h-14 max-w-3xl items-center justify-between px-6">
-          <Link href="/courses" className="flex items-center gap-1.5 font-sans text-xs transition-colors hover:text-white" style={{ color: 'rgba(255,255,255,0.30)' }}>
+          <Link href="/courses" className="flex items-center gap-1.5 font-sans text-xs transition-colors hover:text-white" style={{ color: 'rgba(255,255,255,0.55)' }}>
             <ChevronLeft size={13} />
             수업 목록
           </Link>
@@ -168,7 +168,7 @@ export default function LevelTestPage() {
             <span style={{ fontSize: 18, lineHeight: 1 }}>🐝</span>
             <span className="font-sans text-sm font-semibold">레벨 테스트</span>
           </div>
-          <span className="font-mono" style={{ fontSize: 11, color: 'rgba(255,255,255,0.22)' }}>
+          <span className="font-mono" style={{ fontSize: 11, color: 'rgba(255,255,255,0.50)' }}>
             {submitted ? '완료' : `${current + 1} / ${QUESTIONS.length}`}
           </span>
         </div>
@@ -179,7 +179,7 @@ export default function LevelTestPage() {
         {!submitted ? (
           <>
             {/* 진행바 */}
-            <div style={{ height: 2, background: 'rgba(255,255,255,0.06)', borderRadius: 2, marginBottom: 48, overflow: 'hidden' }}>
+            <div style={{ height: 2, background: 'rgba(255,255,255,0.11)', borderRadius: 2, marginBottom: 48, overflow: 'hidden' }}>
               <div style={{
                 height: '100%',
                 width: `${((current + (answers[current] !== null ? 1 : 0)) / QUESTIONS.length) * 100}%`,
@@ -214,7 +214,7 @@ export default function LevelTestPage() {
                       style={{
                         padding: '14px 18px',
                         borderRadius: 10,
-                        border: selected ? '1px solid rgba(245,158,11,0.45)' : '1px solid rgba(255,255,255,0.08)',
+                        border: selected ? '1px solid rgba(245,158,11,0.45)' : '1px solid rgba(255,255,255,0.13)',
                         background: selected ? 'rgba(245,158,11,0.08)' : 'rgba(255,255,255,0.025)',
                         color: selected ? '#f59e0b' : 'rgba(255,255,255,0.62)',
                         cursor: 'pointer',
@@ -232,7 +232,7 @@ export default function LevelTestPage() {
                       }}
                       onMouseLeave={(e) => {
                         if (!selected) {
-                          (e.currentTarget as HTMLElement).style.borderColor = 'rgba(255,255,255,0.08)';
+                          (e.currentTarget as HTMLElement).style.borderColor = 'rgba(255,255,255,0.13)';
                           (e.currentTarget as HTMLElement).style.color = 'rgba(255,255,255,0.62)';
                         }
                       }}
@@ -251,7 +251,7 @@ export default function LevelTestPage() {
                 disabled={current === 0}
                 style={{
                   padding: '9px 16px', borderRadius: 8,
-                  border: '1px solid rgba(255,255,255,0.07)',
+                  border: '1px solid rgba(255,255,255,0.12)',
                   background: 'transparent',
                   color: current === 0 ? 'rgba(255,255,255,0.12)' : 'rgba(255,255,255,0.36)',
                   cursor: current === 0 ? 'default' : 'pointer',
@@ -269,7 +269,7 @@ export default function LevelTestPage() {
                   disabled={answers[current] === null}
                   style={{
                     padding: '9px 20px', borderRadius: 8,
-                    background: answers[current] !== null ? '#f59e0b' : 'rgba(255,255,255,0.06)',
+                    background: answers[current] !== null ? '#f59e0b' : 'rgba(255,255,255,0.11)',
                     border: 'none',
                     color: answers[current] !== null ? '#000' : 'rgba(255,255,255,0.20)',
                     cursor: answers[current] !== null ? 'pointer' : 'default',
@@ -287,7 +287,7 @@ export default function LevelTestPage() {
                   disabled={!allAnswered}
                   style={{
                     padding: '11px 24px', borderRadius: 9,
-                    background: allAnswered ? '#f59e0b' : 'rgba(255,255,255,0.06)',
+                    background: allAnswered ? '#f59e0b' : 'rgba(255,255,255,0.11)',
                     border: 'none',
                     color: allAnswered ? '#000' : 'rgba(255,255,255,0.20)',
                     cursor: allAnswered ? 'pointer' : 'default',
@@ -343,7 +343,7 @@ export default function LevelTestPage() {
             {/* 점수 시각화 */}
             <div style={{
               padding: '16px 20px', borderRadius: 10,
-              border: '1px solid rgba(255,255,255,0.07)',
+              border: '1px solid rgba(255,255,255,0.12)',
               background: 'rgba(255,255,255,0.02)',
               marginBottom: 28,
               display: 'flex', alignItems: 'center', gap: 16,
@@ -355,12 +355,12 @@ export default function LevelTestPage() {
                   WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent',
                   backgroundClip: 'text', lineHeight: 1,
                 }}>{total}</div>
-                <div className="font-mono" style={{ fontSize: 9, color: 'rgba(255,255,255,0.22)', letterSpacing: '0.14em', textTransform: 'uppercase', marginTop: 3 }}>
+                <div className="font-mono" style={{ fontSize: 9, color: 'rgba(255,255,255,0.50)', letterSpacing: '0.14em', textTransform: 'uppercase', marginTop: 3 }}>
                   / 15점
                 </div>
               </div>
               <div style={{ flex: 1 }}>
-                <div style={{ height: 4, background: 'rgba(255,255,255,0.07)', borderRadius: 2, overflow: 'hidden' }}>
+                <div style={{ height: 4, background: 'rgba(255,255,255,0.12)', borderRadius: 2, overflow: 'hidden' }}>
                   <div style={{
                     height: '100%',
                     width: `${(total / 15) * 100}%`,
@@ -395,7 +395,7 @@ export default function LevelTestPage() {
                 className="flex items-center justify-center gap-2 font-sans transition-all hover:text-white"
                 style={{
                   padding: '13px 28px', borderRadius: 10,
-                  border: '1px solid rgba(255,255,255,0.09)',
+                  border: '1px solid rgba(255,255,255,0.14)',
                   background: 'rgba(255,255,255,0.025)',
                   color: 'rgba(255,255,255,0.40)',
                   fontSize: 14,

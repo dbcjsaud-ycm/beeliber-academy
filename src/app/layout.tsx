@@ -1,5 +1,6 @@
 import './globals.css';
 import { Fraunces, Geist, Geist_Mono } from 'next/font/google';
+import { PageTransition } from '@/components/layout/PageTransition';
 
 const fraunces = Fraunces({
   subsets: ['latin'],
@@ -29,7 +30,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="ko" className={`${fraunces.variable} ${geist.variable} ${geistMono.variable}`}>
       <body className="min-h-screen academy-bg text-white antialiased">
-        {children}
+        <PageTransition>{children}</PageTransition>
       </body>
     </html>
   );
