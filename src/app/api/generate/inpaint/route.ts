@@ -1,8 +1,37 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createServerClient } from '@supabase/ssr';
+import type { SupabaseClient } from '@supabase/supabase-js';
 import { cookies } from 'next/headers';
+import { createAdminClient } from '@/lib/supabase/admin';
+
+async function uploadBase64ToStorage(dataUrl: string, userId: string, generationId: string): Promise<string> {
+  if (!dataUrl.startsWith('data:')) return dataUrl;
+  const [header, b64] = dataUrl.split(',');
+  const mimeType = header.match(/data:([^;]+)/)?.[1] ?? 'image/png';
+  const ext = mimeType.split('/')[1] ?? 'png';
+  const buffer = Buffer.from(b64, 'base64');
+  const admin = createAdminClient();
+  const { error } = await admin.storage.from('generations').upload(`${userId}/${generationId}.${ext}`, buffer, { contentType: mimeType, upsert: true });
+  if (error) return dataUrl;
+  const { data: { publicUrl } } = admin.storage.from('generations').getPublicUrl(`${userId}/${generationId}.${ext}`);
+  return publicUrl;
+}
 
 const INPAINT_CREDITS = 40;
+
+async function preDeductCredits(
+  supabase: SupabaseClient,
+  userId: string,
+  amount: number,
+  generationId: string,
+): Promise<boolean> {
+  const { error } = await supabase.rpc('deduct_credits', {
+    p_user_id: userId,
+    p_amount: amount,
+    p_generation_id: generationId,
+  });
+  return !error;
+}
 
 /**
  * Attempt inpainting via OpenAI DALL-E-2 image edit endpoint.
@@ -137,6 +166,13 @@ export async function POST(req: NextRequest) {
     );
   }
 
+  // ── Pre-deduct credits BEFORE generation (prevents race condition) ────────
+  const generationId = crypto.randomUUID();
+  const deducted = await preDeductCredits(supabase, user.id, INPAINT_CREDITS, generationId);
+  if (!deducted) {
+    return NextResponse.json({ success: false, error: '크레딧이 부족합니다.' }, { status: 402 });
+  }
+
   // ── Provider chain ───────────────────────────────────────────────────────
   let resultUrl: string | null = null;
   let usedModel = 'simulation';
@@ -164,8 +200,12 @@ export async function POST(req: NextRequest) {
     usedModel = 'simulation';
   }
 
-  // ── Deduct credits (best-effort) ──────────────────────────────────────────
-  const generationId = crypto.randomUUID();
+  // ── Upload base64 to Storage (if needed) ─────────────────────────────────
+  if (resultUrl.startsWith('data:')) {
+    resultUrl = await uploadBase64ToStorage(resultUrl, user.id, generationId);
+  }
+
+  // ── Record generation (credits already deducted above) ───────────────────
   try {
     await supabase.from('generations').insert({
       id: generationId,
@@ -176,12 +216,6 @@ export async function POST(req: NextRequest) {
       prompt,
       output_urls: [resultUrl],
       credits_cost: INPAINT_CREDITS,
-    });
-
-    await supabase.rpc('deduct_credits', {
-      p_user_id: user.id,
-      p_amount: INPAINT_CREDITS,
-      p_generation_id: generationId,
     });
   } catch {
     // Non-fatal

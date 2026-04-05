@@ -1,7 +1,46 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createServerClient } from '@supabase/ssr';
+import type { SupabaseClient } from '@supabase/supabase-js';
 import { cookies } from 'next/headers';
 import { resolveAutoModel } from '@/types/models';
+import { createAdminClient } from '@/lib/supabase/admin';
+
+/** Upload a base64 data URL to Supabase Storage and return the public CDN URL. */
+async function uploadBase64ToStorage(
+  dataUrl: string,
+  userId: string,
+  generationId: string,
+): Promise<string> {
+  if (!dataUrl.startsWith('data:')) return dataUrl; // already a URL
+  const [header, b64] = dataUrl.split(',');
+  const mimeType = header.match(/data:([^;]+)/)?.[1] ?? 'image/png';
+  const ext = mimeType.split('/')[1] ?? 'png';
+  const buffer = Buffer.from(b64, 'base64');
+  const path = `${userId}/${generationId}.${ext}`;
+  const admin = createAdminClient();
+  const { error } = await admin.storage.from('generations').upload(path, buffer, {
+    contentType: mimeType,
+    upsert: true,
+  });
+  if (error) return dataUrl; // fallback to base64 on upload failure
+  const { data: { publicUrl } } = admin.storage.from('generations').getPublicUrl(path);
+  return publicUrl;
+}
+
+/** Deduct credits BEFORE generation to prevent race conditions. Returns false if insufficient. */
+async function preDeductCredits(
+  supabase: SupabaseClient,
+  userId: string,
+  amount: number,
+  generationId: string,
+): Promise<boolean> {
+  const { error } = await supabase.rpc('deduct_credits', {
+    p_user_id: userId,
+    p_amount: amount,
+    p_generation_id: generationId,
+  });
+  return !error;
+}
 
 // Credit costs per model
 const CREDIT_COSTS: Record<string, number> = {
@@ -161,7 +200,7 @@ export async function POST(req: NextRequest) {
 
   const creditsCost = CREDIT_COSTS[resolvedModel] ?? 50;
 
-  // ── Pre-flight credit check ───────────────────────────────────────────
+  // ── Pre-flight credit check (read-only, fast path) ───────────────────
   const { data: creditAccount } = await supabase
     .from('credit_accounts')
     .select('balance')
@@ -171,6 +210,16 @@ export async function POST(req: NextRequest) {
   if (!creditAccount || creditAccount.balance < creditsCost) {
     return NextResponse.json(
       { success: false, error: '크레딧이 부족합니다.', required: creditsCost, available: creditAccount?.balance ?? 0 },
+      { status: 402 }
+    );
+  }
+
+  // ── Pre-deduct credits BEFORE generation (prevents race condition) ───
+  const generationId = crypto.randomUUID();
+  const deducted = await preDeductCredits(supabase, user.id, creditsCost, generationId);
+  if (!deducted) {
+    return NextResponse.json(
+      { success: false, error: '크레딧이 부족합니다.' },
       { status: 402 }
     );
   }
@@ -213,8 +262,12 @@ export async function POST(req: NextRequest) {
     usedModel = 'simulation';
   }
 
-  // ── Deduct credits (best-effort) ──────────────────────────────────────────
-  const generationId = crypto.randomUUID();
+  // ── Upload base64 to Storage (if needed) ────────────────────────────
+  if (imageUrl.startsWith('data:')) {
+    imageUrl = await uploadBase64ToStorage(imageUrl, user.id, generationId);
+  }
+
+  // ── Record generation (credits already deducted above) ───────────────
   try {
     await supabase.from('generations').insert({
       id: generationId,
@@ -226,14 +279,8 @@ export async function POST(req: NextRequest) {
       output_urls: [imageUrl],
       credits_cost: creditsCost,
     });
-
-    await supabase.rpc('deduct_credits', {
-      p_user_id: user.id,
-      p_amount: creditsCost,
-      p_generation_id: generationId,
-    });
   } catch {
-    // Non-fatal
+    // Non-fatal — generation record failure doesn't block the response
   }
 
   return NextResponse.json({
