@@ -70,8 +70,28 @@ export default function MyPage() {
         sb.from('generations').select('*').eq('user_id', user.id).order('created_at', { ascending: false }).limit(20),
       ]);
 
-      if (profileRes.data) setProfile(profileRes.data);
-      if (creditRes.data) setCredits(creditRes.data);
+      // Auto-create profile if trigger didn't fire (existing users)
+      if (!profileRes.data && !profileRes.error?.message?.includes('not found')) {
+        await sb.from('profiles').upsert({
+          id: user.id,
+          email: user.email,
+          display_name: user.user_metadata?.name ?? user.email?.split('@')[0] ?? 'user',
+        }, { onConflict: 'id' });
+        const { data } = await sb.from('profiles').select('display_name, email, account_type').eq('id', user.id).single();
+        if (data) setProfile(data);
+      } else if (profileRes.data) {
+        setProfile(profileRes.data);
+      }
+
+      // Auto-create credit account if trigger didn't fire (existing users)
+      if (!creditRes.data) {
+        await sb.from('credit_accounts').upsert({ user_id: user.id, balance: 300, monthly_allowance: 300 }, { onConflict: 'user_id' });
+        const { data } = await sb.from('credit_accounts').select('balance, monthly_allowance').eq('user_id', user.id).single();
+        if (data) setCredits(data);
+      } else {
+        setCredits(creditRes.data);
+      }
+
       if (genRes.data) setGenerations(genRes.data);
       setLoading(false);
     })();
