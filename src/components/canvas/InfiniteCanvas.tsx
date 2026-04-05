@@ -14,13 +14,14 @@ export interface InfiniteCanvasHandle {
 interface InfiniteCanvasProps {
   pageId: string;
   className?: string;
+  onContextMenu?: (pos: { x: number; y: number }) => void;
 }
 
 const ZOOM_MIN = 0.1;
 const ZOOM_MAX = 5;
 
 const InfiniteCanvas = forwardRef<InfiniteCanvasHandle, InfiniteCanvasProps>(
-  ({ pageId, className = '' }, ref) => {
+  ({ pageId, className = '', onContextMenu }, ref) => {
     const canvasElRef = useRef<HTMLCanvasElement>(null);
     const fabricRef = useRef<FabricCanvas | null>(null);
     const isPanningRef = useRef(false);
@@ -33,14 +34,19 @@ const InfiniteCanvas = forwardRef<InfiniteCanvasHandle, InfiniteCanvasProps>(
     useEffect(() => {
       if (!canvasElRef.current) return;
 
-      let fabric: typeof import('fabric') | null = null;
-      let canvas: FabricCanvas | null = null;
+      // Each effect invocation gets its own `aborted` flag.
+      // React Strict Mode fires cleanup before the async IIFE completes —
+      // checking `aborted` after the await prevents double-initialization.
+      let aborted = false;
+      let ro: ResizeObserver | null = null;
 
       (async () => {
-        fabric = await import('fabric');
-        const container = canvasElRef.current!.parentElement!;
+        const fabric = await import('fabric');
+        // If cleanup ran while we were awaiting the import, bail out.
+        if (aborted || !canvasElRef.current) return;
 
-        canvas = new fabric.Canvas(canvasElRef.current!, {
+        const container = canvasElRef.current.parentElement!;
+        const canvas = new fabric.Canvas(canvasElRef.current, {
           backgroundColor: '#0a0a0f',
           selection: true,
           preserveObjectStacking: true,
@@ -53,13 +59,10 @@ const InfiniteCanvas = forwardRef<InfiniteCanvasHandle, InfiniteCanvasProps>(
         // ── Zoom on wheel ──────────────────────────────────────────────
         canvas.on('mouse:wheel', (opt) => {
           const delta = opt.e.deltaY;
-          let zoom = canvas!.getZoom();
+          let zoom = canvas.getZoom();
           zoom *= 0.999 ** delta;
           zoom = Math.min(Math.max(zoom, ZOOM_MIN), ZOOM_MAX);
-          canvas!.zoomToPoint(
-            new fabric!.Point(opt.e.offsetX, opt.e.offsetY),
-            zoom
-          );
+          canvas.zoomToPoint(new fabric.Point(opt.e.offsetX, opt.e.offsetY), zoom);
           setZoom(zoom);
           opt.e.preventDefault();
           opt.e.stopPropagation();
@@ -71,7 +74,7 @@ const InfiniteCanvas = forwardRef<InfiniteCanvasHandle, InfiniteCanvasProps>(
           const isSpacePan = (evt as MouseEvent & { isSpacePan?: boolean }).isSpacePan;
           if (isSpacePan || evt.button === 1) {
             isPanningRef.current = true;
-            canvas!.selection = false;
+            canvas.selection = false;
             lastPosRef.current = { x: evt.clientX, y: evt.clientY };
           }
         });
@@ -79,10 +82,10 @@ const InfiniteCanvas = forwardRef<InfiniteCanvasHandle, InfiniteCanvasProps>(
         canvas.on('mouse:move', (opt) => {
           if (!isPanningRef.current) return;
           const evt = opt.e as MouseEvent;
-          const vpt = canvas!.viewportTransform!;
+          const vpt = canvas.viewportTransform!;
           vpt[4] += evt.clientX - lastPosRef.current.x;
           vpt[5] += evt.clientY - lastPosRef.current.y;
-          canvas!.requestRenderAll();
+          canvas.requestRenderAll();
           lastPosRef.current = { x: evt.clientX, y: evt.clientY };
           setPan(vpt[4], vpt[5]);
         });
@@ -101,29 +104,25 @@ const InfiniteCanvas = forwardRef<InfiniteCanvasHandle, InfiniteCanvasProps>(
           const ids = opt.selected?.map((o) => (o as { id?: string }).id ?? '') ?? [];
           setSelectedIds(ids.filter(Boolean));
         });
-        canvas.on('selection:cleared', () => {
-          setSelectedIds([]);
-        });
+        canvas.on('selection:cleared', () => setSelectedIds([]));
 
         // ── Resize observer ────────────────────────────────────────────
-        const ro = new ResizeObserver(() => {
-          if (!container || !canvas) return;
-          canvas.setWidth(container.clientWidth);
-          canvas.setHeight(container.clientHeight);
-          canvas.requestRenderAll();
+        ro = new ResizeObserver(() => {
+          if (!container || !fabricRef.current) return;
+          fabricRef.current.setWidth(container.clientWidth);
+          fabricRef.current.setHeight(container.clientHeight);
+          fabricRef.current.requestRenderAll();
         });
         ro.observe(container);
-
-        return () => {
-          ro.disconnect();
-          canvas?.dispose();
-          fabricRef.current = null;
-        };
       })();
 
       return () => {
-        canvas?.dispose();
-        fabricRef.current = null;
+        aborted = true;
+        ro?.disconnect();
+        if (fabricRef.current) {
+          fabricRef.current.dispose();
+          fabricRef.current = null;
+        }
       };
     }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -227,14 +226,20 @@ const InfiniteCanvas = forwardRef<InfiniteCanvasHandle, InfiniteCanvasProps>(
     ]);
 
     return (
-      <div className={`relative h-full w-full overflow-hidden bg-neutral-900 ${className}`}>
+      <div
+        className={`relative h-full w-full overflow-hidden bg-neutral-900 ${className}`}
+        onContextMenu={(e) => {
+          e.preventDefault();
+          onContextMenu?.({ x: e.clientX, y: e.clientY });
+        }}
+      >
         {/* Empty state */}
         {elements.length === 0 && (
           <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center gap-3">
             <div className="rounded-2xl border border-white/10 bg-white/5 px-8 py-6 text-center">
               <p className="text-lg font-medium text-white/60">첫 이미지를 생성해보세요</p>
               <p className="mt-1 text-sm text-white/30">
-                오른쪽 패널에서 프롬프트를 입력하고 생성 버튼을 누르세요
+                오른쪽 패널에서 프롬프트를 입력하거나 우클릭하세요
               </p>
             </div>
           </div>

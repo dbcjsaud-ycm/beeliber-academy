@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { Copy, RotateCcw, Save } from 'lucide-react';
+import { Copy, RotateCcw, Save, Loader2 } from 'lucide-react';
 import { QualityCheckCard } from './QualityCheckCard';
 
 interface OutputRailProps {
@@ -13,6 +13,8 @@ interface OutputRailProps {
   isSaving: boolean;
   onSave: () => void;
   onRetry: () => void;
+  imageUrl?: string;
+  isGeneratingImage?: boolean;
 }
 
 export function OutputRail({
@@ -24,6 +26,8 @@ export function OutputRail({
   isSaving,
   onSave,
   onRetry,
+  imageUrl,
+  isGeneratingImage,
 }: OutputRailProps) {
   const [copied, setCopied] = useState(false);
 
@@ -56,6 +60,35 @@ export function OutputRail({
             </button>
           </div>
         </div>
+
+        {/* 이미지 생성 결과 */}
+        {isGeneratingImage && (
+          <div className="mb-4 flex items-center justify-center gap-2 rounded-[10px] border border-cyan-500/15 bg-cyan-500/[0.04] py-8">
+            <Loader2 size={16} className="animate-spin text-cyan-400" />
+            <span className="text-xs text-cyan-400">이미지 생성 중…</span>
+          </div>
+        )}
+        {imageUrl && !isGeneratingImage && (
+          <div className="mb-4 overflow-hidden rounded-[10px] border border-cyan-500/20 bg-black/20">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={imageUrl}
+              alt="생성된 시작 이미지"
+              className="w-full object-cover"
+              style={{ aspectRatio: '9/16', maxHeight: 340, objectFit: 'cover' }}
+            />
+            <div className="flex items-center justify-between px-3 py-2">
+              <span className="text-[10px] font-medium uppercase tracking-wider text-cyan-400/60">시작 이미지</span>
+              <a
+                href={imageUrl}
+                download="start-image.png"
+                className="text-[10px] text-cyan-400/70 hover:text-cyan-400 transition-colors"
+              >
+                ↓ 다운로드
+              </a>
+            </div>
+          </div>
+        )}
 
         {title && (
           <p className="mb-3 text-sm font-semibold text-white/80">{title}</p>

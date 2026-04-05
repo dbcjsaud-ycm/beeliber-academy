@@ -18,7 +18,7 @@ export async function POST(req: NextRequest) {
   if (geminiKey) {
     try {
       const res = await fetch(
-        `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-preview-image-generation:generateContent`,
+        `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-image:generateContent`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json", "x-goog-api-key": geminiKey },
@@ -87,7 +87,7 @@ export async function POST(req: NextRequest) {
   if (geminiKey) {
     try {
       const res = await fetch(
-        `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent`,
+        `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json", "x-goog-api-key": geminiKey },
@@ -117,8 +117,24 @@ export async function POST(req: NextRequest) {
     }
   }
 
+  // 4) 시뮬레이션 폴백 — Unsplash 기반 예시 이미지 (API 키 없을 때)
+  const SIMULATION_IMAGES = [
+    'https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?w=600&q=80', // 여행
+    'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=600&q=80', // 해변
+    'https://images.unsplash.com/photo-1530521954074-e64f6810b32d?w=600&q=80', // 도시
+    'https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=600&q=80', // 카페
+    'https://images.unsplash.com/photo-1500835556837-99ac94a94552?w=600&q=80', // 야경
+  ];
+  const idx = Math.floor(Math.random() * SIMULATION_IMAGES.length);
   return NextResponse.json({
-    success: false,
-    error: "이미지 생성 API 키가 설정되지 않았습니다.",
-  }, { status: 500 });
+    success: true,
+    isSimulation: true,
+    data: {
+      imageUrl: SIMULATION_IMAGES[idx],
+      revisedPrompt: prompt,
+      model: "simulation",
+      provider: "local",
+      note: "시뮬레이션 모드 — API 키 없이 예시 이미지를 표시합니다.",
+    },
+  });
 }

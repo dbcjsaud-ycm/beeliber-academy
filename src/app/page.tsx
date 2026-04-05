@@ -76,7 +76,7 @@ export default function HomePage() {
               { label: '실전 세션', href: '/tracks' },
               { label: '실습 랩', href: '/lab/marketing/campaign-copy-studio' },
               { label: '워크스페이스', href: '/spaces/new' },
-              { label: '대시보드', href: '/academy' },
+              { label: '입문 과정', href: '/start' },
             ].map(({ label, href }) => (
               <Link key={href} href={href}
                 className="font-sans text-[13px] font-normal transition-colors hover:text-white"
@@ -86,7 +86,7 @@ export default function HomePage() {
             ))}
           </div>
 
-          <Link href="/academy"
+          <Link href="/start"
             className="flex items-center gap-1.5 font-sans text-xs font-semibold text-black transition-all hover:bg-amber-400 active:scale-[0.97]"
             style={{
               background: '#f59e0b',
@@ -108,26 +108,35 @@ export default function HomePage() {
           <SplineScene />
         </div>
 
-        {/* 우측 그라디언트 veil */}
+        {/* 그라디언트 veil — 연하게 */}
         <div style={{ position: 'absolute', inset: 0, zIndex: 1, pointerEvents: 'none' }}>
           <div style={{
             position: 'absolute', inset: 0,
-            background: 'linear-gradient(to left, rgba(5,5,8,0.96) 28%, rgba(5,5,8,0.84) 48%, rgba(5,5,8,0.22) 68%, transparent 100%)',
+            background: 'linear-gradient(to left, rgba(5,5,8,0.60) 24%, rgba(5,5,8,0.38) 48%, rgba(5,5,8,0.10) 68%, transparent 100%)',
           }} />
           <div style={{
             position: 'absolute', top: 0, left: 0, right: 0, height: 100,
-            background: 'linear-gradient(to bottom, rgba(5,5,8,0.65), transparent)',
+            background: 'linear-gradient(to bottom, rgba(5,5,8,0.40), transparent)',
           }} />
           <div style={{
             position: 'absolute', bottom: 0, left: 0, right: 0, height: 180,
-            background: 'linear-gradient(to top, rgba(5,5,8,1), transparent)',
+            background: 'linear-gradient(to top, rgba(5,5,8,0.85), transparent)',
           }} />
         </div>
 
         {/* 우측 텍스트 콘텐츠 */}
         <div style={{ position: 'relative', height: '100%', display: 'flex', alignItems: 'center', zIndex: 10 }}>
           <div className="mx-auto w-full max-w-7xl px-6">
-            <div style={{ marginLeft: 'auto', maxWidth: 520, display: 'flex', flexDirection: 'column', gap: 28 }}>
+            <div style={{
+              marginLeft: 'auto', maxWidth: 520, display: 'flex', flexDirection: 'column', gap: 28,
+              background: 'rgba(5,5,8,0.42)',
+              backdropFilter: 'blur(20px)',
+              WebkitBackdropFilter: 'blur(20px)',
+              border: '1px solid rgba(255,255,255,0.08)',
+              borderRadius: 20,
+              padding: '36px 40px',
+              boxShadow: '0 8px 48px rgba(0,0,0,0.28), inset 0 1px 0 rgba(255,255,255,0.06)',
+            }}>
 
               {/* 상태 배지 */}
               <div style={{ display: 'flex', alignItems: 'center' }}>
@@ -189,7 +198,7 @@ export default function HomePage() {
 
               {/* CTA 버튼 */}
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: 10 }}>
-                <Link href="/academy"
+                <Link href="/start"
                   className="group flex items-center gap-2 font-sans text-[13px] font-semibold text-black transition-all hover:bg-amber-400 active:scale-[0.97]"
                   style={{
                     background: '#f59e0b',

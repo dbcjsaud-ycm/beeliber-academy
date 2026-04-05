@@ -1,6 +1,6 @@
 'use client';
 
-import { use, useRef, useState, useEffect } from 'react';
+import { use, useRef, useState, useEffect, useCallback } from 'react';
 import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import {
@@ -37,6 +37,7 @@ export default function SpacePage({ params }: { params: Promise<{ id: string }> 
   const canvasRef = useRef<InfiniteCanvasHandle>(null);
   const [panelTab, setPanelTab] = useState<'generate' | 'layers'>('generate');
   const [saveStatus, setSaveStatus] = useState<'saved' | 'saving' | 'idle'>('idle');
+  const [contextMenu, setContextMenu] = useState<{ x: number; y: number } | null>(null);
 
   const { selectedIds, elements, viewport } = useCanvasStore();
   const { creditsBalance, activeGenerations, setGenerationState } = useGenerateStore();
@@ -60,6 +61,19 @@ export default function SpacePage({ params }: { params: Promise<{ id: string }> 
     const t = setTimeout(() => setSaveStatus('saved'), 2200);
     return () => clearTimeout(t);
   }, [elements]);
+
+  // Close context menu on click anywhere
+  useEffect(() => {
+    if (!contextMenu) return;
+    const close = () => setContextMenu(null);
+    window.addEventListener('click', close);
+    window.addEventListener('keydown', (e) => { if (e.key === 'Escape') close(); });
+    return () => window.removeEventListener('click', close);
+  }, [contextMenu]);
+
+  const handleContextMenu = useCallback((pos: { x: number; y: number }) => {
+    setContextMenu(pos);
+  }, []);
 
   const spaceTitle = `스페이스 ${resolvedParams.id.slice(0, 8)}`;
   const pendingCount = activeGenerations.filter(
@@ -164,7 +178,51 @@ export default function SpacePage({ params }: { params: Promise<{ id: string }> 
             ref={canvasRef}
             pageId={DEFAULT_PAGE_ID}
             className="h-full w-full"
+            onContextMenu={handleContextMenu}
           />
+
+          {/* Right-click context menu */}
+          {contextMenu && (
+            <div
+              className="absolute z-50 min-w-[160px] overflow-hidden rounded-xl border border-white/[0.1] bg-neutral-900 shadow-2xl"
+              style={{ left: contextMenu.x, top: contextMenu.y }}
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="px-3 py-1.5 text-[10px] font-medium uppercase tracking-wider text-white/25">
+                생성
+              </div>
+              <button
+                className="flex w-full items-center gap-2.5 px-3 py-2 text-sm text-white/70 hover:bg-white/[0.07] hover:text-white transition-colors"
+                onClick={() => {
+                  setPanelTab('generate');
+                  useGenerateStore.setState({ selectedModel: 'auto' });
+                  setContextMenu(null);
+                }}
+              >
+                <span className="text-base">🖼️</span>
+                이미지 생성
+              </button>
+              <button
+                className="flex w-full items-center gap-2.5 px-3 py-2 text-sm text-white/70 hover:bg-white/[0.07] hover:text-white transition-colors"
+                onClick={() => {
+                  setPanelTab('generate');
+                  useGenerateStore.setState({ selectedModel: 'kling-3' });
+                  setContextMenu(null);
+                }}
+              >
+                <span className="text-base">🎬</span>
+                영상 생성
+              </button>
+              <div className="mx-3 my-1 h-px bg-white/[0.06]" />
+              <button
+                className="flex w-full items-center gap-2.5 px-3 py-2 text-sm text-white/70 hover:bg-white/[0.07] hover:text-white transition-colors"
+                onClick={() => setContextMenu(null)}
+              >
+                <span className="text-base">✏️</span>
+                텍스트 추가
+              </button>
+            </div>
+          )}
         </div>
 
         {/* Right: Generation / Layers Panel */}

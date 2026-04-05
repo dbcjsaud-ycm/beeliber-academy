@@ -16,7 +16,7 @@ async function generateWithGemini(prompt: string, key: string): Promise<string |
   try {
     // Gemini Imagen 3 (image generation)
     const res = await fetch(
-      'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-preview-image-generation:generateContent',
+      'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-image:generateContent',
       {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'x-goog-api-key': key },
