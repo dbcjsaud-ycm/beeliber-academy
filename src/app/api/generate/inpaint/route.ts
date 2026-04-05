@@ -123,6 +123,20 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ success: false, error: '원본 이미지가 필요합니다.' }, { status: 400 });
   }
 
+  // ── Pre-flight credit check ───────────────────────────────────────────────
+  const { data: creditAccount } = await supabase
+    .from('credit_accounts')
+    .select('balance')
+    .eq('user_id', user.id)
+    .single();
+
+  if (!creditAccount || creditAccount.balance < INPAINT_CREDITS) {
+    return NextResponse.json(
+      { success: false, error: '크레딧이 부족합니다.', required: INPAINT_CREDITS, available: creditAccount?.balance ?? 0 },
+      { status: 402 }
+    );
+  }
+
   // ── Provider chain ───────────────────────────────────────────────────────
   let resultUrl: string | null = null;
   let usedModel = 'simulation';

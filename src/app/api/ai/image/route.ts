@@ -1,7 +1,14 @@
 import { NextRequest, NextResponse } from "next/server";
+import { createServerSupabaseClient } from "@/lib/supabase/server";
 
 // 이미지 생성 API (Google Gemini Imagen / OpenAI DALL-E)
 export async function POST(req: NextRequest) {
+  const authClient = await createServerSupabaseClient();
+  const { data: { user } } = await authClient.auth.getUser();
+  if (!user) {
+    return NextResponse.json({ success: false, error: "로그인이 필요합니다." }, { status: 401 });
+  }
+
   const { prompt, size = "1024x1024" } = await req.json();
 
   if (!prompt || typeof prompt !== "string") {

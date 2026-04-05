@@ -1,8 +1,9 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
 import { createOpenAIClient, getOpenAIModel } from '@/lib/openai/client';
 import { buildLessonSystemPrompt } from '@/lib/openai/prompt-builder';
 import { buildStructuredPreview } from '@/lib/format-output';
+import { createServerSupabaseClient } from '@/lib/supabase/server';
 
 const RequestSchema = z.object({
   trackSlug: z.string().min(1),
@@ -11,7 +12,13 @@ const RequestSchema = z.object({
   inputPayload: z.record(z.string(), z.string()).optional(),
 });
 
-export async function POST(request: Request) {
+export async function POST(request: NextRequest) {
+  const authClient = await createServerSupabaseClient();
+  const { data: { user } } = await authClient.auth.getUser();
+  if (!user) {
+    return NextResponse.json({ ok: false, error: 'UNAUTHORIZED' }, { status: 401 });
+  }
+
   try {
     const json = await request.json();
     const body = RequestSchema.parse(json);

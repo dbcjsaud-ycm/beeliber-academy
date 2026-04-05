@@ -1,9 +1,15 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { reviewAiText } from '@/lib/services/ai-policy';
-import { getSupabaseServerClient } from '@/lib/supabase/server';
+import { getSupabaseServerClient, createServerSupabaseClient } from '@/lib/supabase/server';
 import { aiReviewSchema } from '@/lib/validators/ai';
 
 export async function POST(request: NextRequest) {
+  const authClient = await createServerSupabaseClient();
+  const { data: { user } } = await authClient.auth.getUser();
+  if (!user) {
+    return NextResponse.json({ error: '로그인이 필요합니다.' }, { status: 401 });
+  }
+
   try {
     const json = await request.json();
     const parsed = aiReviewSchema.safeParse(json);
@@ -53,7 +59,7 @@ export async function POST(request: NextRequest) {
         riskScore: review.riskScore,
         checks: review.checks,
       },
-      { status: 200 },
+      { status: 201 },
     );
   } catch (error) {
     console.error('[POST /api/ai/review]', error);

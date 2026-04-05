@@ -2,15 +2,15 @@ import { NextRequest, NextResponse } from "next/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 
 export async function POST(req: NextRequest) {
-  const { email, password, name, role, team } = await req.json();
+  const { email, password, name, loginId } = await req.json();
 
   if (!email || !password || !name) {
-    return NextResponse.json({ success: false, error: "필수 항목을 입력하세요" }, { status: 400 });
+    return NextResponse.json({ success: false, error: "이름, 아이디, 비밀번호를 모두 입력하세요" }, { status: 400 });
   }
 
   const supabase = createAdminClient();
 
-  // Auth 유저 생성
+  // 1) Create Supabase auth user
   const { data: authData, error: authError } = await supabase.auth.admin.createUser({
     email,
     password,
@@ -21,17 +21,19 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ success: false, error: authError.message }, { status: 400 });
   }
 
-  // academy_users 테이블에 프로필 생성
-  const { error: profileError } = await supabase.from("academy_users").insert({
+  // 2) Insert profile
+  const { error: profileError } = await supabase.from("profiles").insert({
     id: authData.user.id,
     email,
-    name,
-    role: role || "student",
-    team: team || "",
-    status: "active",
+    display_name: name,
+    account_type: "student",
+    is_active: true,
+    metadata: { loginId: loginId || email },
   });
 
   if (profileError) {
+    // Rollback: delete auth user
+    await supabase.auth.admin.deleteUser(authData.user.id);
     return NextResponse.json({ success: false, error: profileError.message }, { status: 500 });
   }
 

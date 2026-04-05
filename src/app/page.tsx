@@ -41,21 +41,34 @@ const inputStyle: React.CSSProperties = {
 
 export default function HomePage() {
   const router = useRouter();
-  const [user, setUser] = useState<{ email: string; id: string } | null | undefined>(undefined);
-  const [tab, setTab] = useState<'login' | 'signup'>('login');
+  const [user, setUser] = useState<{ email: string; id: string; displayName: string } | null | undefined>(undefined);
   const [uid, setUid] = useState('');
   const [pw, setPw] = useState('');
-  const [uname, setUname] = useState('');
   const [showPw, setShowPw] = useState(false);
   const [loading, setLoading] = useState(false);
   const [err, setErr] = useState<string | null>(null);
 
   useEffect(() => {
     const sb = createBrowserSupabaseClient();
-    sb.auth.getUser().then(({ data }) => {
-      setUser(data.user ? { email: data.user.email ?? '', id: data.user.id } : null);
+    sb.auth.getUser().then(async ({ data }) => {
+      if (!data.user) { setUser(null); return; }
+      const { data: profile } = await sb
+        .from('profiles')
+        .select('display_name')
+        .eq('id', data.user.id)
+        .single();
+      setUser({
+        email: data.user.email ?? '',
+        id: data.user.id,
+        displayName: profile?.display_name || data.user.email?.replace('@beeliber.internal', '') || '',
+      });
     });
   }, []);
+
+  function authNavigate(href: string) {
+    if (user) { router.push(href); }
+    else { router.push(`/login?redirect=${encodeURIComponent(href)}`); }
+  }
 
   async function handleLogin(e: React.FormEvent) {
     e.preventDefault(); setLoading(true); setErr(null);
@@ -63,25 +76,8 @@ export default function HomePage() {
       const sb = createBrowserSupabaseClient();
       const { error } = await sb.auth.signInWithPassword({ email: toEmail(uid), password: pw });
       if (error) throw new Error('아이디 또는 비밀번호가 올바르지 않습니다');
-      router.push('/academy'); router.refresh();
+      router.push('/level-test'); router.refresh();
     } catch (e: unknown) { setErr(e instanceof Error ? e.message : '로그인 실패'); }
-    finally { setLoading(false); }
-  }
-
-  async function handleSignup(e: React.FormEvent) {
-    e.preventDefault(); setLoading(true); setErr(null);
-    try {
-      const res = await fetch('/api/auth/signup', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: toEmail(uid), password: pw, name: uname, loginId: uid }),
-      });
-      const json = await res.json();
-      if (!json.success) throw new Error(json.error || '가입 실패');
-      const sb = createBrowserSupabaseClient();
-      await sb.auth.signInWithPassword({ email: toEmail(uid), password: pw });
-      router.push('/academy'); router.refresh();
-    } catch (e: unknown) { setErr(e instanceof Error ? e.message : '가입 실패'); }
     finally { setLoading(false); }
   }
 
@@ -98,7 +94,7 @@ export default function HomePage() {
           </Link>
           <div className="hidden items-center gap-7 md:flex">
             {[{ label: '실전 세션', href: '/tracks' }, { label: '실습 랩', href: '/lab/marketing/campaign-copy-studio' }, { label: '워크스페이스', href: '/spaces/new' }, { label: '입문 과정', href: '/start' }].map(({ label, href }) => (
-              <Link key={href} href={href} className="font-sans text-[13px] font-normal transition-colors hover:text-white" style={{ color: 'rgba(255,255,255,0.58)' }}>{label}</Link>
+              <button key={href} onClick={() => authNavigate(href)} className="font-sans text-[13px] font-normal transition-colors hover:text-white" style={{ color: 'rgba(255,255,255,0.58)', background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}>{label}</button>
             ))}
           </div>
           {user ? (
@@ -154,7 +150,7 @@ export default function HomePage() {
               ) : user ? (
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
                   <p className="font-sans" style={{ fontSize: 13, color: 'rgba(255,255,255,0.45)', margin: 0 }}>
-                    <span style={{ color: '#f59e0b', fontWeight: 600 }}>{user.email.replace('@beeliber.internal', '')}</span>님, 환영합니다
+                    <span style={{ color: '#f59e0b', fontWeight: 600 }}>{user.displayName}</span>님, 환영합니다
                   </p>
                   <div style={{ display: 'flex', gap: 8 }}>
                     <Link href="/academy" className="group flex items-center justify-center gap-2 font-sans text-[13px] font-semibold text-black transition-all hover:bg-amber-400 active:scale-[0.97]" style={{ background: '#f59e0b', padding: '10px 20px', borderRadius: 10, boxShadow: '0 0 28px rgba(245,158,11,0.28)', flex: 1 }}>
@@ -165,17 +161,8 @@ export default function HomePage() {
                 </div>
               ) : (
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-                  {/* 탭 */}
-                  <div style={{ display: 'flex', background: 'rgba(255,255,255,0.04)', borderRadius: 10, padding: 3 }}>
-                    {(['login', 'signup'] as const).map((t) => (
-                      <button key={t} onClick={() => { setTab(t); setErr(null); }} className="font-sans text-[13px] font-medium transition-all" style={{ flex: 1, padding: '7px 0', borderRadius: 8, border: 'none', cursor: 'pointer', background: tab === t ? '#fff' : 'transparent', color: tab === t ? '#000' : 'rgba(255,255,255,0.55)' }}>
-                        {t === 'login' ? '로그인' : '회원가입'}
-                      </button>
-                    ))}
-                  </div>
-                  {/* 폼 */}
-                  <form onSubmit={tab === 'login' ? handleLogin : handleSignup} style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-                    {tab === 'signup' && <input placeholder="이름" value={uname} onChange={e => setUname(e.target.value)} required style={inputStyle} />}
+                  <p className="font-sans" style={{ fontSize: 12, color: 'rgba(255,255,255,0.40)', margin: 0, textAlign: 'center' }}>로그인 후 실습을 시작하세요</p>
+                  <form onSubmit={handleLogin} style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
                     <input placeholder="아이디 (또는 이메일)" value={uid} onChange={e => setUid(e.target.value)} required style={inputStyle} />
                     <div style={{ position: 'relative' }}>
                       <input type={showPw ? 'text' : 'password'} placeholder="비밀번호" value={pw} onChange={e => setPw(e.target.value)} required style={{ ...inputStyle, paddingRight: 36 }} />
@@ -186,7 +173,7 @@ export default function HomePage() {
                     {err && <p className="font-sans" style={{ fontSize: 12, color: '#f87171', margin: 0 }}>{err}</p>}
                     <button type="submit" disabled={loading} className="font-sans text-[13px] font-semibold text-black transition-all hover:bg-amber-400 active:scale-[0.97] disabled:opacity-60" style={{ background: '#f59e0b', padding: '10px 0', borderRadius: 10, border: 'none', cursor: loading ? 'not-allowed' : 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6, boxShadow: '0 0 24px rgba(245,158,11,0.28)' }}>
                       {loading ? <Loader2 size={14} className="animate-spin" /> : <Sparkles size={13} strokeWidth={2.5} />}
-                      {tab === 'login' ? '로그인' : '무료 가입 — 크레딧 300 지급'}
+                      로그인
                     </button>
                   </form>
                 </div>
@@ -243,11 +230,11 @@ export default function HomePage() {
               <h2 className="font-display" style={{ fontSize: 'clamp(1.8rem, 3.5vw, 2.5rem)', fontWeight: 900, lineHeight: 1.15, color: '#fff' }}>어떤 결과물을 만들 건가요?</h2>
               <p className="font-sans" style={{ marginTop: 8, fontSize: 14, color: 'rgba(255,255,255,0.52)' }}>4개 트랙 중 하나를 선택해 실제 프롬프트와 결과물을 만들어보세요</p>
             </div>
-            <Link href="/tracks" className="hidden shrink-0 items-center gap-1 font-sans text-sm transition-colors hover:text-white sm:flex" style={{ color: 'rgba(255,255,255,0.45)' }}>전체 보기 <ChevronRight size={13} /></Link>
+            <button onClick={() => authNavigate('/tracks')} className="hidden shrink-0 items-center gap-1 font-sans text-sm transition-colors hover:text-white sm:flex" style={{ color: 'rgba(255,255,255,0.45)', background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}>전체 보기 <ChevronRight size={13} /></button>
           </div>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
             {TRACKS.map((t) => (
-              <Link key={t.no} href={t.href} className="group" style={{ display: 'flex', flexDirection: 'column', overflow: 'hidden', transition: 'transform 200ms ease, box-shadow 200ms ease', textDecoration: 'none', borderRadius: 14, border: '1px solid rgba(255,255,255,0.07)', background: `linear-gradient(140deg, ${t.gradStart} 0%, rgba(255,255,255,0.015) 100%)`, padding: '24px' }}
+              <button key={t.no} onClick={() => authNavigate(t.href)} className="group" style={{ display: 'flex', flexDirection: 'column', overflow: 'hidden', transition: 'transform 200ms ease, box-shadow 200ms ease', textDecoration: 'none', borderRadius: 14, border: '1px solid rgba(255,255,255,0.07)', background: `linear-gradient(140deg, ${t.gradStart} 0%, rgba(255,255,255,0.015) 100%)`, padding: '24px', cursor: 'pointer', textAlign: 'left' }}
                 onMouseEnter={(e) => { const el = e.currentTarget as HTMLElement; el.style.borderColor = t.border; el.style.boxShadow = `0 12px 48px ${t.glow}, 0 1px 0 ${t.border} inset`; }}
                 onMouseLeave={(e) => { const el = e.currentTarget as HTMLElement; el.style.borderColor = 'rgba(255,255,255,0.07)'; el.style.boxShadow = ''; }}>
                 <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: 20 }}>
@@ -276,7 +263,7 @@ export default function HomePage() {
                   <span className="font-mono" style={{ fontSize: 10, fontWeight: 700, letterSpacing: '0.16em', textTransform: 'uppercase', color: t.accent }}>트랙 시작</span>
                   <ArrowRight size={11} strokeWidth={2.5} style={{ color: t.accent }} />
                 </div>
-              </Link>
+              </button>
             ))}
           </div>
         </section>
@@ -322,9 +309,9 @@ export default function HomePage() {
                 <Link href="/login" className="flex items-center gap-2 font-sans text-[13px] font-semibold text-black transition-all hover:bg-amber-400 active:scale-[0.97]" style={{ background: '#f59e0b', padding: '11px 28px', borderRadius: 10, boxShadow: '0 0 32px rgba(245,158,11,0.28)' }}>
                   <Sparkles size={13} strokeWidth={2.5} />무료로 시작하기
                 </Link>
-                <Link href="/tracks" className="flex items-center gap-2 font-sans text-[13px] font-medium transition-all hover:text-white" style={{ padding: '11px 24px', borderRadius: 10, border: '1px solid rgba(255,255,255,0.08)', background: 'rgba(255,255,255,0.03)', color: 'rgba(255,255,255,0.45)' }}
+                <button onClick={() => authNavigate('/tracks')} className="flex items-center gap-2 font-sans text-[13px] font-medium transition-all hover:text-white" style={{ padding: '11px 24px', borderRadius: 10, border: '1px solid rgba(255,255,255,0.08)', background: 'rgba(255,255,255,0.03)', color: 'rgba(255,255,255,0.45)', cursor: 'pointer' }}
                   onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.borderColor = 'rgba(245,158,11,0.18)'; }}
-                  onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.borderColor = 'rgba(255,255,255,0.08)'; }}>트랙 둘러보기</Link>
+                  onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.borderColor = 'rgba(255,255,255,0.08)'; }}>트랙 둘러보기</button>
               </div>
             </div>
           </div>

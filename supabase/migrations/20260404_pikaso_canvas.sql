@@ -232,6 +232,7 @@ create or replace function public.deduct_credits(
 returns void
 language plpgsql
 security definer
+set search_path = public, pg_temp
 as $$
 begin
   -- Idempotency: skip if this generation already deducted
@@ -332,6 +333,7 @@ create or replace function public.handle_new_user_credits()
 returns trigger
 language plpgsql
 security definer
+set search_path = public, pg_temp
 as $$
 begin
   insert into public.credit_accounts (user_id)

@@ -5,11 +5,12 @@ import { resolveAutoModel } from '@/types/models';
 
 // Credit costs per model
 const CREDIT_COSTS: Record<string, number> = {
-  'flux-1-fast': 5,
-  'flux-2-pro': 50,
-  'seedream-5-lite': 50,
-  'google-imagen-4': 100,
-  'gpt': 150,
+  'flux-1-fast': 2,
+  'google-nano-banana-2': 5,
+  'flux-2-pro': 15,
+  'seedream-5-lite': 15,
+  'google-imagen-4': 20,
+  'gpt': 30,
 };
 
 async function generateWithGemini(prompt: string, key: string): Promise<string | null> {
@@ -160,6 +161,20 @@ export async function POST(req: NextRequest) {
 
   const creditsCost = CREDIT_COSTS[resolvedModel] ?? 50;
 
+  // ── Pre-flight credit check ───────────────────────────────────────────
+  const { data: creditAccount } = await supabase
+    .from('credit_accounts')
+    .select('balance')
+    .eq('user_id', user.id)
+    .single();
+
+  if (!creditAccount || creditAccount.balance < creditsCost) {
+    return NextResponse.json(
+      { success: false, error: '크레딧이 부족합니다.', required: creditsCost, available: creditAccount?.balance ?? 0 },
+      { status: 402 }
+    );
+  }
+
   // ── Build final prompt ────────────────────────────────────────────────
   const finalPrompt = negativePrompt
     ? `${prompt}. 제외: ${negativePrompt}`
@@ -176,19 +191,14 @@ export async function POST(req: NextRequest) {
   const anthropicKey = process.env.ANTHROPIC_API_KEY;
 
   // Route by resolved model
-  if (['google-imagen-4', 'flux-2-pro', 'flux-1-fast', 'seedream-5-lite'].includes(resolvedModel) && geminiKey) {
+  if (['google-imagen-4', 'google-nano-banana-2', 'flux-2-pro', 'flux-1-fast', 'seedream-5-lite'].includes(resolvedModel) && geminiKey) {
     imageUrl = await generateWithGemini(finalPrompt, geminiKey);
     if (imageUrl) usedModel = 'gemini-imagen';
   }
 
-  if (!imageUrl && (resolvedModel === 'gpt' || !imageUrl) && openaiKey) {
+  if (!imageUrl && openaiKey) {
     imageUrl = await generateWithOpenAI(finalPrompt, openaiKey, size);
     if (imageUrl) usedModel = 'dall-e-3';
-  }
-
-  if (!imageUrl && geminiKey) {
-    imageUrl = await generateWithGemini(finalPrompt, geminiKey);
-    if (imageUrl) usedModel = 'gemini-fallback';
   }
 
   if (!imageUrl && anthropicKey) {

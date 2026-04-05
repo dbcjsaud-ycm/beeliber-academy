@@ -1,8 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getSupabaseServerClient } from '@/lib/supabase/server';
+import { getSupabaseServerClient, createServerSupabaseClient } from '@/lib/supabase/server';
 import { issueCreateSchema } from '@/lib/validators/issues';
 
 export async function POST(request: NextRequest) {
+  const authClient = await createServerSupabaseClient();
+  const { data: { user } } = await authClient.auth.getUser();
+  if (!user) {
+    return NextResponse.json({ error: '로그인이 필요합니다.' }, { status: 401 });
+  }
+
   try {
     const json = await request.json();
     const parsed = issueCreateSchema.safeParse(json);

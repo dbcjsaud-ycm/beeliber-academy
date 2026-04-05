@@ -1,6 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
+import { createServerSupabaseClient } from "@/lib/supabase/server";
 
 export async function POST(req: NextRequest) {
+  const authClient = await createServerSupabaseClient();
+  const { data: { user } } = await authClient.auth.getUser();
+  if (!user) {
+    return NextResponse.json({ success: false, error: "로그인이 필요합니다." }, { status: 401 });
+  }
+
   const { prompt, model = "auto" } = await req.json();
 
   if (!prompt || typeof prompt !== "string") {

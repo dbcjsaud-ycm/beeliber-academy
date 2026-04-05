@@ -5,4 +5,5 @@ export const paymentConfirmSchema = z.object({
   paymentKey: z.string().min(3),
   amount: z.number().positive(),
   provider: z.string().min(2).default('tosspayments'),
+  orderId: z.string().optional(), // Toss Payments orderId (defaults to reservationId if omitted)
 });

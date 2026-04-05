@@ -51,7 +51,16 @@
       "Bash(curl -s http://localhost:3000/api/ai/generate -X POST -H 'Content-Type: application/json' -d '{\"prompt\":\"안녕하세요, 한 문장으로 인사해줘\"}')",
       "Bash(python3 -c \"import sys; [print\\(l.replace\\('\\\\\\\\\\\\\\\\n','\\\\n'\\).replace\\('\\\\\\\\\\\\\\\\t','\\\\t'\\)\\) for l in sys.stdin]\")",
       "Skill(ship)",
-      "Skill(ship:*)"
+      "Skill(ship:*)",
+      "Bash(git stash:*)",
+      "Bash(git checkout:*)",
+      "Bash(npx vercel:*)",
+      "Bash(npm info:*)",
+      "Bash(python3 -c \"import json,sys; vs=[v for v in json.load\\(sys.stdin\\) if v.startswith\\('15.'\\)]; print\\(vs[-5:]\\)\")",
+      "Skill(plan-eng-review)",
+      "Skill(plan-eng-review:*)",
+      "Bash(ls /Users/cm/aca/beeliber-academy/src/app/my*)",
+      "Bash(ls /Users/cm/aca/beeliber-academy/src/app/profile*)"
     ],
     "additionalDirectories": [
       "/tmp",
