@@ -9,7 +9,7 @@
 
 /* ── CSS Variables ─────────────────────────────────────────────────── */
 :root {
-  --bg-base:           #0d0d18;
+  --bg-base:           #0b0a0f;
   --bg-surface:        rgba(255,255,255,0.04);
   --border-subtle:     rgba(255,255,255,0.07);
   --border-default:    rgba(255,255,255,0.10);
@@ -39,7 +39,16 @@ code, pre {
 /* ── Academy Background ─────────────────────────────────────────────── */
 @layer utilities {
   .academy-bg {
-    background-color: #0d0d18;
+    background-color: #0b0a0f;
+  }
+
+  /* ── Landing page — "황금빛 등불이 어두운 방" ambient glow ────────────*/
+  .landing-bg {
+    background:
+      radial-gradient(ellipse 130% 70% at 62% 48%, rgba(245,158,11,0.08) 0%, transparent 55%),
+      radial-gradient(ellipse 70% 35% at 50% 0%,   rgba(245,158,11,0.05) 0%, transparent 50%),
+      radial-gradient(ellipse 40% 20% at 50% 100%, rgba(245,158,11,0.03) 0%, transparent 50%),
+      #0b0a0f;
   }
 
   /* ── Glass Panels ─────────────────────────────────────────────────── */
@@ -51,7 +60,7 @@ code, pre {
   }
 
   .glass-panel-light {
-    background: rgba(10,10,18,0.80);
+    background: rgba(11,10,15,0.80);
     border: 1px solid rgba(255,255,255,0.08);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);

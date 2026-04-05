@@ -82,10 +82,10 @@ export default function HomePage() {
   }
 
   return (
-    <div style={{ minHeight: '100vh', background: '#0d0d18', color: '#fff', overflowX: 'hidden' }}>
+    <div className="landing-bg" style={{ minHeight: '100vh', color: '#fff', overflowX: 'hidden' }}>
 
       {/* Nav */}
-      <nav style={{ position: 'fixed', top: 0, left: 0, right: 0, zIndex: 50, borderBottom: '1px solid rgba(255,255,255,0.05)', background: 'rgba(13,13,24,0.80)', backdropFilter: 'blur(24px)', WebkitBackdropFilter: 'blur(24px)' }}>
+      <nav style={{ position: 'fixed', top: 0, left: 0, right: 0, zIndex: 50, borderBottom: '1px solid rgba(255,255,255,0.05)', background: 'rgba(11,10,15,0.80)', backdropFilter: 'blur(24px)', WebkitBackdropFilter: 'blur(24px)' }}>
         <div className="mx-auto flex h-14 max-w-7xl items-center justify-between px-6">
           <Link href="/" className="flex items-center gap-2.5">
             <span style={{ fontSize: 20, lineHeight: 1 }}>🐝</span>
@@ -113,14 +113,14 @@ export default function HomePage() {
           <SplineScene />
         </div>
         <div style={{ position: 'absolute', inset: 0, zIndex: 1, pointerEvents: 'none' }}>
-          <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to left, rgba(13,13,24,0.65) 24%, rgba(13,13,24,0.38) 48%, rgba(13,13,24,0.10) 68%, transparent 100%)' }} />
-          <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 100, background: 'linear-gradient(to bottom, rgba(13,13,24,0.40), transparent)' }} />
-          <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: 180, background: 'linear-gradient(to top, rgba(13,13,24,0.85), transparent)' }} />
+          <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to left, rgba(11,10,15,0.65) 24%, rgba(11,10,15,0.38) 48%, rgba(11,10,15,0.10) 68%, transparent 100%)' }} />
+          <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 100, background: 'linear-gradient(to bottom, rgba(11,10,15,0.40), transparent)' }} />
+          <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: 180, background: 'linear-gradient(to top, rgba(11,10,15,0.85), transparent)' }} />
         </div>
 
         <div style={{ position: 'relative', height: '100%', display: 'flex', alignItems: 'center', zIndex: 10 }}>
           <div className="mx-auto w-full max-w-7xl px-6">
-            <div style={{ marginLeft: 'auto', maxWidth: 480, display: 'flex', flexDirection: 'column', gap: 22, background: 'rgba(13,13,24,0.52)', backdropFilter: 'blur(24px)', WebkitBackdropFilter: 'blur(24px)', border: '1px solid rgba(255,255,255,0.09)', borderRadius: 20, padding: '32px 36px', boxShadow: '0 8px 48px rgba(0,0,0,0.32), inset 0 1px 0 rgba(255,255,255,0.06)' }}>
+            <div style={{ marginLeft: 'auto', maxWidth: 480, display: 'flex', flexDirection: 'column', gap: 22, background: 'rgba(11,10,15,0.52)', backdropFilter: 'blur(24px)', WebkitBackdropFilter: 'blur(24px)', border: '1px solid rgba(255,255,255,0.09)', borderRadius: 20, padding: '32px 36px', boxShadow: '0 8px 48px rgba(0,0,0,0.32), inset 0 1px 0 rgba(255,255,255,0.06)' }}>
 
               {/* 배지 */}
               <span style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '4px 12px', borderRadius: 4, border: '1px solid rgba(6,182,212,0.18)', background: 'rgba(6,182,212,0.05)', alignSelf: 'flex-start' }}>
@@ -299,7 +299,7 @@ export default function HomePage() {
       {/* CTA 배너 */}
       <section style={{ padding: '0 24px 96px' }}>
         <div className="mx-auto max-w-7xl">
-          <div style={{ position: 'relative', overflow: 'hidden', borderRadius: 20, border: '1px solid rgba(245,158,11,0.12)', background: 'linear-gradient(120deg, rgba(245,158,11,0.05) 0%, rgba(13,13,24,0) 55%)', padding: '56px 64px' }}>
+          <div style={{ position: 'relative', overflow: 'hidden', borderRadius: 20, border: '1px solid rgba(245,158,11,0.12)', background: 'linear-gradient(120deg, rgba(245,158,11,0.05) 0%, rgba(11,10,15,0) 55%)', padding: '56px 64px' }}>
             <div style={{ position: 'absolute', top: -80, left: -40, width: 280, height: 280, borderRadius: '50%', background: 'rgba(245,158,11,0.07)', filter: 'blur(80px)', pointerEvents: 'none' }} />
             <div style={{ position: 'absolute', bottom: -60, right: -20, width: 200, height: 200, borderRadius: '50%', background: 'rgba(124,58,237,0.05)', filter: 'blur(60px)', pointerEvents: 'none' }} />
             <div style={{ position: 'relative', maxWidth: 520 }}>

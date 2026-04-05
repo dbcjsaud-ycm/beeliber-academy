@@ -106,7 +106,7 @@ export default function MyPage() {
 
   if (loading) {
     return (
-      <div style={{ minHeight: '100vh', background: '#0d0d18', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+      <div style={{ minHeight: '100vh', background: '#0b0a0f', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 12 }}>
           <div style={{ width: 32, height: 32, borderRadius: '50%', border: '2px solid rgba(245,158,11,0.3)', borderTopColor: '#f59e0b', animation: 'spin 0.8s linear infinite' }} />
           <span className="font-mono" style={{ fontSize: 11, color: 'rgba(255,255,255,0.50)', letterSpacing: '0.14em', textTransform: 'uppercase' }}>Loading</span>
@@ -119,10 +119,10 @@ export default function MyPage() {
   const creditPct = Math.max(0, Math.min(100, ((credits?.balance ?? 0) / (credits?.monthly_allowance ?? 300)) * 100));
 
   return (
-    <div style={{ minHeight: '100vh', background: '#0d0d18', color: '#fff' }}>
+    <div className="landing-bg" style={{ minHeight: '100vh', color: '#fff' }}>
 
       {/* Nav */}
-      <nav style={{ position: 'sticky', top: 0, zIndex: 50, borderBottom: '1px solid rgba(255,255,255,0.05)', background: 'rgba(13,13,24,0.85)', backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)' }}>
+      <nav style={{ position: 'sticky', top: 0, zIndex: 50, borderBottom: '1px solid rgba(255,255,255,0.05)', background: 'rgba(11,10,15,0.85)', backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)' }}>
         <div className="mx-auto flex h-14 max-w-5xl items-center justify-between px-6">
           <Link href="/" className="flex items-center gap-2.5">
             <span style={{ fontSize: 18 }}>🐝</span>
@@ -171,7 +171,7 @@ export default function MyPage() {
         </div>
 
         {/* 크레딧 카드 */}
-        <div style={{ borderRadius: 16, border: '1px solid rgba(245,158,11,0.15)', background: 'linear-gradient(135deg, rgba(245,158,11,0.06) 0%, rgba(13,13,24,0) 60%)', padding: '24px 28px', marginBottom: 24 }}>
+        <div style={{ borderRadius: 16, border: '1px solid rgba(245,158,11,0.15)', background: 'linear-gradient(135deg, rgba(245,158,11,0.06) 0%, rgba(11,10,15,0) 60%)', padding: '24px 28px', marginBottom: 24 }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16 }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
               <Zap size={15} style={{ color: '#f59e0b' }} />
