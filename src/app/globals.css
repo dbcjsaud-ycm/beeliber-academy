@@ -9,7 +9,7 @@
 
 /* ── CSS Variables ─────────────────────────────────────────────────── */
 :root {
-  --bg-base:           #050508;
+  --bg-base:           #0d0d18;
   --bg-surface:        rgba(255,255,255,0.04);
   --border-subtle:     rgba(255,255,255,0.07);
   --border-default:    rgba(255,255,255,0.10);
@@ -39,7 +39,7 @@ code, pre {
 /* ── Academy Background ─────────────────────────────────────────────── */
 @layer utilities {
   .academy-bg {
-    background-color: #050508;
+    background-color: #0d0d18;
   }
 
   /* ── Glass Panels ─────────────────────────────────────────────────── */

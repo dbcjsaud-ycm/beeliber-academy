@@ -86,10 +86,10 @@ export default function MyPage() {
 
   if (loading) {
     return (
-      <div style={{ minHeight: '100vh', background: '#050508', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+      <div style={{ minHeight: '100vh', background: '#0d0d18', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 12 }}>
           <div style={{ width: 32, height: 32, borderRadius: '50%', border: '2px solid rgba(245,158,11,0.3)', borderTopColor: '#f59e0b', animation: 'spin 0.8s linear infinite' }} />
-          <span className="font-mono" style={{ fontSize: 11, color: 'rgba(255,255,255,0.28)', letterSpacing: '0.14em', textTransform: 'uppercase' }}>Loading</span>
+          <span className="font-mono" style={{ fontSize: 11, color: 'rgba(255,255,255,0.50)', letterSpacing: '0.14em', textTransform: 'uppercase' }}>Loading</span>
         </div>
       </div>
     );
@@ -99,19 +99,19 @@ export default function MyPage() {
   const creditPct = Math.max(0, Math.min(100, ((credits?.balance ?? 0) / (credits?.monthly_allowance ?? 300)) * 100));
 
   return (
-    <div style={{ minHeight: '100vh', background: '#050508', color: '#fff' }}>
+    <div style={{ minHeight: '100vh', background: '#0d0d18', color: '#fff' }}>
 
       {/* Nav */}
-      <nav style={{ position: 'sticky', top: 0, zIndex: 50, borderBottom: '1px solid rgba(255,255,255,0.05)', background: 'rgba(5,5,8,0.85)', backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)' }}>
+      <nav style={{ position: 'sticky', top: 0, zIndex: 50, borderBottom: '1px solid rgba(255,255,255,0.05)', background: 'rgba(13,13,24,0.85)', backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)' }}>
         <div className="mx-auto flex h-14 max-w-5xl items-center justify-between px-6">
           <Link href="/" className="flex items-center gap-2.5">
             <span style={{ fontSize: 18 }}>🐝</span>
             <span className="font-sans text-sm font-semibold text-white">beeliber</span>
-            <span className="font-sans text-sm" style={{ color: 'rgba(255,255,255,0.22)' }}>academy</span>
+            <span className="font-sans text-sm" style={{ color: 'rgba(255,255,255,0.45)' }}>academy</span>
           </Link>
           <div className="flex items-center gap-3">
-            <Link href="/academy" className="font-sans text-[13px] transition-colors hover:text-white" style={{ color: 'rgba(255,255,255,0.38)' }}>실습 시작</Link>
-            <button onClick={handleLogout} className="flex items-center gap-1.5 font-sans text-[12px] transition-all hover:text-white" style={{ color: 'rgba(255,255,255,0.35)', background: 'none', border: 'none', cursor: 'pointer' }}>
+            <Link href="/academy" className="font-sans text-[13px] transition-colors hover:text-white" style={{ color: 'rgba(255,255,255,0.58)' }}>실습 시작</Link>
+            <button onClick={handleLogout} className="flex items-center gap-1.5 font-sans text-[12px] transition-all hover:text-white" style={{ color: 'rgba(255,255,255,0.55)', background: 'none', border: 'none', cursor: 'pointer' }}>
               <LogOut size={13} />로그아웃
             </button>
           </div>
@@ -133,7 +133,7 @@ export default function MyPage() {
               <h1 className="font-sans" style={{ fontSize: '1.25rem', fontWeight: 700, color: '#fff', margin: 0 }}>
                 {profile?.display_name ?? '사용자'}
               </h1>
-              <p className="font-mono" style={{ fontSize: 11, color: 'rgba(255,255,255,0.32)', margin: '3px 0 0', letterSpacing: '0.06em' }}>
+              <p className="font-mono" style={{ fontSize: 11, color: 'rgba(255,255,255,0.52)', margin: '3px 0 0', letterSpacing: '0.06em' }}>
                 {profile?.email?.replace('@beeliber.internal', '') ?? ''}
               </p>
               <span style={{ display: 'inline-flex', alignItems: 'center', gap: 5, marginTop: 6, padding: '2px 8px', borderRadius: 4, border: '1px solid rgba(245,158,11,0.18)', background: 'rgba(245,158,11,0.05)' }}>
@@ -151,13 +151,13 @@ export default function MyPage() {
         </div>
 
         {/* 크레딧 카드 */}
-        <div style={{ borderRadius: 16, border: '1px solid rgba(245,158,11,0.15)', background: 'linear-gradient(135deg, rgba(245,158,11,0.06) 0%, rgba(5,5,8,0) 60%)', padding: '24px 28px', marginBottom: 24 }}>
+        <div style={{ borderRadius: 16, border: '1px solid rgba(245,158,11,0.15)', background: 'linear-gradient(135deg, rgba(245,158,11,0.06) 0%, rgba(13,13,24,0) 60%)', padding: '24px 28px', marginBottom: 24 }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16 }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
               <Zap size={15} style={{ color: '#f59e0b' }} />
               <span className="font-mono" style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.18em', textTransform: 'uppercase', color: 'rgba(245,158,11,0.80)' }}>크레딧</span>
             </div>
-            <span className="font-mono" style={{ fontSize: 11, color: 'rgba(255,255,255,0.28)', letterSpacing: '0.06em' }}>
+            <span className="font-mono" style={{ fontSize: 11, color: 'rgba(255,255,255,0.50)', letterSpacing: '0.06em' }}>
               {usedCredits} 사용 / {credits?.monthly_allowance ?? 300} 총계
             </span>
           </div>
@@ -167,7 +167,7 @@ export default function MyPage() {
             <span className="font-display" style={{ fontSize: '2.8rem', fontWeight: 900, lineHeight: 1, background: 'linear-gradient(135deg, #fcd34d, #f59e0b)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>
               {credits?.balance ?? 0}
             </span>
-            <span className="font-mono" style={{ fontSize: 13, color: 'rgba(255,255,255,0.35)' }}>크레딧 남음</span>
+            <span className="font-mono" style={{ fontSize: 13, color: 'rgba(255,255,255,0.55)' }}>크레딧 남음</span>
           </div>
 
           {/* 프로그레스 바 */}
@@ -182,7 +182,7 @@ export default function MyPage() {
               { label: '영상 생성', cost: '180–500' },
               { label: '텍스트 AI', cost: '1–10' },
             ].map(({ label, cost }) => (
-              <span key={label} className="font-mono" style={{ fontSize: 10, color: 'rgba(255,255,255,0.25)', letterSpacing: '0.06em' }}>
+              <span key={label} className="font-mono" style={{ fontSize: 10, color: 'rgba(255,255,255,0.45)', letterSpacing: '0.06em' }}>
                 {label} <span style={{ color: 'rgba(245,158,11,0.55)' }}>{cost}cr</span>
               </span>
             ))}
@@ -204,7 +204,7 @@ export default function MyPage() {
                 <span style={{ fontSize: 18 }}>{icon}</span>
                 <span className="font-sans" style={{ fontSize: 13, fontWeight: 500, color: 'rgba(255,255,255,0.75)' }}>{label}</span>
               </div>
-              <ChevronRight size={13} style={{ color: 'rgba(255,255,255,0.22)' }} />
+              <ChevronRight size={13} style={{ color: 'rgba(255,255,255,0.45)' }} />
             </Link>
           ))}
         </div>
@@ -213,11 +213,11 @@ export default function MyPage() {
         <div>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16 }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-              <Clock size={14} style={{ color: 'rgba(255,255,255,0.35)' }} />
-              <span className="font-mono" style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.16em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.40)' }}>생성 이력</span>
+              <Clock size={14} style={{ color: 'rgba(255,255,255,0.55)' }} />
+              <span className="font-mono" style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.16em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.60)' }}>생성 이력</span>
             </div>
             {userId && (
-              <Link href="/outputs" className="flex items-center gap-1 font-sans text-[12px] transition-colors hover:text-white" style={{ color: 'rgba(255,255,255,0.25)' }}>
+              <Link href="/outputs" className="flex items-center gap-1 font-sans text-[12px] transition-colors hover:text-white" style={{ color: 'rgba(255,255,255,0.45)' }}>
                 전체 보기 <ArrowRight size={11} />
               </Link>
             )}
@@ -226,7 +226,7 @@ export default function MyPage() {
           {generations.length === 0 ? (
             <div style={{ textAlign: 'center', padding: '48px 24px', borderRadius: 16, border: '1px solid rgba(255,255,255,0.05)', background: 'rgba(255,255,255,0.01)' }}>
               <span style={{ fontSize: 32, display: 'block', marginBottom: 12 }}>✨</span>
-              <p className="font-sans" style={{ fontSize: 14, color: 'rgba(255,255,255,0.35)', margin: 0 }}>아직 생성한 콘텐츠가 없습니다</p>
+              <p className="font-sans" style={{ fontSize: 14, color: 'rgba(255,255,255,0.55)', margin: 0 }}>아직 생성한 콘텐츠가 없습니다</p>
               <Link href="/academy" className="inline-flex items-center gap-2 font-sans text-[13px] font-semibold text-black mt-4 transition-all hover:bg-amber-400"
                 style={{ background: '#f59e0b', padding: '8px 20px', borderRadius: 8 }}>
                 첫 실습 시작하기 <ArrowRight size={12} />
@@ -254,9 +254,9 @@ export default function MyPage() {
                       {g.prompt}
                     </p>
                     <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginTop: 3 }}>
-                      <span className="font-mono" style={{ fontSize: 10, color: 'rgba(255,255,255,0.22)', letterSpacing: '0.06em' }}>{g.model_id}</span>
+                      <span className="font-mono" style={{ fontSize: 10, color: 'rgba(255,255,255,0.45)', letterSpacing: '0.06em' }}>{g.model_id}</span>
                       <span style={{ width: 2, height: 2, borderRadius: '50%', background: 'rgba(255,255,255,0.14)' }} />
-                      <span className="font-mono" style={{ fontSize: 10, color: 'rgba(255,255,255,0.22)' }}>{timeAgo(g.created_at)}</span>
+                      <span className="font-mono" style={{ fontSize: 10, color: 'rgba(255,255,255,0.45)' }}>{timeAgo(g.created_at)}</span>
                     </div>
                   </div>
 
