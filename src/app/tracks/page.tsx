@@ -156,11 +156,11 @@ export default function TracksPage() {
                 ))}
               </div>
 
-              {/* CTA */}
+              {/* CTA — always amber per DESIGN.md (violet is secondary only) */}
               <Link
                 href={t.href}
-                className="flex items-center justify-center gap-2 rounded-[10px] py-2.5 text-sm font-semibold text-black transition-all hover:opacity-90 active:scale-[0.98]"
-                style={{ background: t.accent }}
+                className="flex items-center justify-center gap-2 rounded-[10px] py-2.5 text-sm font-semibold text-black transition-all hover:bg-amber-400 active:scale-[0.98]"
+                style={{ background: '#f59e0b' }}
               >
                 {t.label} 트랙 시작
                 <ArrowRight size={14} />

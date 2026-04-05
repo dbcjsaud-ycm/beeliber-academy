@@ -1,4 +1,7 @@
+'use client';
+
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { ChevronLeft } from 'lucide-react';
 
 const PAGES = [
@@ -9,6 +12,8 @@ const PAGES = [
 ];
 
 export default function LearnLayout({ children }: { children: React.ReactNode }) {
+  const pathname = usePathname();
+
   return (
     <div className="min-h-screen academy-bg text-white">
       {/* ambient */}
@@ -31,18 +36,31 @@ export default function LearnLayout({ children }: { children: React.ReactNode })
             입문 과정
           </p>
           <nav className="space-y-1">
-            {PAGES.map((page) => (
-              <Link
-                key={page.no}
-                href={page.href}
-                className="flex items-center gap-3 rounded-[8px] px-3 py-2.5 text-sm text-white/40 transition-colors hover:bg-white/[0.04] hover:text-white/80"
-              >
-                <span className="flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full border border-white/[0.08] text-[10px] font-mono text-white/30">
-                  {page.no}
-                </span>
-                {page.title}
-              </Link>
-            ))}
+            {PAGES.map((page) => {
+              const isActive = pathname === page.href;
+              return (
+                <Link
+                  key={page.no}
+                  href={page.href}
+                  className={`flex items-center gap-3 rounded-[8px] px-3 py-2.5 text-sm transition-colors ${
+                    isActive
+                      ? 'bg-amber-500/[0.08] text-white/90'
+                      : 'text-white/40 hover:bg-white/[0.04] hover:text-white/80'
+                  }`}
+                >
+                  <span
+                    className={`flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full border text-[10px] font-mono transition-colors ${
+                      isActive
+                        ? 'border-amber-500/40 text-amber-400'
+                        : 'border-white/[0.08] text-white/30'
+                    }`}
+                  >
+                    {page.no}
+                  </span>
+                  {page.title}
+                </Link>
+              );
+            })}
           </nav>
 
           <div className="mt-auto pt-8">
