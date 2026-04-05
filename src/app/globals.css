@@ -9,23 +9,30 @@
 
 /* ── CSS Variables ─────────────────────────────────────────────────── */
 :root {
-  --bg-base:           #0b0a0f;
-  --bg-surface:        rgba(255,255,255,0.04);
-  --border-subtle:     rgba(255,255,255,0.07);
-  --border-default:    rgba(255,255,255,0.10);
-  --border-hover:      rgba(245,158,11,0.30);
+  --bg-base:           #1a1825;
+  --bg-surface:        rgba(255,255,255,0.07);
+  --border-subtle:     rgba(255,255,255,0.10);
+  --border-default:    rgba(255,255,255,0.14);
+  --border-hover:      rgba(245,158,11,0.40);
   --amber-500:         #f59e0b;
-  --amber-glow:        rgba(245,158,11,0.25);
-  --violet-glow:       rgba(124,58,237,0.20);
-  --cyan-glow:         rgba(6,182,212,0.20);
+  --amber-glow:        rgba(245,158,11,0.30);
+  --violet-glow:       rgba(124,58,237,0.25);
+  --cyan-glow:         rgba(6,182,212,0.25);
 }
 
 html {
   color-scheme: dark;
+  /* Instant paint on scroll */
+  scroll-behavior: smooth;
+}
+
+/* Global link / button click feel */
+a, button {
+  -webkit-tap-highlight-color: transparent;
 }
 
 body {
-  color: #fff;
+  color: rgba(255,255,255,0.92);
   background: var(--bg-base);
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
@@ -39,45 +46,45 @@ code, pre {
 /* ── Academy Background ─────────────────────────────────────────────── */
 @layer utilities {
   .academy-bg {
-    background-color: #0b0a0f;
+    background-color: #1a1825;
   }
 
   /* ── Landing page — "황금빛 등불이 어두운 방" ambient glow ────────────*/
   .landing-bg {
     background:
-      radial-gradient(ellipse 130% 70% at 62% 48%, rgba(245,158,11,0.08) 0%, transparent 55%),
-      radial-gradient(ellipse 70% 35% at 50% 0%,   rgba(245,158,11,0.05) 0%, transparent 50%),
-      radial-gradient(ellipse 40% 20% at 50% 100%, rgba(245,158,11,0.03) 0%, transparent 50%),
-      #0b0a0f;
+      radial-gradient(ellipse 130% 70% at 62% 48%, rgba(245,158,11,0.12) 0%, transparent 55%),
+      radial-gradient(ellipse 70% 35% at 50% 0%,   rgba(245,158,11,0.08) 0%, transparent 50%),
+      radial-gradient(ellipse 40% 20% at 50% 100%, rgba(124,58,237,0.06) 0%, transparent 50%),
+      #1a1825;
   }
 
   /* ── Glass Panels ─────────────────────────────────────────────────── */
   .glass-panel {
-    background: rgba(255,255,255,0.04);
-    border: 1px solid rgba(255,255,255,0.07);
+    background: rgba(255,255,255,0.07);
+    border: 1px solid rgba(255,255,255,0.12);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
   }
 
   .glass-panel-light {
-    background: rgba(11,10,15,0.80);
-    border: 1px solid rgba(255,255,255,0.08);
+    background: rgba(26,24,37,0.82);
+    border: 1px solid rgba(255,255,255,0.12);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
   }
 
   /* ── Cards ────────────────────────────────────────────────────────── */
   .card {
-    background: rgba(255,255,255,0.03);
-    border: 1px solid rgba(255,255,255,0.07);
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.11);
     border-radius: 14px;
     backdrop-filter: blur(8px);
     transition: border-color 160ms ease, background 160ms ease, transform 200ms ease;
   }
 
   .card:hover {
-    border-color: rgba(245,158,11,0.30);
-    background: rgba(245,158,11,0.03);
+    border-color: rgba(245,158,11,0.40);
+    background: rgba(245,158,11,0.05);
     transform: translateY(-1px);
   }
 
@@ -115,7 +122,7 @@ code, pre {
 
   /* ── Dot Grid ───────────────────────────────────────────────────────*/
   .dot-grid {
-    background-image: radial-gradient(circle, rgba(255,255,255,0.025) 1px, transparent 1px);
+    background-image: radial-gradient(circle, rgba(255,255,255,0.06) 1px, transparent 1px);
     background-size: 28px 28px;
   }
 
@@ -137,26 +144,26 @@ code, pre {
   /* ── Divider line ───────────────────────────────────────────────────*/
   .section-divider {
     height: 1px;
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.07) 30%, rgba(255,255,255,0.07) 70%, transparent);
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.12) 30%, rgba(255,255,255,0.12) 70%, transparent);
   }
 
   /* legacy aliases */
   .glass-panel-violet {
-    background: rgba(124,58,237,0.08);
-    border: 1px solid rgba(124,58,237,0.20);
+    background: rgba(124,58,237,0.10);
+    border: 1px solid rgba(124,58,237,0.25);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
   }
 
-  .node-card        { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.07); border-radius: 14px; backdrop-filter: blur(8px); transition: border-color 160ms ease, background 160ms ease, transform 200ms ease; }
-  .node-card:hover  { border-color: rgba(245,158,11,0.30); background: rgba(245,158,11,0.04); transform: translateY(-1px); }
-  .node-card-green  { background: rgba(16,185,129,0.05); border: 1px solid rgba(16,185,129,0.15); border-radius: 1rem; backdrop-filter: blur(8px); transition: border-color .2s, background .2s, transform .2s; }
-  .node-card-green:hover  { border-color: rgba(16,185,129,0.35); background: rgba(16,185,129,0.10); transform: translateY(-1px); }
-  .node-card-purple { background: rgba(124,58,237,0.06); border: 1px solid rgba(124,58,237,0.18); border-radius: 1rem; backdrop-filter: blur(8px); transition: border-color .2s, background .2s, transform .2s; }
-  .node-card-purple:hover { border-color: rgba(124,58,237,0.40); background: rgba(124,58,237,0.12); transform: translateY(-1px); }
-  .node-card-amber  { background: rgba(245,158,11,0.05); border: 1px solid rgba(245,158,11,0.15); border-radius: 1rem; backdrop-filter: blur(8px); transition: border-color .2s, background .2s, transform .2s; }
-  .text-secondary-dark { color: rgba(255,255,255,0.45); }
-  .text-secondary-dark:hover { color: rgba(255,255,255,0.85); transition: color 0.15s; }
+  .node-card        { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.11); border-radius: 14px; backdrop-filter: blur(8px); transition: border-color 160ms ease, background 160ms ease, transform 200ms ease; }
+  .node-card:hover  { border-color: rgba(245,158,11,0.40); background: rgba(245,158,11,0.06); transform: translateY(-1px); }
+  .node-card-green  { background: rgba(16,185,129,0.08); border: 1px solid rgba(16,185,129,0.20); border-radius: 1rem; backdrop-filter: blur(8px); transition: border-color .2s, background .2s, transform .2s; }
+  .node-card-green:hover  { border-color: rgba(16,185,129,0.42); background: rgba(16,185,129,0.14); transform: translateY(-1px); }
+  .node-card-purple { background: rgba(124,58,237,0.09); border: 1px solid rgba(124,58,237,0.24); border-radius: 1rem; backdrop-filter: blur(8px); transition: border-color .2s, background .2s, transform .2s; }
+  .node-card-purple:hover { border-color: rgba(124,58,237,0.48); background: rgba(124,58,237,0.16); transform: translateY(-1px); }
+  .node-card-amber  { background: rgba(245,158,11,0.08); border: 1px solid rgba(245,158,11,0.22); border-radius: 1rem; backdrop-filter: blur(8px); transition: border-color .2s, background .2s, transform .2s; }
+  .text-secondary-dark { color: rgba(255,255,255,0.60); }
+  .text-secondary-dark:hover { color: rgba(255,255,255,0.92); transition: color 0.15s; }
 }
 
 /* ── Keyframes ───────────────────────────────────────────────────────── */

@@ -34,7 +34,7 @@ const STEPS = [
 const inputStyle: React.CSSProperties = {
   width: '100%', padding: '9px 12px',
   background: 'rgba(255,255,255,0.04)',
-  border: '1px solid rgba(255,255,255,0.09)',
+  border: '1px solid rgba(255,255,255,0.14)',
   borderRadius: 8, color: '#fff', fontSize: 13,
   outline: 'none', boxSizing: 'border-box',
 };
@@ -66,8 +66,8 @@ export default function HomePage() {
   }, []);
 
   function authNavigate(href: string) {
-    if (user) { router.push(href); }
-    else { router.push(`/login?redirect=${encodeURIComponent(href)}`); }
+    const dest = user ? href : `/login?redirect=${encodeURIComponent(href)}`;
+    router.push(dest);
   }
 
   async function handleLogin(e: React.FormEvent) {
@@ -85,7 +85,7 @@ export default function HomePage() {
     <div className="landing-bg" style={{ minHeight: '100vh', color: '#fff', overflowX: 'hidden' }}>
 
       {/* Nav */}
-      <nav style={{ position: 'fixed', top: 0, left: 0, right: 0, zIndex: 50, borderBottom: '1px solid rgba(255,255,255,0.05)', background: 'rgba(11,10,15,0.80)', backdropFilter: 'blur(24px)', WebkitBackdropFilter: 'blur(24px)' }}>
+      <nav style={{ position: 'fixed', top: 0, left: 0, right: 0, zIndex: 50, borderBottom: '1px solid rgba(255,255,255,0.13)', background: 'rgba(10,9,14,0.45)', backdropFilter: 'blur(32px) saturate(180%)', WebkitBackdropFilter: 'blur(32px) saturate(180%)' }}>
         <div className="mx-auto flex h-14 max-w-7xl items-center justify-between px-6">
           <Link href="/" className="flex items-center gap-2.5">
             <span style={{ fontSize: 20, lineHeight: 1 }}>🐝</span>
@@ -98,7 +98,7 @@ export default function HomePage() {
             ))}
           </div>
           {user ? (
-            <Link href="/my" className="flex items-center gap-1.5 font-sans text-xs font-medium transition-all hover:text-white" style={{ color: 'rgba(255,255,255,0.55)', padding: '7px 16px', borderRadius: 10, border: '1px solid rgba(255,255,255,0.09)' }}>마이페이지</Link>
+            <Link href="/my" className="flex items-center gap-1.5 font-sans text-xs font-medium transition-all hover:text-white" style={{ color: 'rgba(255,255,255,0.55)', padding: '7px 16px', borderRadius: 10, border: '1px solid rgba(255,255,255,0.14)' }}>마이페이지</Link>
           ) : (
             <Link href="/login" className="flex items-center gap-1.5 font-sans text-xs font-semibold text-black transition-all hover:bg-amber-400 active:scale-[0.97]" style={{ background: '#f59e0b', padding: '7px 16px', borderRadius: 10, boxShadow: '0 0 18px rgba(245,158,11,0.28)' }}>
               <Sparkles size={11} strokeWidth={2.5} />무료로 시작
@@ -109,18 +109,19 @@ export default function HomePage() {
 
       {/* Hero */}
       <section style={{ position: 'relative', height: '100vh', minHeight: 700, overflow: 'hidden' }}>
-        <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', zIndex: 0 }}>
+        {/* Spline — pointer-events: none so it never steals focus/clicks */}
+        <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', zIndex: 0, pointerEvents: 'none' }}>
           <SplineScene />
         </div>
         <div style={{ position: 'absolute', inset: 0, zIndex: 1, pointerEvents: 'none' }}>
-          <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to left, rgba(11,10,15,0.65) 24%, rgba(11,10,15,0.38) 48%, rgba(11,10,15,0.10) 68%, transparent 100%)' }} />
-          <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 100, background: 'linear-gradient(to bottom, rgba(11,10,15,0.40), transparent)' }} />
-          <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: 180, background: 'linear-gradient(to top, rgba(11,10,15,0.85), transparent)' }} />
+          <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to left, rgba(26,24,37,0.65) 24%, rgba(26,24,37,0.38) 48%, rgba(26,24,37,0.10) 68%, transparent 100%)' }} />
+          <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 100, background: 'linear-gradient(to bottom, rgba(26,24,37,0.40), transparent)' }} />
+          <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: 180, background: 'linear-gradient(to top, rgba(26,24,37,0.85), transparent)' }} />
         </div>
 
         <div style={{ position: 'relative', height: '100%', display: 'flex', alignItems: 'center', zIndex: 10 }}>
           <div className="mx-auto w-full max-w-7xl px-6">
-            <div style={{ marginLeft: 'auto', maxWidth: 480, display: 'flex', flexDirection: 'column', gap: 22, background: 'rgba(11,10,15,0.52)', backdropFilter: 'blur(24px)', WebkitBackdropFilter: 'blur(24px)', border: '1px solid rgba(255,255,255,0.09)', borderRadius: 20, padding: '32px 36px', boxShadow: '0 8px 48px rgba(0,0,0,0.32), inset 0 1px 0 rgba(255,255,255,0.06)' }}>
+            <div style={{ marginLeft: 'auto', maxWidth: 480, display: 'flex', flexDirection: 'column', gap: 22, background: 'rgba(26,24,37,0.18)', backdropFilter: 'blur(32px) saturate(160%)', WebkitBackdropFilter: 'blur(32px) saturate(160%)', border: '1px solid rgba(255,255,255,0.18)', borderRadius: 20, padding: '32px 36px', boxShadow: '0 8px 48px rgba(0,0,0,0.22), inset 0 1px 0 rgba(255,255,255,0.16)' }}>
 
               {/* 배지 */}
               <span style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '4px 12px', borderRadius: 4, border: '1px solid rgba(6,182,212,0.18)', background: 'rgba(6,182,212,0.05)', alignSelf: 'flex-start' }}>
@@ -156,7 +157,7 @@ export default function HomePage() {
                     <Link href="/academy" className="group flex items-center justify-center gap-2 font-sans text-[13px] font-semibold text-black transition-all hover:bg-amber-400 active:scale-[0.97]" style={{ background: '#f59e0b', padding: '10px 20px', borderRadius: 10, boxShadow: '0 0 28px rgba(245,158,11,0.28)', flex: 1 }}>
                       실습 시작하기 <ArrowRight size={13} strokeWidth={2.5} />
                     </Link>
-                    <Link href="/my" className="flex items-center justify-center font-sans text-[13px] font-medium transition-all hover:text-white" style={{ padding: '10px 16px', borderRadius: 10, border: '1px solid rgba(255,255,255,0.09)', background: 'rgba(255,255,255,0.04)', color: 'rgba(255,255,255,0.50)' }}>마이페이지</Link>
+                    <Link href="/my" className="flex items-center justify-center font-sans text-[13px] font-medium transition-all hover:text-white" style={{ padding: '10px 16px', borderRadius: 10, border: '1px solid rgba(255,255,255,0.14)', background: 'rgba(255,255,255,0.04)', color: 'rgba(255,255,255,0.50)' }}>마이페이지</Link>
                   </div>
                 </div>
               ) : (
@@ -180,7 +181,7 @@ export default function HomePage() {
               )}
 
               {/* 스탯 바 */}
-              <div style={{ display: 'flex', alignItems: 'center', gap: 20, paddingTop: 16, borderTop: '1px solid rgba(255,255,255,0.06)' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 20, paddingTop: 16, borderTop: '1px solid rgba(255,255,255,0.11)' }}>
                 {[{ v: '04', l: '실전 트랙' }, { v: '28+', l: '실습 모듈' }, { v: 'AI', l: '자동 검수' }].map(({ v, l }) => (
                   <div key={l} style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
                     <span className="font-mono" style={{ fontSize: '1rem', fontWeight: 700, lineHeight: 1, background: 'linear-gradient(135deg, #fcd34d, #f59e0b)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>{v}</span>
@@ -188,7 +189,7 @@ export default function HomePage() {
                   </div>
                 ))}
                 <div style={{ marginLeft: 'auto' }}>
-                  <span style={{ display: 'inline-flex', alignItems: 'center', gap: 5, padding: '3px 10px', borderRadius: 4, border: '1px solid rgba(255,255,255,0.06)', background: 'rgba(255,255,255,0.02)' }}>
+                  <span style={{ display: 'inline-flex', alignItems: 'center', gap: 5, padding: '3px 10px', borderRadius: 4, border: '1px solid rgba(255,255,255,0.11)', background: 'rgba(255,255,255,0.02)' }}>
                     <Zap size={9} style={{ color: 'rgba(245,158,11,0.5)' }} />
                     <span className="font-mono" style={{ fontSize: 9, fontWeight: 600, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.50)' }}>Gemini · GPT · Claude</span>
                   </span>
@@ -201,7 +202,7 @@ export default function HomePage() {
         {/* 스크롤 인디케이터 */}
         <div style={{ position: 'absolute', bottom: 28, left: '50%', transform: 'translateX(-50%)', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6, zIndex: 10 }}>
           <div style={{ width: 1, height: 36, background: 'linear-gradient(to bottom, rgba(255,255,255,0.18), transparent)' }} />
-          <span className="font-mono" style={{ fontSize: 9, letterSpacing: '0.24em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.28)' }}>scroll</span>
+          <span className="font-mono" style={{ fontSize: 9, letterSpacing: '0.24em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.52)' }}>scroll</span>
         </div>
       </section>
 
@@ -212,7 +213,7 @@ export default function HomePage() {
             <span className="font-mono" style={{ fontSize: 9, fontWeight: 600, letterSpacing: '0.18em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.52)', whiteSpace: 'nowrap', marginRight: 24 }}>지원 AI 엔진</span>
             <div style={{ flex: 1, height: 1, background: 'rgba(255,255,255,0.04)', marginRight: 24 }} />
             {['Gemini 2.0', 'GPT-4o', 'Claude 3.7', 'Imagen 4', 'Kling 3', 'ElevenLabs'].map((name, i) => (
-              <span key={name} className="font-mono" style={{ fontSize: 11, color: 'rgba(255,255,255,0.45)', fontWeight: 500, padding: i === 0 ? '0 20px 0 0' : '0 20px', borderLeft: i === 0 ? 'none' : '1px solid rgba(255,255,255,0.06)', whiteSpace: 'nowrap' }}>{name}</span>
+              <span key={name} className="font-mono" style={{ fontSize: 11, color: 'rgba(255,255,255,0.45)', fontWeight: 500, padding: i === 0 ? '0 20px 0 0' : '0 20px', borderLeft: i === 0 ? 'none' : '1px solid rgba(255,255,255,0.11)', whiteSpace: 'nowrap' }}>{name}</span>
             ))}
           </div>
         </div>
@@ -234,9 +235,9 @@ export default function HomePage() {
           </div>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
             {TRACKS.map((t) => (
-              <button key={t.no} onClick={() => authNavigate(t.href)} className="group" style={{ display: 'flex', flexDirection: 'column', overflow: 'hidden', transition: 'transform 200ms ease, box-shadow 200ms ease', textDecoration: 'none', borderRadius: 14, border: '1px solid rgba(255,255,255,0.07)', background: `linear-gradient(140deg, ${t.gradStart} 0%, rgba(255,255,255,0.015) 100%)`, padding: '24px', cursor: 'pointer', textAlign: 'left' }}
+              <button key={t.no} onClick={() => authNavigate(t.href)} className="group" style={{ display: 'flex', flexDirection: 'column', overflow: 'hidden', transition: 'transform 200ms ease, box-shadow 200ms ease', textDecoration: 'none', borderRadius: 14, border: '1px solid rgba(255,255,255,0.12)', background: `linear-gradient(140deg, ${t.gradStart} 0%, rgba(255,255,255,0.015) 100%)`, padding: '24px', cursor: 'pointer', textAlign: 'left' }}
                 onMouseEnter={(e) => { const el = e.currentTarget as HTMLElement; el.style.borderColor = t.border; el.style.boxShadow = `0 12px 48px ${t.glow}, 0 1px 0 ${t.border} inset`; }}
-                onMouseLeave={(e) => { const el = e.currentTarget as HTMLElement; el.style.borderColor = 'rgba(255,255,255,0.07)'; el.style.boxShadow = ''; }}>
+                onMouseLeave={(e) => { const el = e.currentTarget as HTMLElement; el.style.borderColor = 'rgba(255,255,255,0.12)'; el.style.boxShadow = ''; }}>
                 <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: 20 }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
                     <span style={{ fontSize: 22, lineHeight: 1 }}>{t.icon}</span>
@@ -244,13 +245,13 @@ export default function HomePage() {
                   </div>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
                     <span style={{ padding: '2px 8px', borderRadius: 4, border: `1px solid ${t.border}`, background: t.glow, color: t.accent }}><span className="font-mono" style={{ fontSize: 9, fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase' }}>{t.level}</span></span>
-                    <span style={{ padding: '2px 8px', borderRadius: 4, border: '1px solid rgba(255,255,255,0.07)', background: 'rgba(255,255,255,0.025)' }}><span className="font-mono" style={{ fontSize: 9, fontWeight: 600, letterSpacing: '0.12em', color: 'rgba(255,255,255,0.50)' }}>{t.time}</span></span>
+                    <span style={{ padding: '2px 8px', borderRadius: 4, border: '1px solid rgba(255,255,255,0.12)', background: 'rgba(255,255,255,0.025)' }}><span className="font-mono" style={{ fontSize: 9, fontWeight: 600, letterSpacing: '0.12em', color: 'rgba(255,255,255,0.50)' }}>{t.time}</span></span>
                   </div>
                 </div>
                 <h3 className="font-sans" style={{ fontSize: '1.1rem', fontWeight: 700, color: '#fff', marginBottom: 3 }}>{t.label}</h3>
                 <p className="font-mono" style={{ fontSize: 11, marginBottom: 6, color: t.accent, opacity: 0.9, letterSpacing: '0.04em' }}>{t.sub}</p>
                 <p className="font-sans" style={{ fontSize: 13, lineHeight: 1.65, color: 'rgba(255,255,255,0.58)', flex: 1, marginBottom: 18 }}>{t.desc}</p>
-                <div style={{ borderRadius: 8, border: '1px solid rgba(255,255,255,0.05)', background: 'rgba(0,0,0,0.20)', padding: '10px 12px', marginBottom: 18 }}>
+                <div style={{ borderRadius: 8, border: '1px solid rgba(255,255,255,0.10)', background: 'rgba(0,0,0,0.20)', padding: '10px 12px', marginBottom: 18 }}>
                   <p className="font-mono" style={{ fontSize: 9, fontWeight: 600, letterSpacing: '0.18em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.52)', marginBottom: 8 }}>결과물</p>
                   {t.outputs.map((o) => (
                     <div key={o} style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 5 }}>
@@ -274,7 +275,7 @@ export default function HomePage() {
         <div style={{ position: 'absolute', top: 0, right: 0, width: 400, height: 400, borderRadius: '50%', background: 'radial-gradient(circle, rgba(124,58,237,0.04) 0%, transparent 70%)', pointerEvents: 'none' }} />
         <div className="mx-auto max-w-7xl px-6">
           <div style={{ marginBottom: 40 }}>
-            <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '4px 12px', borderRadius: 4, marginBottom: 14, border: '1px solid rgba(255,255,255,0.07)', background: 'rgba(255,255,255,0.025)' }}>
+            <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '4px 12px', borderRadius: 4, marginBottom: 14, border: '1px solid rgba(255,255,255,0.12)', background: 'rgba(255,255,255,0.025)' }}>
               <span className="font-mono" style={{ fontSize: 10, fontWeight: 600, letterSpacing: '0.22em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.55)' }}>학습 흐름</span>
             </div>
             <h2 className="font-display" style={{ fontSize: 'clamp(1.8rem, 3vw, 2.25rem)', fontWeight: 900, color: '#fff' }}>한 번 해보면 바로 보입니다</h2>
@@ -289,7 +290,7 @@ export default function HomePage() {
                 <span className="font-mono" style={{ fontSize: 9, fontWeight: 700, color: 'rgba(245,158,11,0.50)', letterSpacing: '0.14em' }}>{s.n}</span>
                 <span className="font-sans" style={{ fontSize: 13, fontWeight: 600, color: '#fff', lineHeight: 1.3 }}>{s.label}</span>
                 <span className="font-mono" style={{ fontSize: 10, textTransform: 'uppercase', letterSpacing: '0.10em', color: 'rgba(255,255,255,0.50)', lineHeight: 1.4 }}>{s.desc}</span>
-                {i < 4 && <div style={{ position: 'absolute', top: 26, right: -4, zIndex: 2, color: 'rgba(255,255,255,0.28)' }}><ChevronRight size={10} /></div>}
+                {i < 4 && <div style={{ position: 'absolute', top: 26, right: -4, zIndex: 2, color: 'rgba(255,255,255,0.52)' }}><ChevronRight size={10} /></div>}
               </div>
             ))}
           </div>
@@ -299,7 +300,7 @@ export default function HomePage() {
       {/* CTA 배너 */}
       <section style={{ padding: '0 24px 96px' }}>
         <div className="mx-auto max-w-7xl">
-          <div style={{ position: 'relative', overflow: 'hidden', borderRadius: 20, border: '1px solid rgba(245,158,11,0.12)', background: 'linear-gradient(120deg, rgba(245,158,11,0.05) 0%, rgba(11,10,15,0) 55%)', padding: '56px 64px' }}>
+          <div style={{ position: 'relative', overflow: 'hidden', borderRadius: 20, border: '1px solid rgba(245,158,11,0.12)', background: 'linear-gradient(120deg, rgba(245,158,11,0.05) 0%, rgba(26,24,37,0) 55%)', padding: '56px 64px' }}>
             <div style={{ position: 'absolute', top: -80, left: -40, width: 280, height: 280, borderRadius: '50%', background: 'rgba(245,158,11,0.07)', filter: 'blur(80px)', pointerEvents: 'none' }} />
             <div style={{ position: 'absolute', bottom: -60, right: -20, width: 200, height: 200, borderRadius: '50%', background: 'rgba(124,58,237,0.05)', filter: 'blur(60px)', pointerEvents: 'none' }} />
             <div style={{ position: 'relative', maxWidth: 520 }}>
@@ -309,9 +310,9 @@ export default function HomePage() {
                 <Link href="/login" className="flex items-center gap-2 font-sans text-[13px] font-semibold text-black transition-all hover:bg-amber-400 active:scale-[0.97]" style={{ background: '#f59e0b', padding: '11px 28px', borderRadius: 10, boxShadow: '0 0 32px rgba(245,158,11,0.28)' }}>
                   <Sparkles size={13} strokeWidth={2.5} />무료로 시작하기
                 </Link>
-                <button onClick={() => authNavigate('/tracks')} className="flex items-center gap-2 font-sans text-[13px] font-medium transition-all hover:text-white" style={{ padding: '11px 24px', borderRadius: 10, border: '1px solid rgba(255,255,255,0.08)', background: 'rgba(255,255,255,0.03)', color: 'rgba(255,255,255,0.45)', cursor: 'pointer' }}
+                <button onClick={() => authNavigate('/tracks')} className="flex items-center gap-2 font-sans text-[13px] font-medium transition-all hover:text-white" style={{ padding: '11px 24px', borderRadius: 10, border: '1px solid rgba(255,255,255,0.13)', background: 'rgba(255,255,255,0.03)', color: 'rgba(255,255,255,0.45)', cursor: 'pointer' }}
                   onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.borderColor = 'rgba(245,158,11,0.18)'; }}
-                  onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.borderColor = 'rgba(255,255,255,0.08)'; }}>트랙 둘러보기</button>
+                  onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.borderColor = 'rgba(255,255,255,0.13)'; }}>트랙 둘러보기</button>
               </div>
             </div>
           </div>
@@ -325,7 +326,7 @@ export default function HomePage() {
             <span style={{ fontSize: 15 }}>🐝</span>
             <span className="font-mono" style={{ fontSize: 11, color: 'rgba(255,255,255,0.14)', letterSpacing: '0.06em' }}>beeliber academy</span>
           </div>
-          <span className="font-mono" style={{ fontSize: 11, color: 'rgba(255,255,255,0.42)', letterSpacing: '0.04em' }}>© 2026 Beeliber. All rights reserved.</span>
+          <span className="font-mono" style={{ fontSize: 11, color: 'rgba(255,255,255,0.62)', letterSpacing: '0.04em' }}>© 2026 Beeliber. All rights reserved.</span>
         </div>
       </footer>
 

@@ -19,6 +19,7 @@ export default function SplineScene() {
           width: '100%',
           height: '100%',
           border: 'none',
+          pointerEvents: 'none',
         }}
       />
     </div>
