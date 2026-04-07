@@ -56,7 +56,7 @@ export default function LoginPage() {
         email: toEmail(loginId),
         password: loginPw,
       });
-      if (error) throw new Error('아이디 또는 비밀번호가 올바르지 않습니다');
+      if (error) throw new Error(`아이디 또는 비밀번호가 올바르지 않습니다 (${error.message})`);
       router.push(redirectTo);
       router.refresh();
     } catch (err: unknown) {
