@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from "next/server";
-import { createClient } from "@supabase/supabase-js";
 import { createAdminClient } from "@/lib/supabase/admin";
 
 // Optional: comma-separated allowed domains, e.g. "beeliber.com,partner.com"
@@ -10,7 +9,7 @@ export async function POST(req: NextRequest) {
   const { email, password, name, loginId } = await req.json();
 
   if (!email || !password || !name) {
-    return NextResponse.json({ success: false, error: "이름, 아이디, 비밀번호를 모두 입력하세요" }, { status: 400 });
+    return NextResponse.json({ success: false, error: "이름, 이메일, 비밀번호를 모두 입력하세요" }, { status: 400 });
   }
 
   // Server-side password length validation
@@ -26,25 +25,22 @@ export async function POST(req: NextRequest) {
     }
   }
 
-  // Use anon client for signUp so Supabase's built-in rate limiting applies
-  const anonClient = createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY!
-  );
+  const admin = createAdminClient();
 
-  // 1) Create auth user via signUp (rate-limited by Supabase)
-  const { data: authData, error: authError } = await anonClient.auth.signUp({
+  // 1) Create auth user with email_confirm: true (skip email verification)
+  // Internal education platform — no need for email confirmation flow.
+  const { data: authData, error: authError } = await admin.auth.admin.createUser({
     email,
     password,
-    options: { data: { display_name: name } },
+    email_confirm: true,
+    user_metadata: { display_name: name },
   });
 
   if (authError || !authData.user) {
     return NextResponse.json({ success: false, error: authError?.message ?? "회원가입 실패" }, { status: 400 });
   }
 
-  // 2) Upsert profile via admin client (trigger may have already created the row)
-  const admin = createAdminClient();
+  // 2) Upsert profile (DB trigger may have already created the row)
   const { error: profileError } = await admin.from("profiles").upsert({
     id: authData.user.id,
     email,
